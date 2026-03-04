@@ -36,13 +36,13 @@ const SCENARIOS: Scenario[] = [
     kort: "Default credentials → strømbortfall → total kollaps",
     beskrivelse: "Angriper bruker ukryptert SNMP community string «public» til å sende shutdown-kommando til UPS. Ingen autentisering kreves.",
     steg: [
-      { tid: 0, sys: "ups", status: "kompromittert", melding: "Angriper sender SNMP WriteRequest: powerOff=1 (community: «public»)" },
+      { tid: 0, sys: "ups", status: "svært_kritisk", melding: "Angriper sender SNMP WriteRequest: powerOff=1 (community: «public»)" },
       { tid: 900, sys: "ups", status: "nede", melding: "UPS slår seg av. Strømbortfall i teknisk rom og serverrom." },
       { tid: 1600, sys: "hvac", status: "nede", melding: "HVAC mister strøm. Kjøling stanser umiddelbart." },
       { tid: 2200, sys: "server", status: "nede", melding: "Servere mister strøm. Ukontrollert nedstenging initieres." },
       { tid: 2800, sys: "brannmur", status: "nede", melding: "Brannmur uten strøm. Nettverksbeskyttelse faller bort." },
-      { tid: 3400, sys: "cctv", status: "nede", melding: "NVR uten strøm. Alle kameraer svarte. Opptak stopper.", lovkrav: "Sikkerhetsloven §7" },
-      { tid: 4100, sys: "aak", status: "degradert", melding: "AAK på nødstrøm/batteri. Loggføring stopper om 15 min." },
+      { tid: 3400, sys: "TVO", status: "nede", melding: "NVR uten strøm. Alle kameraer svarte. Opptak stopper.", lovkrav: "Sikkerhetsloven §7" },
+      { tid: 4100, sys: "aak", status: "svekket", melding: "AAK på nødstrøm/batteri. Loggføring stopper om 15 min." },
       { tid: 5000, sys: "fagsystem", status: "nede", melding: "Alle fagsystemer utilgjengelige. Saksbehandling umulig.", lovkrav: "Digitalsikkerhetsloven art. 21" },
       { tid: 6200, sys: "servertemp", status: "kritisk", melding: "Servertemperatur >35°C. Permanent maskinvareskade risikeres.", lovkrav: "NSM GP 2.5 — strømredundans" },
     ]
@@ -52,28 +52,28 @@ const SCENARIOS: Scenario[] = [
     kort: "Angriper manipulerer kjøling → overoppheting → total nedetid",
     beskrivelse: "Angriper finner BACnet port 47808 åpen på internett via Shodan. Ingen autentisering. Manipulerer kjølesetpoint direkte.",
     steg: [
-      { tid: 0, sys: "bms", status: "kompromittert", melding: "BACnet port 47808 åpen. WriteProperty: cooling_setpoint=99°C sendt." },
+      { tid: 0, sys: "bms", status: "svært_kritisk", melding: "BACnet port 47808 åpen. WriteProperty: cooling_setpoint=99°C sendt." },
       { tid: 1100, sys: "hvac", status: "manipulert", melding: "Kjølesetpoint overstyrt til 99°C. Vifter stanser. Kjølemedium stengt." },
       { tid: 2500, sys: "servertemp", status: "advarsel", melding: "Temperatur stiger jevnt. Nå 29°C — kritisk grense: 35°C." },
-      { tid: 4000, sys: "server", status: "degradert", melding: "Servere throttler prosessorkraft for å begrense varme. Ytelse -45%." },
+      { tid: 4000, sys: "server", status: "svekket", melding: "Servere throttler prosessorkraft for å begrense varme. Ytelse -45%." },
       { tid: 5800, sys: "servertemp", status: "kritisk", melding: "Temperatur >35°C. Automatisk nedstenging initieres.", lovkrav: "NIS2 art. 21 — alvorlig hendelse" },
       { tid: 6400, sys: "server", status: "nede", melding: "Servere stenger ned automatisk for å unngå permanent skade." },
-      { tid: 7000, sys: "cctv", status: "nede", melding: "VMS-server ned. Alle kameraopptak stopper.", lovkrav: "Sikkerhetsloven §7" },
+      { tid: 7000, sys: "TVO", status: "nede", melding: "VMS-server ned. Alle kameraopptak stopper.", lovkrav: "Sikkerhetsloven §7" },
       { tid: 7800, sys: "fagsystem", status: "nede", melding: "Alle tjenester utilgjengelige. Samfunnsoppdrag ikke oppfylt.", lovkrav: "Digitalsikkerhetsloven" },
     ]
   },
   {
-    id: "patching", navn: "Patching-feil brannmur → CCTV svart", ikon: "construction",
+    id: "patching", navn: "Patchefeil brannmur → TVO svart", ikon: "construction",
     kort: "Automatisk oppdatering, feil ACL — kameraer slokner, ingen alarm",
-    beskrivelse: "Automatisk firmware-oppdatering deployes 03:14. Ny ACL-regel blokkerer ved feil VLAN 30 (CCTV/NVR). Ingen varsling utløses.",
+    beskrivelse: "Automatisk firmware-oppdatering deployes 03:14. Ny ACL-regel blokkerer ved feil VLAN 30 (TVO/NVR). Ingen varsling utløses.",
     steg: [
       { tid: 0, sys: "brannmur", status: "oppdateres", melding: "Automatisk firmware-oppdatering starter 03:14. Brannmur restarter." },
-      { tid: 1400, sys: "brannmur", status: "feil", melding: "Oppdatering fullført. Feil ACL-regel: VLAN 30 (CCTV/NVR) blokkert." },
-      { tid: 1700, sys: "cctv", status: "nede", melding: "NVR mister kontakt med alle kameraer via VLAN 30. Svarte skjermer.", lovkrav: "Sikkerhetsloven §7" },
-      { tid: 2000, sys: "aak", status: "degradert", melding: "Adgangskontroll-server utilgjengelig via VLAN 30. Loggføring stanser." },
+      { tid: 1400, sys: "brannmur", status: "feil", melding: "Oppdatering fullført. Feil ACL-regel: VLAN 30 (TVO/NVR) blokkert." },
+      { tid: 1700, sys: "TVO", status: "nede", melding: "NVR mister kontakt med alle kameraer via VLAN 30. Svarte skjermer.", lovkrav: "Sikkerhetsloven §7" },
+      { tid: 2000, sys: "aak", status: "svekket", melding: "Adgangskontroll-server utilgjengelig via VLAN 30. Loggføring stanser." },
       { tid: 2800, sys: "vaktrom", status: "advarsel", melding: "Vakt oppdager svarte skjermer 03:22. Varsler IT-vakt på telefon." },
       { tid: 3800, sys: "brannmur", status: "normal", melding: "Feil ACL identifisert og rettet. Total nedetid: 1t 14min.", lovkrav: "Endringslogg-krav (ITIL/endringsstyring)" },
-      { tid: 4400, sys: "cctv", status: "normal", melding: "Kameraer tilbake online. Opptak gjenopptas. Hull i videohistorikk." },
+      { tid: 4400, sys: "TVO", status: "normal", melding: "Kameraer tilbake online. Opptak gjenopptas. Hull i videohistorikk." },
       { tid: 4400, sys: "aak", status: "normal", melding: "Adgangskontroll-logging gjenopptatt. 1t 14min uten sporing." },
     ]
   }
@@ -82,14 +82,14 @@ const SCENARIOS: Scenario[] = [
 const SYS_INFO: Record<string, SystemInfo> = {
   ups:        { navn: "UPS", etasje: 0, col: 0, ikon: "bolt" },
   hvac:       { navn: "HVAC / Kjøling", etasje: 0, col: 1, ikon: "ac_unit" },
-  bms:        { navn: "BMS / SD-anlegg", etasje: 0, col: 2, ikon: "settings" },
+  bms:        { navn: "BMS / SD-anlegg", etasje: 0, col: 2, ikon: "rule_settings" },
   aak:        { navn: "Adgangskontroll", etasje: 1, col: 0, ikon: "lock" },
-  cctv:       { navn: "CCTV / NVR", etasje: 1, col: 1, ikon: "videocam" },
-  vaktrom:    { navn: "Vaktrom", etasje: 1, col: 2, ikon: "shield" },
-  brannmur:   { navn: "Brannmur", etasje: 2, col: 0, ikon: "fireplace" },
+  TVO:       { navn: "TVO / NVR", etasje: 1, col: 1, ikon: "speed_camera" },
+  vaktrom:    { navn: "Vaktrom", etasje: 1, col: 2, ikon: "person_shield" },
+  brannmur:   { navn: "Brannmur", etasje: 2, col: 0, ikon: "shield_locked" },
   server:     { navn: "Servere", etasje: 2, col: 1, ikon: "dns" },
-  servertemp: { navn: "Temp-sensor srv", etasje: 2, col: 2, ikon: "thermostat" },
-  fagsystem:  { navn: "Fagsystemer", etasje: 3, col: 1, ikon: "business_center" },
+  servertemp: { navn: "Temp-sensor server", etasje: 2, col: 2, ikon: "thermostat" },
+  fagsystem:  { navn: "Fagsystemer", etasje: 3, col: 1, ikon: "computer" },
 };
 
 const ETASJER = [
@@ -102,8 +102,8 @@ const ETASJER = [
 function fg(s?: string): string {
   if (!s) return "#2563eb";
   const m: Record<string, string> = {
-    kompromittert: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
-    feil: "#ff6600", manipulert: "#e06000", degradert: "#cc8800",
+    svært_kritisk: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
+    feil: "#ff6600", manipulert: "#e06000", svekket: "#cc8800",
     advarsel: "#ccaa00", oppdateres: "#3b82f6", normal: "#00cc66",
   };
   return m[s] || "#2563eb";
@@ -112,8 +112,8 @@ function fg(s?: string): string {
 function statusTekst(s?: string): string {
   if (!s) return "NORMAL";
   const m: Record<string, string> = {
-    kompromittert: "KOMPROMITTERT", nede: "NEDE", kritisk: "KRITISK",
-    feil: "FEIL", manipulert: "MANIPULERT", degradert: "DEGRADERT",
+    svært_kritisk: "LANGVARIG NEDETID / SVÆRT KRITISK", nede: "NEDE", kritisk: "KRITISK",
+    feil: "FEIL", manipulert: "MANIPULERT", svekket: "SVEKKET",
     advarsel: "ADVARSEL", oppdateres: "OPPDATERES", normal: "NORMAL",
   };
   return m[s] || s.toUpperCase();
@@ -173,7 +173,7 @@ export default function OTSimulator({ onBack }: Props) {
 
   const velgScenario = (id: string) => { nullstill(); setValgt(id); };
   const antallBrutt = Object.values(statuses).filter(s =>
-    ["nede", "kritisk", "kompromittert", "feil", "manipulert"].includes(s)).length;
+    ["nede", "kritisk", "svært_kritisk", "feil", "manipulert"].includes(s)).length;
   const lovkravListe = [...new Set(log.filter(l => l.lovkrav).map(l => l.lovkrav))];
 
   return (
@@ -194,8 +194,8 @@ export default function OTSimulator({ onBack }: Props) {
         }}>
           <Icon name="arrow_back" size={16} ariaLabel="" /> Tilbake
         </button>
-        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>DRIFTSKOMPASSET</span>
-        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>OT-SIMULATOR · TYPISK NORSK KONTORBYGG</span>
+        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>OPERASJONELL TEKNOLOGI</span>
+        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>SCENARIOSIMULATOR · BYGG</span>
         {running && (
           <span style={{ marginLeft: "auto", color: "#f59e0b", fontSize: "11px", animation: "blink 0.9s infinite", display: "flex", alignItems: "center", gap: "6px" }}>
             <Icon name="radio_button_checked" size={12} fill={true} ariaLabel="" /> SIMULERING AKTIV
@@ -263,7 +263,7 @@ export default function OTSimulator({ onBack }: Props) {
             </div>
             <div ref={logRef} style={{ maxHeight: "250px", overflowY: "auto", padding: "7px" }}>
               {log.length === 0
-                ? <div style={{ color: "#5a6a80", fontSize: "12px", padding: "24px", textAlign: "center" }}>— Velg scenario og trykk Simuler —</div>
+                ? <div style={{ color: "#5a6a80", fontSize: "12px", padding: "24px", textAlign: "center" }}>— Velg scenario og trykk SIMULER —</div>
                 : log.map((e, i) => {
                   const c = fg(e.status);
                   return (
@@ -383,10 +383,10 @@ export default function OTSimulator({ onBack }: Props) {
             {([
               ["NORMAL", "#2563eb"],
               ["ADVARSEL", "#ccaa00"],
-              ["DEGRADERT", "#cc8800"],
+              ["SVEKKET", "#cc8800"],
               ["FEIL / MANIPULERT", "#ff6600"],
               ["NEDE / KRITISK", "#ff2244"],
-              ["KOMPROMITTERT", "#ff003c"],
+              ["LANGVARIG NEDETID / SVÆRT KRITISK", "#ff003c"],
             ] as const).map(([l, c]) => (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
                 <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: c, boxShadow: `0 0 5px ${c}`, flexShrink: 0 }} />

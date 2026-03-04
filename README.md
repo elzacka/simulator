@@ -6,8 +6,8 @@ Interaktiv scenariosimulator for sikkerhetshendelser basert på NSM Risiko 2026.
 
 ## Simulatorer
 
-- **OT-simulator** — Operasjonell teknologi: simuler angrep mot industrielle kontrollsystemer (SCADA, PLS, HMI)
-- **Risiko-simulator** — Digital risiko: simuler cyberhendelser mot sky, nettverk, e-post og finanssystemer
+- **Operasjonell teknologi** — Simuler angrep mot UPS, BMS og nettverksinfrastruktur i kontorbygg
+- **Risiko 2026** — Uonskede hendelser relatert til anskaffelser og leverandorkjeder (NSM Risiko 2026)
 
 ## Teknologi
 

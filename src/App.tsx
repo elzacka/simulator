@@ -61,16 +61,13 @@ export default function App() {
             background: "rgba(8, 16, 32, 0.95)",
           }}
         >
-          <div style={{ marginBottom: "16px" }}>
-            <Icon name="bolt" size={36} fill={true} style={{ color: "#fbbf24" }} ariaLabel="OT" />
-          </div>
           <h2 style={{
             fontSize: "20px",
             fontWeight: 700,
             color: "#e5e7eb",
             marginBottom: "10px",
           }}>
-            OT
+            Operasjonell teknologi
           </h2>
           <p style={{
             fontSize: "14px",
@@ -103,9 +100,6 @@ export default function App() {
             background: "rgba(8, 16, 32, 0.95)",
           }}
         >
-          <div style={{ marginBottom: "16px" }}>
-            <Icon name="shield_person" size={36} fill={true} style={{ color: "#f87171" }} ariaLabel="Risiko 2026" />
-          </div>
           <h2 style={{
             fontSize: "20px",
             fontWeight: 700,
@@ -119,7 +113,7 @@ export default function App() {
             color: "#8896aa",
             lineHeight: 1.55,
           }}>
-            Trusler mot anskaffelser og virksomhetssikkerhet.
+            Uønskede hendelser relatert til anskaffelser og leverandørkjeder.
             Basert på NSMs risikovurdering for 2026.
           </p>
           <div style={{
@@ -143,7 +137,7 @@ export default function App() {
         textAlign: "center",
         lineHeight: 1.6,
       }}>
-        Kilde: NSM Risiko 2026 · Veileder for sikkerhet i anskaffelser
+        Kilder: OWASP Top Ten 2025 · NSM Risiko 2026 · NSM Veileder for sikkerhet i anskaffelser 2025
       </div>
     </div>
   );

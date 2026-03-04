@@ -38,18 +38,18 @@ interface SystemInfo {
 const SCENARIOS: Scenario[] = [
   {
     id: "leverandor_angrep",
-    navn: "Kompromittert IT-leverandør",
+    navn: "Svært kritisk — IT-leverandør",
     ikon: "link",
     kort: "Leverandør hackes — angriperen bruker deres tilgang til å stjele data og penger",
     beskrivelse: "Virksomheten har satt ut IT-drift til en ekstern leverandør uten tilstrekkelige sikkerhetskrav i kontrakten. Leverandøren blir hacket, og angriperen bruker leverandørens legitime tilgang til å kompromittere virksomhetens systemer. Dette scenariet viser hvorfor sikkerhetskrav i anskaffelser er avgjørende.",
     steg: [
-      { tid: 0, sys: "leverandor", status: "kompromittert", melding: "IT-leverandørens fjernstyringsverktøy er kompromittert. Angriperen har full tilgang til alle kunders systemer." },
-      { tid: 1200, sys: "nettverk", status: "kompromittert", melding: "Angriperen bruker leverandørens VPN-tilgang til å kartlegge virksomhetens interne nettverk." },
-      { tid: 2400, sys: "epost", status: "kompromittert", melding: "Leverandørens servicekonto gir tilgang til e-postsystemet. Intern kommunikasjon overvåkes." },
-      { tid: 3600, sys: "fagsystem", status: "kompromittert", melding: "Saksbehandlingssystemet med personsensitive data kompromitteres via leverandørtilgangen.", lovkrav: "Personopplysningsloven / GDPR art. 32" },
-      { tid: 4800, sys: "personaldata", status: "kompromittert", melding: "Personopplysninger om ansatte og borgere kopieres ut av virksomheten.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 0, sys: "leverandor", status: "svært_kritisk", melding: "IT-leverandørens fjernstyringsverktøy er kompromittert. Angriperen har full tilgang til alle kunders systemer." },
+      { tid: 1200, sys: "nettverk", status: "svært_kritisk", melding: "Angriperen bruker leverandørens VPN-tilgang til å kartlegge virksomhetens interne nettverk." },
+      { tid: 2400, sys: "epost", status: "svært_kritisk", melding: "Leverandørens servicekonto gir tilgang til e-postsystemet. Intern kommunikasjon overvåkes." },
+      { tid: 3600, sys: "fagsystem", status: "svært_kritisk", melding: "Saksbehandlingssystemet med personsensitive data kompromitteres via leverandørtilgangen.", lovkrav: "Personopplysningsloven / GDPR art. 32" },
+      { tid: 4800, sys: "personaldata", status: "svært_kritisk", melding: "Personopplysninger om ansatte og borgere kopieres ut av virksomheten.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
       { tid: 6000, sys: "okonomi", status: "manipulert", melding: "Angriperen endrer kontonummer i fakturarutinene. Neste utbetaling på 4,2 mill. kr sendes til angriperens konto.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 7200, sys: "backup", status: "kompromittert", melding: "Backup-løsningen krypteres med løsepengevirus. Gjenoppretting av data er umulig." },
+      { tid: 7200, sys: "backup", status: "svært_kritisk", melding: "Backup-løsningen krypteres med løsepengevirus. Gjenoppretting av data er umulig." },
       { tid: 8400, sys: "skytjeneste", status: "nede", melding: "Leverandørens skytjeneste stenges ned som følge av hendelsen. Alle avhengige systemer er utilgjengelige.", lovkrav: "Sikkerhetsloven § 4-1" },
     ]
   },
@@ -62,11 +62,11 @@ const SCENARIOS: Scenario[] = [
     steg: [
       { tid: 0, sys: "tilgang", status: "advarsel", melding: "«Ola» er autorisert for nivå HEMMELIG. Han har bred tilgang til fagsystemer og gradert informasjon." },
       { tid: 1500, sys: "personaldata", status: "advarsel", melding: "«Ola» blir samboer med person fra et land PST vurderer som høy etterretningstrussel. Forholdet meldes ikke til autorisasjonsansvarlig." },
-      { tid: 3000, sys: "epost", status: "degradert", melding: "«Ola» introduseres for fagpersoner fra samboerens nettverk. De utveksler informasjon via privat e-post." },
-      { tid: 4500, sys: "fagsystem", status: "kompromittert", melding: "«Ola» inviteres til fagsamarbeid i utlandet. Han holder foredrag om sitt arbeidsområde for et ukjent publikum." },
-      { tid: 6000, sys: "personaldata", status: "kompromittert", melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
+      { tid: 3000, sys: "epost", status: "svekket", melding: "«Ola» introduseres for fagpersoner fra samboerens nettverk. De utveksler informasjon via privat e-post." },
+      { tid: 4500, sys: "fagsystem", status: "svært_kritisk", melding: "«Ola» inviteres til fagsamarbeid i utlandet. Han holder foredrag om sitt arbeidsområde for et ukjent publikum." },
+      { tid: 6000, sys: "personaldata", status: "svært_kritisk", melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
       { tid: 7500, sys: "tilgang", status: "feil", melding: "Autorisasjonsansvarlig er aldri blitt varslet om samboerforholdet. Ingen revurdering av «Ola»s klarering er gjennomført.", lovkrav: "Sikkerhetsloven § 8-4 — personkontroll" },
-      { tid: 9000, sys: "backup", status: "degradert", melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til sensitiv informasjon.", lovkrav: "Sikkerhetsloven § 4-3 — sikkerhetsstyring" },
+      { tid: 9000, sys: "backup", status: "svekket", melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til sensitiv informasjon.", lovkrav: "Sikkerhetsloven § 4-3 — sikkerhetsstyring" },
     ]
   },
   {
@@ -82,8 +82,8 @@ const SCENARIOS: Scenario[] = [
       { tid: 2400, sys: "fagsystem", status: "nede", melding: "Alle fagsystemer hostet i skyen er utilgjengelige. Saksbehandling og publikumstjenester stopper." },
       { tid: 3200, sys: "okonomi", status: "nede", melding: "Lønn- og faktureringssystem er nede. Ansatte risikerer å ikke få utbetalt lønn ved neste termin.", lovkrav: "Anskaffelsesloven § 6" },
       { tid: 4000, sys: "backup", status: "nede", melding: "Backup er lagret hos samme skyleverandør. Ingen data kan gjenopprettes fra alternativ kilde." },
-      { tid: 5000, sys: "nettverk", status: "degradert", melding: "VPN og nettverkstjenester som er avhengige av skyen feiler. Fjernarbeid er umulig." },
-      { tid: 6000, sys: "fysisk", status: "degradert", melding: "Bygningsstyring og adgangskort knyttet til skytjenesten svikter. Dører må låses opp manuelt.", lovkrav: "Sikkerhetsloven § 4-1" },
+      { tid: 5000, sys: "nettverk", status: "svekket", melding: "VPN og nettverkstjenester som er avhengige av skyen feiler. Fjernarbeid er umulig." },
+      { tid: 6000, sys: "fysisk", status: "svekket", melding: "Bygningsstyring og adgangskort knyttet til skytjenesten svikter. Dører må låses opp manuelt.", lovkrav: "Sikkerhetsloven § 4-1" },
     ]
   },
   {
@@ -93,13 +93,13 @@ const SCENARIOS: Scenario[] = [
     kort: "Synlig adgangskort kopieres — inntrenger stjeler data fra bygget",
     beskrivelse: "En ansatt bærer synlig adgangskort utenfor arbeidsplassen. Kortet fotograferes og kopieres. En inntrenger bruker det falske kortet og «tailgating» (følger tett bak en ansatt) for å komme inn i bygget. Sensitive data stjeles via USB-enhet.",
     steg: [
-      { tid: 0, sys: "fysisk", status: "kompromittert", melding: "Ansatt bærer synlig adgangskort på T-banen. Foto av kortets design og ID-nummer tas av ukjent person." },
-      { tid: 1200, sys: "tilgang", status: "kompromittert", melding: "Falskt adgangskort produseres basert på fotografiet. Inntrengeren bruker «tailgating» ved hovedinngangen.", lovkrav: "Sikkerhetsloven § 4-2" },
-      { tid: 2400, sys: "fysisk", status: "degradert", melding: "Inntrengeren beveger seg fritt i bygget. Ingen ansatte utfordrer en ukjent person uten synlig kort." },
-      { tid: 3600, sys: "nettverk", status: "kompromittert", melding: "USB-enhet med skadevare kobles til en nettverkskontakt i et uovervåket møterom. Bakdør installeres." },
-      { tid: 4800, sys: "fagsystem", status: "kompromittert", melding: "Via bakdøren kartlegges interne systemer. Fagsystemet med pågående anskaffelser kompromitteres." },
-      { tid: 6000, sys: "epost", status: "kompromittert", melding: "Intern e-post overvåkes. Budsjettrammer og konkurransegrunnlag for pågående anskaffelser avdekkes.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 7200, sys: "personaldata", status: "kompromittert", melding: "Personopplysninger og gradert informasjon kopieres til USB-enhet og bringes ut av bygget.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 0, sys: "fysisk", status: "svært_kritisk", melding: "Ansatt bærer synlig adgangskort på T-banen. Foto av kortets design og ID-nummer tas av ukjent person." },
+      { tid: 1200, sys: "tilgang", status: "svært_kritisk", melding: "Falskt adgangskort produseres basert på fotografiet. Inntrengeren bruker «tailgating» ved hovedinngangen.", lovkrav: "Sikkerhetsloven § 4-2" },
+      { tid: 2400, sys: "fysisk", status: "svekket", melding: "Inntrengeren beveger seg fritt i bygget. Ingen ansatte utfordrer en ukjent person uten synlig kort." },
+      { tid: 3600, sys: "nettverk", status: "svært_kritisk", melding: "USB-enhet med skadevare kobles til en nettverkskontakt i et uovervåket møterom. Bakdør installeres." },
+      { tid: 4800, sys: "fagsystem", status: "svært_kritisk", melding: "Via bakdøren kartlegges interne systemer. Fagsystemet med pågående anskaffelser kompromitteres." },
+      { tid: 6000, sys: "epost", status: "svært_kritisk", melding: "Intern e-post overvåkes. Budsjettrammer og konkurransegrunnlag for pågående anskaffelser avdekkes.", lovkrav: "Anskaffelsesloven § 6" },
+      { tid: 7200, sys: "personaldata", status: "svært_kritisk", melding: "Personopplysninger og gradert informasjon kopieres til USB-enhet og bringes ut av bygget.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
     ]
   },
   {
@@ -109,13 +109,13 @@ const SCENARIOS: Scenario[] = [
     kort: "Kunstig intelligens brukes til å lure innkjøpsansvarlig — deepfake og perfekt norsk",
     beskrivelse: "Trusselaktør bruker kunstig intelligens til å lage perfekt tilpassede phishing-e-poster og deepfake-videosamtaler rettet mot innkjøpsansvarlige. Angrepet utnytter tillit og rutiner i anskaffelsesprosessen for å omdirigere betalinger og stjele forretningshemmeligheter.",
     steg: [
-      { tid: 0, sys: "epost", status: "kompromittert", melding: "KI-generert phishing-e-post sendes til innkjøpsansvarlig. Perfekt norsk, refererer til en reell pågående anskaffelse." },
-      { tid: 1200, sys: "tilgang", status: "kompromittert", melding: "Ansatt klikker lenke og oppgir pålogging. Tofaktorverifisering avlures via KI-generert telefonsamtale som ligner IT-support." },
+      { tid: 0, sys: "epost", status: "svært_kritisk", melding: "KI-generert phishing-e-post sendes til innkjøpsansvarlig. Perfekt norsk, refererer til en reell pågående anskaffelse." },
+      { tid: 1200, sys: "tilgang", status: "svært_kritisk", melding: "Ansatt klikker lenke og oppgir pålogging. Tofaktorverifisering avlures via KI-generert telefonsamtale som ligner IT-support." },
       { tid: 2400, sys: "okonomi", status: "manipulert", melding: "Angriperen endrer leverandørens kontonummer i økonomisystemet. Neste betaling på 2,8 mill. kr sendes til feil konto.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 3600, sys: "epost", status: "degradert", melding: "KI-deepfake videosamtale brukes til å «bekrefte» kontoendringen. Personen i videoen ligner seksjonsleder til forveksling." },
-      { tid: 4800, sys: "fagsystem", status: "kompromittert", melding: "Angriperen bruker tilgangen til å kartlegge alle pågående og fremtidige anskaffelser i fagsystemet." },
-      { tid: 6000, sys: "personaldata", status: "kompromittert", melding: "Budsjettrammer, kontraktsverdier og leverandørlister eksfiltreres. Kan brukes til fremtidige angrep.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
-      { tid: 7200, sys: "nettverk", status: "kompromittert", melding: "Vedvarende bakdør installeres i nettverket for fremtidig tilgang og overvåkning.", lovkrav: "Digitalsikkerhetsloven art. 21" },
+      { tid: 3600, sys: "epost", status: "svekket", melding: "KI-deepfake videosamtale brukes til å «bekrefte» kontoendringen. Personen i videoen ligner seksjonsleder til forveksling." },
+      { tid: 4800, sys: "fagsystem", status: "svært_kritisk", melding: "Angriperen bruker tilgangen til å kartlegge alle pågående og fremtidige anskaffelser i fagsystemet." },
+      { tid: 6000, sys: "personaldata", status: "svært_kritisk", melding: "Budsjettrammer, kontraktsverdier og leverandørlister eksfiltreres. Kan brukes til fremtidige angrep.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
+      { tid: 7200, sys: "nettverk", status: "svært_kritisk", melding: "Vedvarende bakdør installeres i nettverket for fremtidig tilgang og overvåkning.", lovkrav: "Digitalsikkerhetsloven art. 21" },
     ]
   }
 ];
@@ -127,8 +127,8 @@ const SYS_INFO: Record<string, SystemInfo> = {
   backup:     { navn: "Backup", domene: 0, col: 3, ikon: "backup" },
   tilgang:    { navn: "Tilgangskontroll", domene: 1, col: 0, ikon: "vpn_key" },
   epost:      { navn: "E-post", domene: 1, col: 1, ikon: "mail" },
-  fagsystem:  { navn: "Fagsystemer", domene: 2, col: 0, ikon: "inventory_2" },
-  okonomi:    { navn: "Økonomi / lønn", domene: 2, col: 1, ikon: "account_balance" },
+  fagsystem:  { navn: "Fagsystemer", domene: 2, col: 0, ikon: "computer" },
+  okonomi:    { navn: "Økonomi / lønn", domene: 2, col: 1, ikon: "finance" },
   personaldata:{ navn: "Personopplysninger", domene: 2, col: 2, ikon: "person" },
   fysisk:     { navn: "Fysisk sikring", domene: 3, col: 0, ikon: "domain" },
 };
@@ -143,8 +143,8 @@ const DOMENER = [
 function fg(s?: string): string {
   if (!s) return "#2563eb";
   const m: Record<string, string> = {
-    kompromittert: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
-    feil: "#ff6600", manipulert: "#e06000", degradert: "#cc8800",
+    svært_kritisk: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
+    feil: "#ff6600", manipulert: "#e06000", svekket: "#cc8800",
     advarsel: "#ccaa00", oppdateres: "#3b82f6", normal: "#00cc66",
   };
   return m[s] || "#2563eb";
@@ -153,8 +153,8 @@ function fg(s?: string): string {
 function statusTekst(s?: string): string {
   if (!s) return "NORMAL";
   const m: Record<string, string> = {
-    kompromittert: "KOMPROMITTERT", nede: "NEDE", kritisk: "KRITISK",
-    feil: "FEIL", manipulert: "MANIPULERT", degradert: "DEGRADERT",
+    svært_kritisk: "LANGVARIG NEDETID/SVÆRT KRITISK", nede: "NEDE", kritisk: "KRITISK",
+    feil: "FEIL", manipulert: "MANIPULERT", svekket: "SVEKKET",
     advarsel: "ADVARSEL", oppdateres: "OPPDATERES", normal: "NORMAL",
   };
   return m[s] || s.toUpperCase();
@@ -214,7 +214,7 @@ export default function RisikoSimulator({ onBack }: Props) {
 
   const velgScenario = (id: string) => { nullstill(); setValgt(id); };
   const antallBrutt = Object.values(statuses).filter(s =>
-    ["nede", "kritisk", "kompromittert", "feil", "manipulert"].includes(s)).length;
+    ["nede", "kritisk", "svært kritisk", "feil", "manipulert"].includes(s)).length;
   const lovkravListe = [...new Set(log.filter(l => l.lovkrav).map(l => l.lovkrav))];
 
   return (
@@ -235,8 +235,8 @@ export default function RisikoSimulator({ onBack }: Props) {
         }}>
           <Icon name="arrow_back" size={16} ariaLabel="" /> Tilbake
         </button>
-        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>RISIKO 2026</span>
-        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>TRUSLER MOT ANSKAFFELSER OG VIRKSOMHET</span>
+        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>NSM RISIKO 2026</span>
+        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>SCENARIOSIMULATOR · ANSKAFFELSER OG LEVERANDØRKJEDER</span>
         {running && (
           <span style={{ marginLeft: "auto", color: "#f59e0b", fontSize: "11px", animation: "blink 0.9s infinite", display: "flex", alignItems: "center", gap: "6px" }}>
             <Icon name="radio_button_checked" size={12} fill={true} ariaLabel="" /> SIMULERING AKTIV
@@ -304,7 +304,7 @@ export default function RisikoSimulator({ onBack }: Props) {
             </div>
             <div ref={logRef} style={{ maxHeight: "280px", overflowY: "auto", padding: "7px" }}>
               {log.length === 0
-                ? <div style={{ color: "#5a6a80", fontSize: "12px", padding: "24px", textAlign: "center" }}>— Velg scenario og trykk Simuler —</div>
+                ? <div style={{ color: "#5a6a80", fontSize: "12px", padding: "24px", textAlign: "center" }}>— Velg scenario og trykk SIMULER —</div>
                 : log.map((e, i) => {
                   const c = fg(e.status);
                   return (
@@ -424,10 +424,10 @@ export default function RisikoSimulator({ onBack }: Props) {
             {([
               ["NORMAL", "#2563eb"],
               ["ADVARSEL", "#ccaa00"],
-              ["DEGRADERT", "#cc8800"],
+              ["SVEKKET", "#cc8800"],
               ["FEIL / MANIPULERT", "#ff6600"],
-              ["NEDE / KRITISK", "#ff2244"],
-              ["KOMPROMITTERT", "#ff003c"],
+              ["NEDETID / KRITISK", "#ff2244"],
+              ["LANGVARIG NEDETID / SVÆRT KRITISK", "#ff003c"],
             ] as const).map(([l, c]) => (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
                 <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: c, boxShadow: `0 0 5px ${c}`, flexShrink: 0 }} />
