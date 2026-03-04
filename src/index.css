@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Nunito Sans', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: #060b18;
+  color: #d1d5db;
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 3px 0px currentColor; }
+  50% { box-shadow: 0 0 12px 2px currentColor, 0 0 24px 4px currentColor; }
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.sysnode {
+  transition: border-color 0.4s, background 0.4s, color 0.4s;
+}
+
+.sysnode.hit {
+  animation: glow 1.3s ease-in-out infinite;
+}
+
+.logrow {
+  animation: fadein 0.25s ease;
+}
+
+.sccard {
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+}
+
+.sccard:hover {
+  border-color: #2563eb !important;
+  background: rgba(37, 99, 235, 0.08) !important;
+}
+
+.sccard.sel {
+  border-color: #3b82f6 !important;
+  background: rgba(37, 99, 235, 0.12) !important;
+}
+
+.simbtn {
+  transition: all 0.18s ease;
+}
+
+.simbtn:hover:not(:disabled) {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+}
+
+.navcard {
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.navcard:hover {
+  transform: translateY(-4px);
+  border-color: #3b82f6 !important;
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
+}
+
+.backbtn {
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.backbtn:hover {
+  background: rgba(37, 99, 235, 0.1) !important;
+  color: #93c5fd !important;
+}
