@@ -15,6 +15,7 @@ interface Scenario {
   ikon: string;
   kort: string;
   beskrivelse: string;
+  owasp: string;
   steg: Steg[];
 }
 
@@ -25,119 +26,125 @@ interface LoggInnslag extends Steg {
 
 interface SystemInfo {
   navn: string;
-  domene: number;
+  lag: number;
   col: number;
   ikon: string;
 }
 
 /* ————————————————————————————————————————————
-   5 scenarier basert på NSM Risiko 2026
-   Målgruppe: Innkjøpere i norsk offentlig sektor
+   5 scenarier basert på OWASP Top Ten 2025
+   Målgruppe: Utviklere og driftsansvarlige i norsk offentlig sektor
    ———————————————————————————————————————————— */
 
 const SCENARIOS: Scenario[] = [
   {
-    id: "leverandor_angrep",
-    navn: "Kompromittert — IT-leverandør",
+    id: "broken_access",
+    navn: "A01 — Broken Access Control",
+    ikon: "shield",
+    owasp: "A01:2025",
+    kort: "IDOR-sårbarhet i portal — innbyggere ser andres data",
+    beskrivelse: "En innbyggerportal mangler tilgangskontroll på API-nivå. Ved å endre bruker-ID i URL-en kan en angriper se og endre andre innbyggeres søknader, vedtak og personopplysninger. Feilen skyldes at autorisasjonssjekk kun gjøres i frontend, ikke i backend-API-et.",
+    steg: [
+      { tid: 0, sys: "api", status: "kompromittert", melding: "Angriper oppdager at GET /api/soknader/{id} returnerer data uten autorisasjonssjekk. Endrer ID fra egen til vilkårlig." },
+      { tid: 1200, sys: "database", status: "kompromittert", melding: "Databasen returnerer søknadsdata for alle innbyggere. Ingen row-level security. 14 000 søknader eksponert.", lovkrav: "GDPR art. 32 — tilgangskontroll" },
+      { tid: 2400, sys: "persondata", status: "kompromittert", melding: "Personnummer, inntektsopplysninger og helsedata leses ut via IDOR-sårbarheten.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 3600, sys: "portal", status: "manipulert", melding: "Angriper bruker PUT /api/soknader/{id} til å endre status på andres søknader. Vedtak manipuleres." },
+      { tid: 4800, sys: "epost", status: "svekket", melding: "Automatisk e-postvarsling sender bekreftelse på endret søknad til uskyldig innbygger. Hendelsen oppdages." },
+      { tid: 6000, sys: "logg", status: "advarsel", melding: "Loggene viser 4 300 uautoriserte API-kall siste 72 timer. Ingen alarm ble utløst.", lovkrav: "Digitalsikkerhetsloven art. 21" },
+      { tid: 7200, sys: "brannmur", status: "feil", melding: "WAF var konfigurert til å logge, ikke blokkere. Rate limiting var deaktivert for «intern» trafikk." },
+      { tid: 8400, sys: "backup", status: "svekket", melding: "Omfanget av dataeksponering er ukjent. Alle backups siden sårbarheten ble introdusert må gjennomgås.", lovkrav: "Personopplysningsloven § 26" },
+    ]
+  },
+  {
+    id: "misconfig",
+    navn: "A02 — Security Misconfiguration",
+    ikon: "settings",
+    owasp: "A02:2025",
+    kort: "Debug-modus i produksjon — feilmeldinger avslører infrastruktur",
+    beskrivelse: "En webapplikasjon deployes til produksjon med debug-modus aktivert. Stack traces, databasetilkoblingsstrenger og interne IP-adresser eksponeres i feilmeldinger. Default admin-konto er ikke deaktivert. Unødvendige tjenester og porter er åpne.",
+    steg: [
+      { tid: 0, sys: "webserver", status: "advarsel", melding: "Debug-modus er aktiv i produksjon. Detaljerte stack traces returneres ved alle feil." },
+      { tid: 1000, sys: "api", status: "svekket", melding: "Feilmelding avslører databasetype, versjon og intern IP: PostgreSQL 14.2 på 10.0.3.47." },
+      { tid: 2000, sys: "admin", status: "kompromittert", melding: "Default admin-konto «admin/admin» er aktiv. Angriper logger inn på /admin-panelet.", lovkrav: "NSM grunnprinsipper 2.3 — minste privilegium" },
+      { tid: 3200, sys: "database", status: "kompromittert", melding: "Admin-panelet gir direkte databasetilgang. Hele bruker-tabellen med passord-hasher eksporteres." },
+      { tid: 4400, sys: "persondata", status: "kompromittert", melding: "12 500 brukerprofiler med personnummer, e-post og adresse lastes ned.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 5600, sys: "webserver", status: "kompromittert", melding: "Unødvendig tjeneste (phpMyAdmin) kjører på port 8080 uten autentisering. Full DB-tilgang." },
+      { tid: 6800, sys: "logg", status: "feil", melding: "Logging skriver til lokal fil som roterer hver 24 timer. Eldre logger er allerede slettet.", lovkrav: "Sikkerhetsloven § 4-3" },
+    ]
+  },
+  {
+    id: "supply_chain",
+    navn: "A03 — Supply Chain Failures",
     ikon: "link",
-    kort: "Leverandør hackes — angriperen bruker deres tilgang til å stjele data og penger",
-    beskrivelse: "Virksomheten har satt ut IT-drift til en ekstern leverandør uten tilstrekkelige sikkerhetskrav i kontrakten. Leverandøren blir hacket, og angriperen bruker leverandørens legitime tilgang til å kompromittere virksomhetens systemer. Dette scenariet viser hvorfor sikkerhetskrav i anskaffelser er avgjørende.",
+    owasp: "A03:2025",
+    kort: "Kompromittert npm-pakke — bakdør i CI/CD-pipeline",
+    beskrivelse: "En populær npm-pakke som brukes i virksomhetens webapplikasjon blir kompromittert via en dependency confusion-angrep. Ondsinnet kode injiseres i en patch-oppdatering og deployes automatisk via CI/CD-pipelinen uten manuell gjennomgang.",
     steg: [
-      { tid: 0, sys: "leverandor", status: "kompromittert", melding: "IT-leverandørens fjernstyringsverktøy er kompromittert. Angriperen har full tilgang til alle kunders systemer." },
-      { tid: 1200, sys: "nettverk", status: "kompromittert", melding: "Angriperen bruker leverandørens VPN-tilgang til å kartlegge virksomhetens interne nettverk." },
-      { tid: 2400, sys: "epost", status: "kompromittert", melding: "Leverandørens servicekonto gir tilgang til e-postsystemet. Intern kommunikasjon overvåkes." },
-      { tid: 3600, sys: "fagsystem", status: "kompromittert", melding: "Saksbehandlingssystemet med personsensitive data kompromitteres via leverandørtilgangen.", lovkrav: "Personopplysningsloven / GDPR art. 32" },
-      { tid: 4800, sys: "personaldata", status: "kompromittert", melding: "Personopplysninger om ansatte og borgere kopieres ut av virksomheten.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
-      { tid: 6000, sys: "okonomi", status: "manipulert", melding: "Angriperen endrer kontonummer i fakturarutinene. Neste utbetaling på 4,2 mill. kr sendes til angriperens konto.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 7200, sys: "backup", status: "kompromittert", melding: "Backup-løsningen krypteres med løsepengevirus. Gjenoppretting av data er umulig." },
-      { tid: 8400, sys: "skytjeneste", status: "nede", melding: "Leverandørens skytjeneste stenges ned som følge av hendelsen. Alle avhengige systemer er utilgjengelige.", lovkrav: "Sikkerhetsloven § 4-1" },
+      { tid: 0, sys: "cicd", status: "kompromittert", melding: "npm-pakken «form-validator-utils» v2.1.4 inneholder bakdør. Automatisk oppdatering via Dependabot." },
+      { tid: 1200, sys: "webserver", status: "kompromittert", melding: "Ondsinnet kode deployes til produksjon via automatisk CI/CD-pipeline. Ingen manuell kodegjennomgang.", lovkrav: "Digitalsikkerhetsloven art. 21" },
+      { tid: 2400, sys: "portal", status: "kompromittert", melding: "Bakdøren samler inn alle skjemadata (inkl. personnummer) og sender til ekstern server." },
+      { tid: 3600, sys: "persondata", status: "kompromittert", melding: "Innbyggernes personopplysninger eksfiltreres i sanntid. 850 søknader kompromittert første døgn.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 4800, sys: "api", status: "svekket", melding: "Bakdøren installerer en sekundær payload som kartlegger interne API-endepunkter og tokens." },
+      { tid: 6000, sys: "database", status: "advarsel", melding: "SCA-verktøy (Software Composition Analysis) var ikke konfigurert. Ingen SBOM finnes for applikasjonen.", lovkrav: "NSM grunnprinsipper 2.9 — programvareintegritet" },
+      { tid: 7200, sys: "logg", status: "svekket", melding: "Utgående trafikk til ukjent IP ble ikke fanget opp. Egress-filtrering var ikke implementert." },
     ]
   },
   {
-    id: "innsiderisiko",
-    navn: "Innsiderisiko — «Ola Nordmann»",
-    ikon: "person",
-    kort: "Ansatt med sikkerhetsklarering rekrutteres gradvis av fremmed etterretning",
-    beskrivelse: "Basert på et scenario fra NSM Risiko 2026. En ansatt med sikkerhetsklarering for HEMMELIG og bred systemtilgang rekrutteres gradvis av en fremmed etterretningstjeneste — via en nær relasjon. Virksomheten mangler rutiner for å oppdage og håndtere situasjonen.",
+    id: "injection",
+    navn: "A05 — Injection",
+    ikon: "code",
+    owasp: "A05:2025",
+    kort: "SQL-injeksjon i søkefelt — hele databasen dumpes",
+    beskrivelse: "Søkefeltet i en offentlig tjeneste validerer ikke brukerinput. En angriper bruker SQL-injeksjon til å hente ut hele databasen, inkludert intern saksbehandlerdata, før angrepet eskaleres til OS-kommandoer via xp_cmdshell.",
     steg: [
-      { tid: 0, sys: "tilgang", status: "advarsel", melding: "«Ola» er autorisert for nivå HEMMELIG. Han har bred tilgang til fagsystemer og gradert informasjon." },
-      { tid: 1500, sys: "personaldata", status: "advarsel", melding: "«Ola» blir samboer med person fra et land PST vurderer som høy etterretningstrussel. Forholdet meldes ikke til autorisasjonsansvarlig." },
-      { tid: 3000, sys: "epost", status: "svekket", melding: "«Ola» introduseres for fagpersoner fra samboerens nettverk. De utveksler informasjon via privat e-post." },
-      { tid: 4500, sys: "fagsystem", status: "kompromittert", melding: "«Ola» inviteres til fagsamarbeid i utlandet. Han holder foredrag om sitt arbeidsområde for et ukjent publikum." },
-      { tid: 6000, sys: "personaldata", status: "kompromittert", melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
-      { tid: 7500, sys: "tilgang", status: "feil", melding: "Autorisasjonsansvarlig er aldri blitt varslet om samboerforholdet. Ingen revurdering av «Ola»s klarering er gjennomført.", lovkrav: "Sikkerhetsloven § 8-4 — personkontroll" },
-      { tid: 9000, sys: "backup", status: "svekket", melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til sensitiv informasjon.", lovkrav: "Sikkerhetsloven § 4-3 — sikkerhetsstyring" },
+      { tid: 0, sys: "portal", status: "kompromittert", melding: "Angriper sender ' OR 1=1 -- i søkefeltet. Applikasjonen returnerer alle poster i tabellen (45 000 rader)." },
+      { tid: 1200, sys: "database", status: "kompromittert", melding: "UNION SELECT avslører tabellstruktur. Angriper finner tabellene «brukere», «vedtak» og «dokumenter»." },
+      { tid: 2400, sys: "persondata", status: "kompromittert", melding: "Tabellen «brukere» inneholder personnummer, passord-hasher (MD5 uten salt) og adresser.", lovkrav: "GDPR art. 32 — kryptering" },
+      { tid: 3600, sys: "admin", status: "kompromittert", melding: "Admin-passord knekkes (MD5: «Sommer2024!»). Angriper logger inn som systemadministrator.", lovkrav: "NSM grunnprinsipper 2.3" },
+      { tid: 4800, sys: "webserver", status: "kompromittert", melding: "Via admin-tilgang aktiveres xp_cmdshell. Angriper har nå OS-tilgang på databaseserveren." },
+      { tid: 6000, sys: "api", status: "nede", melding: "Angriper installerer kryptominer og bakdør. Serverlast øker til 98%. Tjenesten svarer ikke." },
+      { tid: 7200, sys: "brannmur", status: "svekket", melding: "Utgående C2-trafikk over port 443 blandes med normal HTTPS. Ingen DPI-inspeksjon konfigurert." },
+      { tid: 8400, sys: "logg", status: "feil", melding: "SQL-feilmeldinger ble logget men aldri overvåket. 3 uker med angrepsforsøk ble ignorert.", lovkrav: "Digitalsikkerhetsloven art. 21" },
     ]
   },
   {
-    id: "skytjeneste_avbrudd",
-    navn: "Skytjenesteavbrudd — konsentrasjonsrisiko",
-    ikon: "cloud",
-    kort: "Én utenlandsk skyleverandør svikter — hele virksomheten stopper opp",
-    beskrivelse: "Virksomheten har samlet e-post, fagsystemer, backup og tilgangsstyring hos én stor utenlandsk skyleverandør. En geopolitisk hendelse fører til at tjenestene begrenses for europeiske kunder. Ingen reserveløsning finnes fordi alt ble anskaffet fra samme leverandør.",
+    id: "auth_failure",
+    navn: "A07 — Authentication Failures",
+    ikon: "passkey",
+    owasp: "A07:2025",
+    kort: "Credential stuffing mot ansattportal — ingen MFA, ingen rate limiting",
+    beskrivelse: "En ansattportal med VPN-tilgang mangler flerfaktorautentisering og rate limiting. En angriper bruker lekkede brukernavn/passord-par fra et tidligere databrudd til å systematisk logge inn som ansatte. Session-ID-er er forutsigbare og invalideres ikke ved passordendring.",
     steg: [
-      { tid: 0, sys: "skytjeneste", status: "nede", melding: "Geopolitisk hendelse: Utenlandsk skyleverandør begrenser tjenester for europeiske kunder uten varsel." },
-      { tid: 800, sys: "epost", status: "nede", melding: "E-post og samhandlingsverktøy er utilgjengelige. All intern og ekstern kommunikasjon stanser." },
-      { tid: 1600, sys: "tilgang", status: "nede", melding: "Felles innloggingsløsning (SSO) i skyen er nede. Ingen ansatte kan logge inn på noe system.", lovkrav: "Digitalsikkerhetsloven art. 21" },
-      { tid: 2400, sys: "fagsystem", status: "nede", melding: "Alle fagsystemer hostet i skyen er utilgjengelige. Saksbehandling og publikumstjenester stopper." },
-      { tid: 3200, sys: "okonomi", status: "nede", melding: "Lønn- og faktureringssystem er nede. Ansatte risikerer å ikke få utbetalt lønn ved neste termin.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 4000, sys: "backup", status: "nede", melding: "Backup er lagret hos samme skyleverandør. Ingen data kan gjenopprettes fra alternativ kilde." },
-      { tid: 5000, sys: "nettverk", status: "svekket", melding: "VPN og nettverkstjenester som er avhengige av skyen feiler. Fjernarbeid er umulig." },
-      { tid: 6000, sys: "fysisk", status: "svekket", melding: "Bygningsstyring og adgangskort knyttet til skytjenesten svikter. Dører må låses opp manuelt.", lovkrav: "Sikkerhetsloven § 4-1" },
-    ]
-  },
-  {
-    id: "fysisk_brist",
-    navn: "Fysisk inntrengning via adgangskort",
-    ikon: "badge",
-    kort: "Synlig adgangskort kopieres — inntrenger stjeler data fra bygget",
-    beskrivelse: "En ansatt bærer synlig adgangskort utenfor arbeidsplassen. Kortet fotograferes og kopieres. En inntrenger bruker det falske kortet og «tailgating» (følger tett bak en ansatt) for å komme inn i bygget. Sensitive data stjeles via USB-enhet.",
-    steg: [
-      { tid: 0, sys: "fysisk", status: "kompromittert", melding: "Ansatt bærer synlig adgangskort på T-banen. Foto av kortets design og ID-nummer tas av ukjent person." },
-      { tid: 1200, sys: "tilgang", status: "kompromittert", melding: "Falskt adgangskort produseres basert på fotografiet. Inntrengeren bruker «tailgating» ved hovedinngangen.", lovkrav: "Sikkerhetsloven § 4-2" },
-      { tid: 2400, sys: "fysisk", status: "svekket", melding: "Inntrengeren beveger seg fritt i bygget. Ingen ansatte utfordrer en ukjent person uten synlig kort." },
-      { tid: 3600, sys: "nettverk", status: "kompromittert", melding: "USB-enhet med skadevare kobles til en nettverkskontakt i et uovervåket møterom. Bakdør installeres." },
-      { tid: 4800, sys: "fagsystem", status: "kompromittert", melding: "Via bakdøren kartlegges interne systemer. Fagsystemet med pågående anskaffelser kompromitteres." },
-      { tid: 6000, sys: "epost", status: "kompromittert", melding: "Intern e-post overvåkes. Budsjettrammer og konkurransegrunnlag for pågående anskaffelser avdekkes.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 7200, sys: "personaldata", status: "kompromittert", melding: "Personopplysninger og gradert informasjon kopieres til USB-enhet og bringes ut av bygget.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
-    ]
-  },
-  {
-    id: "ki_angrep",
-    navn: "KI-drevet angrep mot innkjøper",
-    ikon: "smart_toy",
-    kort: "Kunstig intelligens brukes til å lure innkjøpsansvarlig — deepfake og perfekt norsk",
-    beskrivelse: "Trusselaktør bruker kunstig intelligens til å lage perfekt tilpassede phishing-e-poster og deepfake-videosamtaler rettet mot innkjøpsansvarlige. Angrepet utnytter tillit og rutiner i anskaffelsesprosessen for å omdirigere betalinger og stjele forretningshemmeligheter.",
-    steg: [
-      { tid: 0, sys: "epost", status: "kompromittert", melding: "KI-generert phishing-e-post sendes til innkjøpsansvarlig. Perfekt norsk, refererer til en reell pågående anskaffelse." },
-      { tid: 1200, sys: "tilgang", status: "kompromittert", melding: "Ansatt klikker lenke og oppgir pålogging. Tofaktorverifisering avlures via KI-generert telefonsamtale som ligner IT-support." },
-      { tid: 2400, sys: "okonomi", status: "manipulert", melding: "Angriperen endrer leverandørens kontonummer i økonomisystemet. Neste betaling på 2,8 mill. kr sendes til feil konto.", lovkrav: "Anskaffelsesloven § 6" },
-      { tid: 3600, sys: "epost", status: "svekket", melding: "KI-deepfake videosamtale brukes til å «bekrefte» kontoendringen. Personen i videoen ligner seksjonsleder til forveksling." },
-      { tid: 4800, sys: "fagsystem", status: "kompromittert", melding: "Angriperen bruker tilgangen til å kartlegge alle pågående og fremtidige anskaffelser i fagsystemet." },
-      { tid: 6000, sys: "personaldata", status: "kompromittert", melding: "Budsjettrammer, kontraktsverdier og leverandørlister eksfiltreres. Kan brukes til fremtidige angrep.", lovkrav: "Sikkerhetsloven § 5-4 — taushetsplikt" },
-      { tid: 7200, sys: "nettverk", status: "kompromittert", melding: "Vedvarende bakdør installeres i nettverket for fremtidig tilgang og overvåkning.", lovkrav: "Digitalsikkerhetsloven art. 21" },
+      { tid: 0, sys: "portal", status: "advarsel", melding: "Automatisert credential stuffing startes. 200 innloggingsforsøk per minutt. Ingen rate limiting." },
+      { tid: 1200, sys: "admin", status: "kompromittert", melding: "5 av 200 passord-par gir treff. Ansatt med rollen «saksbehandler» kompromitteres. Ingen MFA.", lovkrav: "NSM grunnprinsipper 2.2 — autentisering" },
+      { tid: 2400, sys: "epost", status: "kompromittert", melding: "Angriperen leser ansattes e-post via SSO-token. Intern kommunikasjon om pågående anskaffelse avdekkes." },
+      { tid: 3600, sys: "api", status: "kompromittert", melding: "API-tokenet er en forutsigbar JWT uten utløpstid. Token gjenbrukes selv etter at ansatt bytter passord." },
+      { tid: 4800, sys: "persondata", status: "kompromittert", melding: "Saksbehandlerens tilgang brukes til å eksportere personopplysninger om 2 300 innbyggere.", lovkrav: "GDPR art. 33 — varsling innen 72 timer" },
+      { tid: 6000, sys: "database", status: "svekket", melding: "Session-ID-er er sekvensielle (1001, 1002, 1003...). Angriper kaprer 12 aktive sesjoner." },
+      { tid: 7200, sys: "logg", status: "feil", melding: "Mislykkede innloggingsforsøk logges, men ingen alarm utløses. Terskelverdier er satt til 10 000.", lovkrav: "Sikkerhetsloven § 4-3 — sikkerhetsstyring" },
     ]
   }
 ];
 
 const SYS_INFO: Record<string, SystemInfo> = {
-  leverandor: { navn: "Leverandørtilgang", domene: 0, col: 0, ikon: "link" },
-  nettverk:   { navn: "Internt nettverk", domene: 0, col: 1, ikon: "hub" },
-  skytjeneste:{ navn: "Skytjenester", domene: 0, col: 2, ikon: "cloud" },
-  backup:     { navn: "Backup", domene: 0, col: 3, ikon: "backup" },
-  tilgang:    { navn: "Tilgangskontroll", domene: 1, col: 0, ikon: "vpn_key" },
-  epost:      { navn: "E-post", domene: 1, col: 1, ikon: "mail" },
-  fagsystem:  { navn: "Fagsystemer", domene: 2, col: 0, ikon: "computer" },
-  okonomi:    { navn: "Økonomi / lønn", domene: 2, col: 1, ikon: "finance" },
-  personaldata:{ navn: "Personopplysninger", domene: 2, col: 2, ikon: "person" },
-  fysisk:     { navn: "Fysisk sikring", domene: 3, col: 0, ikon: "domain" },
+  portal:     { navn: "Innbyggerportal", lag: 0, col: 0, ikon: "language" },
+  webserver:  { navn: "Webserver", lag: 0, col: 1, ikon: "dns" },
+  brannmur:   { navn: "WAF / Brannmur", lag: 0, col: 2, ikon: "shield_locked" },
+  api:        { navn: "API-lag", lag: 1, col: 0, ikon: "api" },
+  admin:      { navn: "Admin-panel", lag: 1, col: 1, ikon: "admin_panel_settings" },
+  cicd:       { navn: "CI/CD-pipeline", lag: 1, col: 2, ikon: "build" },
+  database:   { navn: "Database", lag: 2, col: 0, ikon: "database" },
+  persondata: { navn: "Personopplysninger", lag: 2, col: 1, ikon: "person" },
+  epost:      { navn: "E-post / SSO", lag: 2, col: 2, ikon: "mail" },
+  logg:       { navn: "Logging / SIEM", lag: 3, col: 0, ikon: "monitoring" },
+  backup:     { navn: "Backup", lag: 3, col: 1, ikon: "backup" },
 };
 
-const DOMENER = [
-  "DIGITAL INFRASTRUKTUR",
-  "BRUKER OG TILGANG",
-  "KJERNEVIRKSOMHET",
-  "FYSISK SIKRING",
+const LAG = [
+  "PRESENTASJON — Frontend / Edge",
+  "APPLIKASJON — Backend / API",
+  "DATA — Database / Personopplysninger",
+  "DRIFT — Logging / Backup",
 ];
 
 function fg(s?: string): string {
@@ -164,7 +171,7 @@ interface Props {
   onBack: () => void;
 }
 
-export default function RisikoSimulator({ onBack }: Props) {
+export default function OwaspSimulator({ onBack }: Props) {
   const [valgt, setValgt] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
   const [done, setDone] = useState(false);
@@ -214,7 +221,7 @@ export default function RisikoSimulator({ onBack }: Props) {
 
   const velgScenario = (id: string) => { nullstill(); setValgt(id); };
   const antallBrutt = Object.values(statuses).filter(s =>
-    ["nede", "kritisk", "svært kritisk", "feil", "manipulert"].includes(s)).length;
+    ["nede", "kritisk", "kompromittert", "feil", "manipulert"].includes(s)).length;
   const lovkravListe = [...new Set(log.filter(l => l.lovkrav).map(l => l.lovkrav))];
 
   return (
@@ -224,7 +231,7 @@ export default function RisikoSimulator({ onBack }: Props) {
       color: "#d1d5db",
       padding: "14px",
       boxSizing: "border-box",
-      backgroundImage: "radial-gradient(ellipse at 85% 30%, rgba(37,99,235,0.05) 0%, transparent 55%)"
+      backgroundImage: "radial-gradient(ellipse at 50% 20%, rgba(37,99,235,0.05) 0%, transparent 55%)"
     }}>
       {/* TOPPLINJE */}
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", borderBottom: "1px solid #1c2a40", paddingBottom: "11px" }}>
@@ -235,8 +242,8 @@ export default function RisikoSimulator({ onBack }: Props) {
         }}>
           <Icon name="arrow_back" size={16} ariaLabel="" /> Tilbake
         </button>
-        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>NSM RISIKO 2026</span>
-        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>SCENARIOSIMULATOR · ANSKAFFELSER OG LEVERANDØRKJEDER</span>
+        <span style={{ fontSize: "16px", fontWeight: 700, color: "#3b82f6", letterSpacing: "0.06em" }}>OWASP TOP 10 2025</span>
+        <span style={{ fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", marginTop: "1px" }}>SCENARIOSIMULATOR · WEBAPPLIKASJONSSIKKERHET</span>
         {running && (
           <span style={{ marginLeft: "auto", color: "#f59e0b", fontSize: "11px", animation: "blink 0.9s infinite", display: "flex", alignItems: "center", gap: "6px" }}>
             <Icon name="radio_button_checked" size={12} fill={true} ariaLabel="" /> SIMULERING AKTIV
@@ -252,19 +259,19 @@ export default function RisikoSimulator({ onBack }: Props) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "12px", alignItems: "start" }}>
         {/* VENSTRE KOLONNE */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          {/* ORGANISASJONSVISNING */}
+          {/* ARKITEKTURVISNING */}
           <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", overflow: "hidden", background: "rgba(8,16,32,0.95)" }}>
             <div style={{ padding: "8px 14px", borderBottom: "1px solid #1c2a40", fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", fontWeight: 600 }}>
-              ORGANISASJONSVISNING — SYSTEMSTATUS
+              ARKITEKTURVISNING — SYSTEMSTATUS
             </div>
             <div style={{ padding: "10px", display: "flex", flexDirection: "column", gap: "3px" }}>
-              {DOMENER.map((domenenavn, dIdx) => {
+              {LAG.map((lagnavn, lIdx) => {
                 const sys = Object.entries(SYS_INFO)
-                  .filter(([, v]) => v.domene === dIdx)
+                  .filter(([, v]) => v.lag === lIdx)
                   .sort((a, b) => a[1].col - b[1].col);
                 return (
-                  <div key={dIdx} style={{ borderLeft: "2px solid #1c2a40", paddingLeft: "10px", paddingTop: "7px", paddingBottom: "7px" }}>
-                    <div style={{ fontSize: "9px", color: "#7a8a9e", letterSpacing: "0.08em", marginBottom: "7px" }}>{domenenavn}</div>
+                  <div key={lIdx} style={{ borderLeft: "2px solid #1c2a40", paddingLeft: "10px", paddingTop: "7px", paddingBottom: "7px" }}>
+                    <div style={{ fontSize: "9px", color: "#7a8a9e", letterSpacing: "0.08em", marginBottom: "7px" }}>{lagnavn}</div>
                     <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
                       {sys.map(([id, info]) => {
                         const st = statuses[id];
@@ -300,7 +307,7 @@ export default function RisikoSimulator({ onBack }: Props) {
           {/* HENDELSESLOGG */}
           <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", background: "rgba(8,16,32,0.95)" }}>
             <div style={{ padding: "8px 14px", borderBottom: "1px solid #1c2a40", fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", fontWeight: 600 }}>
-              HENDELSESLOGG — FEILKJEDE
+              HENDELSESLOGG — ANGREPSKJEDE
             </div>
             <div ref={logRef} style={{ maxHeight: "280px", overflowY: "auto", padding: "7px" }}>
               {log.length === 0
@@ -442,7 +449,7 @@ export default function RisikoSimulator({ onBack }: Props) {
               <div style={{ fontSize: "9px", color: "#8896aa", letterSpacing: "0.08em", marginBottom: "6px", fontWeight: 600 }}>KONTEKST</div>
               <div style={{ fontSize: "10px", color: "#9ca3af", lineHeight: 1.6 }}>{SCENARIOS.find(s => s.id === valgt)?.beskrivelse}</div>
               <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #1c2a40", fontSize: "9px", color: "#5a6a80" }}>
-                Basert på NSM Risiko 2026 og Veileder for sikkerhet i anskaffelser
+                Basert på OWASP Top Ten 2025 ({SCENARIOS.find(s => s.id === valgt)?.owasp})
               </div>
             </div>
           )}

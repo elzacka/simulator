@@ -1,15 +1,17 @@
 import { useState } from "react";
 import OTSimulator from "./OTSimulator";
 import RisikoSimulator from "./RisikoSimulator";
+import OwaspSimulator from "./OwaspSimulator";
 import Icon from "./Icon";
 
-type Page = "start" | "ot" | "risiko";
+type Page = "start" | "ot" | "risiko" | "owasp";
 
 export default function App() {
   const [page, setPage] = useState<Page>("start");
 
   if (page === "ot") return <OTSimulator onBack={() => setPage("start")} />;
   if (page === "risiko") return <RisikoSimulator onBack={() => setPage("start")} />;
+  if (page === "owasp") return <OwaspSimulator onBack={() => setPage("start")} />;
 
   return (
     <div style={{
@@ -49,7 +51,7 @@ export default function App() {
         gap: "24px",
         justifyContent: "center",
         width: "100%",
-        maxWidth: "700px",
+        maxWidth: "1040px",
       }}>
         <div
           className="navcard"
@@ -115,6 +117,45 @@ export default function App() {
           }}>
             Uønskede hendelser relatert til anskaffelser og leverandørkjeder.
             Basert på NSMs risikovurdering for 2026.
+          </p>
+          <div style={{
+            marginTop: "20px",
+            fontSize: "13px",
+            color: "#3b82f6",
+            fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}>
+            5 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
+          </div>
+        </div>
+
+        <div
+          className="navcard"
+          onClick={() => setPage("owasp")}
+          style={{
+            padding: "32px 28px",
+            borderRadius: "8px",
+            border: "1px solid #1c2a40",
+            background: "rgba(8, 16, 32, 0.95)",
+          }}
+        >
+          <h2 style={{
+            fontSize: "20px",
+            fontWeight: 700,
+            color: "#e5e7eb",
+            marginBottom: "10px",
+          }}>
+            OWASP 2025
+          </h2>
+          <p style={{
+            fontSize: "14px",
+            color: "#8896aa",
+            lineHeight: 1.55,
+          }}>
+            Angrepskjeder basert på OWASP Top Ten 2025. Simuler
+            broken access control, injection, feilkonfigurasjon og mer.
           </p>
           <div style={{
             marginTop: "20px",

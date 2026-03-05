@@ -36,7 +36,7 @@ const SCENARIOS: Scenario[] = [
     kort: "Default credentials → strømbortfall → total kollaps",
     beskrivelse: "Angriper bruker ukryptert SNMP community string «public» til å sende shutdown-kommando til UPS. Ingen autentisering kreves.",
     steg: [
-      { tid: 0, sys: "ups", status: "svært_kritisk", melding: "Angriper sender SNMP WriteRequest: powerOff=1 (community: «public»)" },
+      { tid: 0, sys: "ups", status: "kompromittert", melding: "Angriper sender SNMP WriteRequest: powerOff=1 (community: «public»)" },
       { tid: 900, sys: "ups", status: "nede", melding: "UPS slår seg av. Strømbortfall i teknisk rom og serverrom." },
       { tid: 1600, sys: "hvac", status: "nede", melding: "HVAC mister strøm. Kjøling stanser umiddelbart." },
       { tid: 2200, sys: "server", status: "nede", melding: "Servere mister strøm. Ukontrollert nedstenging initieres." },
@@ -50,9 +50,9 @@ const SCENARIOS: Scenario[] = [
   {
     id: "bacnet", navn: "A01 — BACnet BMS eksponert mot internett", ikon: "thermostat",
     kort: "Angriper manipulerer kjøling → overoppheting → total nedetid",
-    beskrivelse: "Angriper finner BACnet port 47808 åpen på internett via Shodan. Ingen autentisering. Manipulerer kjølesetpoint direkte.",
+    beskrivelse: "Angriper finner BACnet port 47808 åpen på internett via Shodan. Ingen autentisering. Manipulerer kjølesettpunkt direkte.",
     steg: [
-      { tid: 0, sys: "bms", status: "svært_kritisk", melding: "BACnet port 47808 åpen. WriteProperty: cooling_setpoint=99°C sendt." },
+      { tid: 0, sys: "bms", status: "kompromittert", melding: "BACnet port 47808 åpen. WriteProperty: cooling_setpoint=99°C sendt." },
       { tid: 1100, sys: "hvac", status: "manipulert", melding: "Kjølesetpoint overstyrt til 99°C. Vifter stanser. Kjølemedium stengt." },
       { tid: 2500, sys: "servertemp", status: "advarsel", melding: "Temperatur stiger jevnt. Nå 29°C — kritisk grense: 35°C." },
       { tid: 4000, sys: "server", status: "svekket", melding: "Servere throttler prosessorkraft for å begrense varme. Ytelse -45%." },
@@ -102,7 +102,7 @@ const ETASJER = [
 function fg(s?: string): string {
   if (!s) return "#2563eb";
   const m: Record<string, string> = {
-    svært_kritisk: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
+    kompromittert: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
     feil: "#ff6600", manipulert: "#e06000", svekket: "#cc8800",
     advarsel: "#ccaa00", oppdateres: "#3b82f6", normal: "#00cc66",
   };
@@ -112,7 +112,7 @@ function fg(s?: string): string {
 function statusTekst(s?: string): string {
   if (!s) return "NORMAL";
   const m: Record<string, string> = {
-    svært_kritisk: "LANGVARIG NEDETID / SVÆRT KRITISK", nede: "NEDE", kritisk: "KRITISK",
+    kompromittert: "KOMPROMITTERT", nede: "NEDE", kritisk: "KRITISK",
     feil: "FEIL", manipulert: "MANIPULERT", svekket: "SVEKKET",
     advarsel: "ADVARSEL", oppdateres: "OPPDATERES", normal: "NORMAL",
   };
@@ -173,7 +173,7 @@ export default function OTSimulator({ onBack }: Props) {
 
   const velgScenario = (id: string) => { nullstill(); setValgt(id); };
   const antallBrutt = Object.values(statuses).filter(s =>
-    ["nede", "kritisk", "svært_kritisk", "feil", "manipulert"].includes(s)).length;
+    ["nede", "kritisk", "kompromittert", "feil", "manipulert"].includes(s)).length;
   const lovkravListe = [...new Set(log.filter(l => l.lovkrav).map(l => l.lovkrav))];
 
   return (
@@ -386,7 +386,7 @@ export default function OTSimulator({ onBack }: Props) {
               ["SVEKKET", "#cc8800"],
               ["FEIL / MANIPULERT", "#ff6600"],
               ["NEDE / KRITISK", "#ff2244"],
-              ["LANGVARIG NEDETID / SVÆRT KRITISK", "#ff003c"],
+              ["KOMPROMITTERT", "#ff003c"],
             ] as const).map(([l, c]) => (
               <div key={l} style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "5px" }}>
                 <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: c, boxShadow: `0 0 5px ${c}`, flexShrink: 0 }} />

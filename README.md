@@ -7,7 +7,7 @@ Interaktiv scenariosimulator for sikkerhetshendelser basert på NSM Risiko 2026.
 ## Simulatorer
 
 - **Operasjonell teknologi** — Simuler angrep mot UPS, BMS og nettverksinfrastruktur i kontorbygg
-- **Risiko 2026** — Uonskede hendelser relatert til anskaffelser og leverandorkjeder (NSM Risiko 2026)
+- **Risiko 2026** — Uønskede hendelser relatert til anskaffelser og leverandørkjeder (NSM Risiko 2026)
 
 ## Teknologi
 
@@ -29,8 +29,8 @@ npm run dev
 |----------|-------------|
 | `npm run dev` | Start utviklingsserver |
 | `npm run build` | Produksjonsbygg |
-| `npm run lint` | Kjor ESLint |
-| `npm run preview` | Forhandsvis produksjonsbygg |
+| `npm run lint` | Kjør ESLint |
+| `npm run preview` | Forhåndsvis produksjonsbygg |
 
 ## Prosjektstruktur
 
