@@ -53,7 +53,7 @@ export default function App() {
         width: "100%",
         maxWidth: "1040px",
       }}>
-        <div
+        <button
           className="navcard"
           onClick={() => setPage("ot")}
           style={{
@@ -61,6 +61,8 @@ export default function App() {
             borderRadius: "8px",
             border: "1px solid #1c2a40",
             background: "rgba(8, 16, 32, 0.95)",
+            textAlign: "left",
+            fontFamily: "inherit",
           }}
         >
           <h2 style={{
@@ -88,11 +90,11 @@ export default function App() {
             alignItems: "center",
             gap: "6px",
           }}>
-            3 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
+            4 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
           </div>
-        </div>
+        </button>
 
-        <div
+        <button
           className="navcard"
           onClick={() => setPage("risiko")}
           style={{
@@ -100,6 +102,8 @@ export default function App() {
             borderRadius: "8px",
             border: "1px solid #1c2a40",
             background: "rgba(8, 16, 32, 0.95)",
+            textAlign: "left",
+            fontFamily: "inherit",
           }}
         >
           <h2 style={{
@@ -129,9 +133,9 @@ export default function App() {
           }}>
             5 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
           </div>
-        </div>
+        </button>
 
-        <div
+        <button
           className="navcard"
           onClick={() => setPage("owasp")}
           style={{
@@ -139,6 +143,8 @@ export default function App() {
             borderRadius: "8px",
             border: "1px solid #1c2a40",
             background: "rgba(8, 16, 32, 0.95)",
+            textAlign: "left",
+            fontFamily: "inherit",
           }}
         >
           <h2 style={{
@@ -147,7 +153,7 @@ export default function App() {
             color: "#e5e7eb",
             marginBottom: "10px",
           }}>
-            OWASP 2025
+            OWASP Top Ten 2025
           </h2>
           <p style={{
             fontSize: "14px",
@@ -166,9 +172,9 @@ export default function App() {
             alignItems: "center",
             gap: "6px",
           }}>
-            5 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
+            10 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
           </div>
-        </div>
+        </button>
       </div>
 
       <div style={{
@@ -178,7 +184,7 @@ export default function App() {
         textAlign: "center",
         lineHeight: 1.6,
       }}>
-        Kilder: OWASP Top Ten 2025 · NSM Risiko 2026 · NSM Veileder for sikkerhet i anskaffelser 2025
+        Kilder: OT/ICS-rammeverk ISA/NIST/SANS · NSM Risiko 2026 · OWASP Top Ten 2025
       </div>
     </div>
   );

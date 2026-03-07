@@ -48,7 +48,8 @@ export default function Icon({
         userSelect: 'none',
         ...style,
       }}
-      aria-label={ariaLabel}
+      aria-label={ariaLabel || undefined}
+      aria-hidden={!ariaLabel || undefined}
       role={ariaLabel ? 'img' : undefined}
     >
       {name}

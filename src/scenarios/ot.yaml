@@ -1,0 +1,312 @@
+gruppeLabels:
+  - "KJELLER — Teknisk rom"
+  - "1. ETG — Inngang / Vaktrom"
+  - "2. ETG — IT / Serverrom"
+  - "3. ETG — Kontorer / Drift"
+
+systemer:
+  ups:
+    navn: UPS
+    gruppe: 0
+    col: 0
+    ikon: bolt
+  hvac:
+    navn: "HVAC / Kjøling"
+    gruppe: 0
+    col: 1
+    ikon: ac_unit
+  bms:
+    navn: "BMS / SD-anlegg"
+    gruppe: 0
+    col: 2
+    ikon: rule_settings
+  aak:
+    navn: Adgangskontroll
+    gruppe: 1
+    col: 0
+    ikon: lock
+  TVO:
+    navn: "Kamera / NVR"
+    gruppe: 1
+    col: 1
+    ikon: speed_camera
+  vaktrom:
+    navn: Vaktrom
+    gruppe: 1
+    col: 2
+    ikon: person_shield
+  brannmur:
+    navn: Brannmur
+    gruppe: 2
+    col: 0
+    ikon: shield_locked
+  server:
+    navn: Servere
+    gruppe: 2
+    col: 1
+    ikon: dns
+  servertemp:
+    navn: "Temp-sensor server"
+    gruppe: 2
+    col: 2
+    ikon: thermostat
+  fagsystem:
+    navn: Fagsystemer
+    gruppe: 3
+    col: 1
+    ikon: computer
+  angriper:
+    navn: "Angriper (internett)"
+    gruppe: -1
+    col: 3
+    ikon: person_alert
+
+scenarier:
+  - id: snmp_ups
+    navn: "Default SNMP på UPS"
+    ikon: bolt
+    kort: "Default credentials → strømbortfall → total kollaps"
+    beskrivelse: "Angriper bruker SNMPv2c med default write community string «private» til å sende shutdown-kommando til UPS. Ingen autentisering eller kryptering. UPS er konfigurert uten grace period — nedstenging er umiddelbar."
+    steg:
+      - tid: 0
+        sys: ups
+        status: kompromittert
+        melding: "Angriper sender SNMPv2c WriteRequest med write community «private» (default, aldri endret). Shutdown-OID satt til aktiv. Ingen grace period konfigurert."
+      - tid: 900
+        sys: ups
+        status: nede
+        melding: "UPS slår seg av. Strømbortfall i teknisk rom og serverrom."
+      - tid: 1600
+        sys: hvac
+        status: nede
+        melding: "HVAC mister strøm. Kjøling stanser umiddelbart. Serverrommet begynner å akkumulere varme."
+      - tid: 1950
+        sys: servertemp
+        status: advarsel
+        melding: "Servertemperatur stiger raskt uten kjøling — serverne kjører fortsatt på UPS-nødstrøm. Kritisk grense (35°C) nås om anslagsvis 4–6 minutter ved full serverbelastning."
+      - tid: 2200
+        sys: server
+        status: nede
+        melding: "Servere mister strøm. Ukontrollert nedstenging initieres — ingen kontrollert shutdown, risiko for datakorrupsjon."
+      - tid: 2800
+        sys: brannmur
+        status: nede
+        melding: "Brannmur uten strøm. Nettverksbeskyttelse faller bort."
+      - tid: 3400
+        sys: TVO
+        status: nede
+        melding: "Kamera / NVR uten strøm. Alle kameraer svarte. Opptak stopper."
+        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+      - tid: 4100
+        sys: aak
+        status: svekket
+        melding: "Adgangskontroll på nødstrøm / batteri. Loggføring stopper om 15 min."
+      - tid: 5000
+        sys: fagsystem
+        status: nede
+        melding: "Alle fagsystemer utilgjengelige. Saksbehandling umulig."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+    tiltak:
+      forebygging:
+        - "Endre SNMP community string fra default. Bruk SNMPv3 med autentisering og kryptering (authPriv)."
+        - "Begrens SNMP-tilgang med IP-basert ACL — tillat kun dedikerte administrasjonsstasjoner."
+        - "Konfigurer grace period (minimum 60 sekunder) på UPS-nedstenging for å hindre umiddelbar avslåing."
+        - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri eksponeres mot internett."
+      respons:
+        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Gjennomgå alle nettverkstilkoblede OT-enheter for default credentials — anta at ingen er endret."
+        - "Vurder dataintegriteten på servere som ble ukontrollert avsluttet. Sjekk filsystemstatus ved oppstart."
+
+  - id: bacnet
+    navn: "BACnet BMS eksponert mot internett"
+    ikon: thermostat
+    kort: "Angriper manipulerer kjøling → overoppheting → total nedetid"
+    beskrivelse: "Angriper finner BACnet port 47808 åpen på internett via Shodan. Ingen autentisering. Sender WriteProperty med et settpunkt høyere enn romtemperaturen — kontrolleren ser ingen grunn til å kjøle og stanser. Et subtilt angrep ville brukt 28–30°C (nettopp over normal) for å unngå alarmer. Her velges 99°C for å synliggjøre mekanismen."
+    steg:
+      - tid: 0
+        sys: bms
+        status: kompromittert
+        melding: "BACnet port 47808 åpen. WriteProperty: cooling_setpoint=99°C sendt. Kontrolleren aksepterer kommandoen uten autentisering. (Et sofistikert angrep ville brukt 28–30°C for å unngå alarmer.)"
+      - tid: 1100
+        sys: hvac
+        status: manipulert
+        melding: "Kjølesettpunkt satt til 99°C. Kontrolleren registrerer at romtemperaturen (18°C) er langt under målet — ingen grunn til å kjøle. Kjøleventil stenger, kompressor og vifter reduseres til minimum."
+      - tid: 2500
+        sys: servertemp
+        status: advarsel
+        melding: "Temperatur stiger jevnt. Nå 29°C — kritisk grense: 35°C."
+      - tid: 4000
+        sys: server
+        status: svekket
+        melding: "CPU-temperatur overskrider termisk terskel. Servere throttler prosessorkraft automatisk for å unngå overoppheting. Ytelse redusert."
+      - tid: 5800
+        sys: servertemp
+        status: kritisk
+        melding: "Temperatur >35°C. Automatisk nedstenging initieres."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+      - tid: 6400
+        sys: server
+        status: nede
+        melding: "Servere stenger ned automatisk for å unngå permanent skade."
+      - tid: 7000
+        sys: TVO
+        status: nede
+        melding: "VMS-server ned. Alle kameraopptak stopper."
+        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+      - tid: 7800
+        sys: fagsystem
+        status: nede
+        melding: "Alle tjenester utilgjengelige. Samfunnsoppdrag ikke oppfylt."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+    tiltak:
+      forebygging:
+        - "Steng BACnet port 47808 mot internett. BACnet har ingen innebygd autentisering og skal aldri eksponeres."
+        - "Plasser BMS i et segregert OT-VLAN uten internettaksess. Bruk DMZ og proxy for eventuell fjernovervåking."
+        - "Gjennomfør regelmessige søk i Shodan og Censys mot egne IP-adresser for å avdekke utilsiktede eksponeringer."
+        - "Vurder overgang til BACnet/SC (Secure Connect) dersom autentisert kommunikasjon er nødvendig."
+      respons:
+        - "Resett BACnet-kontroller til korrekte settpunkter manuelt. Verifiser alle BACnet-objektverdier mot baseline."
+        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Gjennomfør fullstendig nettverkssegmenteringsgjennomgang — angi hva som er eksponert og steng umiddelbart."
+
+  - id: patching
+    navn: "Patchefeil brannmur → TVO svart"
+    ikon: construction
+    kort: "Automatisk oppdatering, feil ACL — kameraer slokner, ingen alarm"
+    beskrivelse: "Automatisk firmware-oppdatering deployes 03:14. Ny ACL-regel blokkerer ved feil VLAN 30 (kamera/NVR-segmentet). Ingen varsling utløses."
+    steg:
+      - tid: 0
+        sys: brannmur
+        status: oppdateres
+        melding: "Automatisk firmware-oppdatering starter 03:14. Brannmur restarter."
+      - tid: 1400
+        sys: brannmur
+        status: feil
+        melding: "Oppdatering fullført. Feil ACL-regel: VLAN 30 (kamera/NVR-segmentet) blokkert."
+      - tid: 1700
+        sys: TVO
+        status: nede
+        melding: "NVR mister kontakt med alle kameraer via VLAN 30. Svarte skjermer."
+        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+      - tid: 2000
+        sys: aak
+        status: svekket
+        melding: "Adgangskontroll-server utilgjengelig via VLAN 30. Loggføring stanser."
+      - tid: 2800
+        sys: vaktrom
+        status: advarsel
+        melding: "Vakt oppdager svarte skjermer 03:22. Varsler IT-vakt på telefon."
+      - tid: 3800
+        sys: brannmur
+        status: normal
+        melding: "Feil ACL identifisert og rettet. Total nedetid: 1t 14min."
+      - tid: 4400
+        sys: TVO
+        status: normal
+        melding: "Kameraer tilbake online. Opptak gjenopptas. Hull i videohistorikk."
+      - tid: 4400
+        sys: aak
+        status: normal
+        melding: "Adgangskontroll-logging gjenopptatt. 1t 14min uten sporing."
+    tiltak:
+      forebygging:
+        - "Deaktiver automatiske firmware-oppdateringer på brannmur og sikkerhetskritisk nettverksutstyr. Krev manuell godkjenning."
+        - "Test alle oppdateringer i et labmiljø (non-prod) som speiler produksjonskonfigurasjonen."
+        - "Sett opp alarm ved nettverkstap til kamerasegmentet (VLAN 30) — tap av kamerakommunikasjon er en sikkerhetsrelevant hendelse."
+        - "Innfør change management-prosedyre med rollback-plan for alle firewall-oppdateringer."
+      respons:
+        - "Gjennomgå videohistorikk-hull (1t 14min) for å verifisere at ingen sikkerhetshendelser var uoppdaget i nedetidsperioden."
+        - "Dokumenter hendelsen og oppdater endringshåndteringsprosedyren med krav om ACL-validering etter oppdatering."
+        - "Vurder om adgangskortlogger for nedetidsperioden kan rekonstrueres fra alternative kilder."
+
+  - id: shodan_yabe_angrep
+    navn: "Shodan + YABE — Kjøling slått av via internett"
+    ikon: ac_unit
+    kort: "Ingen kode, ingen passord — Shodan avslører adressen, YABE utfører angrepet"
+    beskrivelse: "Angriper finner BACnet-kontroller eksponert på internett via Shodan. Enhetsnavnet avslører byggets fysiske adresse. YABE brukes til å skrive direkte til kjølesetpunkt — ingen autentisering kreves. Kjølingen stanser. Serverrom overopphetes."
+    steg:
+      - tid: 0
+        sys: angriper
+        status: manipulert
+        melding: "FASE A — ANONYMISERING: Angriper etablerer Tor-basert anonymisering. IP-adresse og identitet er fullstendig skjult. Angrepet kan ikke spores."
+
+      - tid: 2500
+        sys: angriper
+        status: kompromittert
+        melding: "FASE B — SHODAN-SØK 1: Søkeoperator «port:47808 country:NO» kjøres. Shodan returnerer 800+ norske BACnet-enheter eksponert på internett. Filtrerer mot Oslo."
+
+      - tid: 5000
+        sys: bms
+        status: eksponert
+        melding: "FASE B — SHODAN-TREFF: BACnet port 47808 åpen uten autentisering. Object Name: «*Gatenavn*_*Nr*_HVAC». Byggets fysiske adresse er identifisert direkte fra enhetsnavnet — uten å forlate Shodan."
+
+      - tid: 7000
+        sys: bms
+        status: advarsel
+        melding: "FASE C — VERIFISERING: Shodan-søk 2: «port:47808 org:[virksomhet]». Tridium Niagara 4, firmware 4.7.110.26, modell B-AWS bekreftet. Dette er supervisornoden — den ser og kan styre ALLE BACnet-enheter i bygget."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+
+      - tid: 9000
+        sys: angriper
+        status: kompromittert
+        melding: "FASE D — YABE LASTET NED: Yet Another BACnet Explorer lastes ned fra GitHub. Gratis, åpen kildekode, grafisk grensesnitt. Ingen programmerings- eller hackerkompetanse nødvendig. Installert på 2 minutter."
+
+      - tid: 11000
+        sys: bms
+        status: kompromittert
+        melding: "FASE D — YABE TILKOBLET: IP-adresse fra Shodan legges inn i YABE. BACnet Who-Is-pakke sendt til port 47808. Enheten svarer umiddelbart med komplett enhetsprofil. Ingen brukernavn. Ingen passord. Ingen sertifikat."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+
+      - tid: 13000
+        sys: hvac
+        status: advarsel
+        melding: "FASE E — KARTLEGGING I YABE: BACnet-objekttre lastes automatisk. HVAC_Cooling_Setpoint identifisert. Nåverdi: 18°C. Objektet er merket «commandable» — skrivbart uten restriksjoner. Viftekontroll og kompressorstyring også synlig."
+
+      - tid: 15000
+        sys: bms
+        status: manipulert
+        melding: "FASE F — ANGREP UTFØRT: YABE WriteProperty → HVAC_Cooling_Setpoint = 45°C. Kommando akseptert og bekreftet av enheten. Kontrolleren registrerer at romtemperaturen (18°C) er langt under nytt settpunkt — og stopper all kjøling. Operasjonstid fra YABE-oppstart til utført angrep: under 4 minutter."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+
+      - tid: 17000
+        sys: hvac
+        status: manipulert
+        melding: "FASE G — KJØLING STANSET: HVAC-kontroller mottar settpunkt 45°C. Romtemperaturen (18°C) er allerede «kaldere enn mål» — kontrolleren stenger kjøleventil, reduserer kompressor til minimum og stanser vifter. Resultatet er identisk med et manuelt overstyrt anlegg: serverrommet mister all kjøling uten at noen alarm utløses."
+
+      - tid: 19000
+        sys: angriper
+        status: advarsel
+        melding: "FASE H — ANGRIPER KOBLER FRA: YABE lukkes. Tor-sesjon termineres. Ingen logger, ingen spor, ingen identitet. Hele angrepet tok under 9 minutter fra første Shodan-søk til frakobling."
+
+      - tid: 20500
+        sys: servertemp
+        status: advarsel
+        melding: "FASE I — TEMPERATUR STIGER: Serverrom 29°C og stigende. Kritisk grense: 35°C. Ingen varsling sendt — kjølingsstatus rapporteres som «normal» i SD-systemet fordi setpunktet er endret, ikke brutt."
+
+      - tid: 22500
+        sys: servertemp
+        status: kritisk
+        melding: "FASE I — KRITISK: Servertemperatur >35°C. Automatisk nedstenging av servere initieres av termisk vern."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+
+      - tid: 24000
+        sys: server
+        status: nede
+        melding: "FASE I — SERVERE NED: Alle servere stenger ned automatisk. Ukontrollert avslutning. Risiko for datakorrupsjon."
+
+      - tid: 25500
+        sys: fagsystem
+        status: nede
+        melding: "FASE I — TOTAL NEDETID: Alle fagsystemer utilgjengelige. Virksomhetens tjenester stanset. Angrepet er fullført — av en angriper uten hackerkompetanse, med ett gratis verktøy, på under 10 minutter."
+        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+    tiltak:
+      forebygging:
+        - "Steng BACnet-porten mot internett. OT-protokoller uten autentisering skal aldri eksponeres på nett."
+        - "Fjern stedsinformasjon fra BACnet-enhetsnavn. Objektnavn som «Gatenavn_Nr_HVAC» avslører fysisk adresse direkte via Shodan."
+        - "Gjennomfør periodisk Shodan/Censys-søk mot egne IP-adresser og ASN. Sett opp automatisk varsling."
+        - "Implementer nettverkssegmentering: BMS i eget OT-VLAN uten internettaksess. Bruk enveis datadiode eller DMZ for eventuell fjernovervåking."
+      respons:
+        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17. Angriperen er sporløs — men hendelsen skal rapporteres."
+        - "Resett kjølesettpunkt manuelt. Verifiser alle skrivbare BACnet-objekter mot baseline-verdier."
+        - "Gjennomfør full forensisk nettverksanalyse. Sjekk om BACnet-kontrolleren ble benyttet til ytterligere manipulering."
+        - "Revider sikkerhetsarkitektur for all OT-infrastruktur. Bruk Shodan-funnet som argument for investeringer i nettverkssegmentering."

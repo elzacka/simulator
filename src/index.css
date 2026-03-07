@@ -49,11 +49,6 @@ body {
   to { opacity: 1; transform: none; }
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -104,6 +99,26 @@ body {
   transform: translateY(-4px);
   border-color: #3b82f6 !important;
   box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
+}
+
+.navcard:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+  border-color: #3b82f6 !important;
+}
+
+.navcard:active {
+  transform: translateY(-1px);
+}
+
+/* OT-simulator: SVG nodeglow */
+.ot-node-glow {
+  animation: ot-glow 1.3s ease-in-out infinite;
+}
+
+@keyframes ot-glow {
+  0%, 100% { opacity: 0.15; }
+  50% { opacity: 0.5; }
 }
 
 .backbtn {
