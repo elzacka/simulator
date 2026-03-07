@@ -1,20 +1,21 @@
 # Scenariosimulator
 
-Interaktiv scenariosimulator for sikkerhetshendelser basert på NSM Risiko 2026. Simuler OT-angrep og digitale risikoer i sanntid.
+Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og digitale risikoer i sanntid med hendelseslogg, systemstatusvisning og konsekvensoppsummering.
 
 **Live:** https://elzacka.github.io/simulator/
 
 ## Simulatorer
 
-- **Operasjonell teknologi** — Simuler angrep mot UPS, BMS og nettverksinfrastruktur i kontorbygg
-- **Risiko 2026** — Uønskede hendelser relatert til anskaffelser og leverandørkjeder (NSM Risiko 2026)
+- **Operasjonell teknologi** — Angrep mot OT-systemer i kontorbygg (UPS, BMS, HVAC, adgangskontroll)
+- **NSM Risiko 2026** — Uønskede hendelser knyttet til anskaffelser og leverandørkjeder
+- **OWASP Top 10 2025** — Angrep mot webapplikasjoner basert på OWASP Top 10:2025
 
 ## Teknologi
 
 - React 19, TypeScript 5.9, Vite 7
-- Material Symbols Rounded (ikoner)
-- Nunito Sans (font)
-- GitHub Pages (hosting via GitHub Actions)
+- Scenariodata i YAML (`src/scenarios/`)
+- Material Symbols Rounded, Nunito Sans
+- GitHub Pages via GitHub Actions
 
 ## Kom i gang
 
@@ -27,26 +28,14 @@ npm run dev
 
 | Kommando | Beskrivelse |
 |----------|-------------|
-| `npm run dev` | Start utviklingsserver |
+| `npm run dev` | Utviklingsserver |
 | `npm run build` | Produksjonsbygg |
-| `npm run lint` | Kjør ESLint |
-| `npm run preview` | Forhåndsvis produksjonsbygg |
-
-## Prosjektstruktur
-
-```
-src/
-  App.tsx              — Forside med simulatorvalg
-  Icon.tsx             — Gjenbrukbar Material Symbols-komponent
-  OTSimulator.tsx      — OT-scenariosimulator
-  RisikoSimulator.tsx  — Risiko-scenariosimulator
-  index.css            — Globale stiler og animasjoner
-  main.tsx             — React-inngangspunkt
-```
+| `npm run lint` | ESLint |
+| `npm run preview` | Forhåndsvis bygg |
 
 ## Deploy
 
-Push til `main` trigger automatisk deploy til GitHub Pages via GitHub Actions.
+Push til `main` trigger automatisk deploy til GitHub Pages.
 
 ## Lisens
 

@@ -111,16 +111,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* OT-simulator: SVG nodeglow */
-.ot-node-glow {
-  animation: ot-glow 1.3s ease-in-out infinite;
-}
-
-@keyframes ot-glow {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.5; }
-}
-
 .backbtn {
   transition: all 0.15s ease;
   cursor: pointer;

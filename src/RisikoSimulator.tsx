@@ -77,10 +77,13 @@ export default function RisikoSimulator({ onBack }: Props) {
                             borderRadius: "6px",
                             padding: "6px 10px",
                             background: hit ? `${c}12` : "rgba(6,11,24,0.97)",
-                            minWidth: "110px",
+                            width: "120px",
+                            height: "68px",
                             color: hit ? c : "#9ca3af",
                             position: "relative",
                             overflow: "hidden",
+                            textAlign: "center",
+                            boxSizing: "border-box",
                           }}>
                             {hit && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: c, animation: "blink 0.9s infinite" }} />}
                             <div style={{ marginBottom: "2px" }}>

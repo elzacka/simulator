@@ -1,58 +1,58 @@
 gruppeLabels:
-  - "KJELLER — Teknisk rom"
-  - "1. ETG — Inngang / Vaktrom"
-  - "2. ETG — IT / Serverrom"
   - "3. ETG — Kontorer / Drift"
+  - "2. ETG — IT / Serverrom"
+  - "1. ETG — Inngang / Vaktrom"
+  - "KJELLER — Teknisk rom"
 
 systemer:
   ups:
     navn: UPS
-    gruppe: 0
+    gruppe: 3
     col: 0
     ikon: bolt
   hvac:
     navn: "HVAC / Kjøling"
-    gruppe: 0
+    gruppe: 3
     col: 1
     ikon: ac_unit
   bms:
     navn: "BMS / SD-anlegg"
-    gruppe: 0
+    gruppe: 3
     col: 2
     ikon: rule_settings
   aak:
     navn: Adgangskontroll
-    gruppe: 1
+    gruppe: 2
     col: 0
     ikon: lock
   TVO:
     navn: "Kamera / NVR"
-    gruppe: 1
+    gruppe: 2
     col: 1
     ikon: speed_camera
   vaktrom:
     navn: Vaktrom
-    gruppe: 1
+    gruppe: 2
     col: 2
     ikon: person_shield
   brannmur:
     navn: Brannmur
-    gruppe: 2
+    gruppe: 1
     col: 0
     ikon: shield_locked
   server:
     navn: Servere
-    gruppe: 2
+    gruppe: 1
     col: 1
     ikon: dns
   servertemp:
     navn: "Temp-sensor server"
-    gruppe: 2
+    gruppe: 1
     col: 2
     ikon: thermostat
   fagsystem:
     navn: Fagsystemer
-    gruppe: 3
+    gruppe: 0
     col: 1
     ikon: computer
   angriper:

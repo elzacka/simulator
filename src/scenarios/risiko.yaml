@@ -1,28 +1,28 @@
 gruppeLabels:
-  - "DIGITAL INFRASTRUKTUR"
-  - "BRUKER OG TILGANG"
   - "KJERNEVIRKSOMHET"
+  - "BRUKER OG TILGANG"
   - "FYSISK SIKRING"
+  - "DIGITAL INFRASTRUKTUR"
 
 systemer:
   leverandor:
     navn: Leverandørtilgang
-    gruppe: 0
+    gruppe: 3
     col: 0
     ikon: link
   nettverk:
     navn: "Internt nettverk"
-    gruppe: 0
+    gruppe: 3
     col: 1
     ikon: hub
   skytjeneste:
     navn: Skytjenester
-    gruppe: 0
+    gruppe: 3
     col: 2
     ikon: cloud
   backup:
     navn: Backup
-    gruppe: 0
+    gruppe: 3
     col: 3
     ikon: backup
   tilgang:
@@ -37,22 +37,22 @@ systemer:
     ikon: mail
   fagsystem:
     navn: Fagsystemer
-    gruppe: 2
+    gruppe: 0
     col: 0
     ikon: computer
   okonomi:
     navn: "Økonomi / lønn"
-    gruppe: 2
+    gruppe: 0
     col: 1
     ikon: finance
   personopplysninger:
     navn: Personopplysninger
-    gruppe: 2
+    gruppe: 0
     col: 2
     ikon: person
   fysisk:
     navn: "Fysisk sikring"
-    gruppe: 3
+    gruppe: 2
     col: 0
     ikon: domain
 
@@ -121,7 +121,7 @@ scenarier:
       - tid: 0
         sys: tilgang
         status: advarsel
-        melding: "«Ola» er autorisert for nivå HEMMELIG. Han har bred tilgang til fagsystemer og sensitiv informasjon."
+        melding: "«Ola» er autorisert for nivå HEMMELIG. Han har bred tilgang til fagsystemer og gradert informasjon."
       - tid: 1500
         sys: personopplysninger
         status: advarsel
@@ -137,7 +137,7 @@ scenarier:
       - tid: 6000
         sys: personopplysninger
         status: kompromittert
-        melding: "«Ola» deler sensitiv informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press."
+        melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press."
         lovkrav: "Digitalsikkerhetsforskriften § 12 — personellmessige sikkerhetstiltak"
       - tid: 7500
         sys: tilgang
@@ -147,12 +147,12 @@ scenarier:
       - tid: 9000
         sys: backup
         status: svekket
-        melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til sensitiv informasjon."
+        melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til gradert informasjon."
         lovkrav: "Digitalsikkerhetsforskriften § 10 — teknologiske sikkerhetstiltak"
     tiltak:
       forebygging:
         - "Implementer rutiner for å melde endringer i livssituasjon til autorisasjonsansvarlig (jf. digitalsikkerhetsforskriften § 12 — personellmessige sikkerhetstiltak)."
-        - "Aktiver logging og atferdsanalyse (UBA) for alle med tilgang til sensitiv informasjon. Avvik skal generere varsel."
+        - "Aktiver logging og atferdsanalyse (UBA) for alle med tilgang til gradert informasjon. Avvik skal generere varsel."
         - "Gjennomfør regelmessige sikkerhetssamtaler med sikkerhetsklarert personell. Klarering er ikke en engangsvurdering."
         - "Bygg sikkerhetskultur der melding av bekymringsfulle forhold er normen — ikke en aksjonsbar foreteelse."
       respons:
@@ -234,7 +234,7 @@ scenarier:
       - tid: 3600
         sys: nettverk
         status: kompromittert
-        melding: "USB-enhet med skadevare kobles til en nettverkskontakt i et uovervåket møterom. Bakdør installeres."
+        melding: "USB-enhet med skadevare kobles til en USB-port i et uovervåket møterom. Bakdør installeres."
       - tid: 4800
         sys: fagsystem
         status: kompromittert
@@ -274,7 +274,7 @@ scenarier:
       - tid: 1200
         sys: tilgang
         status: kompromittert
-        melding: "Ansatt klikker lenke og oppgir pålogging. Tofaktorverifisering avlures via KI-generert telefonsamtale som ligner IT-support."
+        melding: "Ansatt klikker lenke og oppgir pålogging. Tofaktorverifisering omgås via KI-generert telefonsamtale der «innringer» utgir seg for å være IT-support."
       - tid: 2400
         sys: okonomi
         status: manipulert

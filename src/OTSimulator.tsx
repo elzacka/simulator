@@ -1,233 +1,11 @@
-import { memo } from "react";
 import Icon from "./Icon";
 import otYaml from "./scenarios/ot.yaml?raw";
 import { parseSimulatorData, useScenarioEngine, fg, statusTekst } from "./scenarioEngine";
-import type { SystemInfo } from "./scenarioEngine";
 
 const data = parseSimulatorData(otYaml);
 const SYS_INFO = data.systemer;
 const SCENARIOS = data.scenarier;
-
-/* ── SVG tverrsnitt: posisjoner og forbindelser ── */
-
-const SYS_POS: Record<string, { x: number; y: number }> = {
-  ups:        { x: 195, y: 497 },
-  hvac:       { x: 390, y: 497 },
-  bms:        { x: 585, y: 497 },
-  aak:        { x: 195, y: 378 },
-  TVO:        { x: 390, y: 378 },
-  vaktrom:    { x: 585, y: 378 },
-  brannmur:   { x: 195, y: 259 },
-  server:     { x: 390, y: 259 },
-  servertemp: { x: 585, y: 259 },
-  fagsystem:  { x: 390, y: 140 },
-  angriper:   { x: 720, y: 52 },
-};
-
-/* Nodestørrelse: nw=80, nh=48. Halv: 40x, 24y.
-   Kanter beregnet fra SYS_POS ± halv.
-   Forbindelser stopper ved nodekant, ikke senter. */
-
-const NODE_W = 80, NODE_H = 48;
-
-/* ── SVG bygningsvisualisering ── */
-
-const BuildingCrossSection = memo(({ statuses, showAngriper }: { statuses: Record<string, string>; showAngriper: boolean }) => {
-  const bx = 100, bw = 580;
-  const wallW = 3;
-  const plates = [78, 196, 315, 434];
-  const groundY = 434;
-  const foundY = 553;
-
-  return (
-    <svg viewBox="0 0 800 590" style={{ width: "100%", height: "auto", display: "block" }}
-         role="img" aria-label="Tverrsnitt av kontorbygg med OT-systemer">
-      <defs>
-        <pattern id="hatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
-          <line x1="0" y1="0" x2="0" y2="6" stroke="#1a2535" strokeWidth="0.5" />
-        </pattern>
-        <filter id="nodeGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
-        </filter>
-      </defs>
-
-      {/* Bakgrunn og grunn */}
-      <rect x="0" y="0" width="800" height="590" fill="#060b18" />
-      <rect x="0" y={groundY} width="800" height={590 - groundY} fill="url(#hatch)" />
-      <rect x="0" y={groundY} width="800" height={590 - groundY} fill="rgba(8,14,26,0.88)" />
-
-      {/* Bygningskropp — etasjefyll */}
-      <rect x={bx + wallW} y={85} width={bw - wallW * 2} height={111} fill="rgba(14,24,40,0.45)" />
-      <rect x={bx + wallW} y={203} width={bw - wallW * 2} height={112} fill="rgba(12,20,36,0.45)" />
-      <rect x={bx + wallW} y={322} width={bw - wallW * 2} height={112} fill="rgba(14,24,40,0.45)" />
-      <rect x={bx + wallW} y={441} width={bw - wallW * 2} height={112} fill="rgba(10,18,32,0.6)" />
-
-      {/* Etasjeskillere (betongdekker) — innsatt innenfor vegger */}
-      {plates.map(y => (
-        <rect key={y} x={bx + wallW} y={y} width={bw - wallW * 2} height={6} fill="#1a2840" />
-      ))}
-
-      {/* Tak */}
-      <rect x={bx - 2} y={76} width={bw + 4} height={4} fill="#263348" rx={1} />
-
-      {/* Fundament */}
-      <rect x={bx - 8} y={foundY} width={bw + 16} height={16} fill="#1a2840" rx="2" />
-
-      {/* Yttervegger */}
-      <rect x={bx} y={76} width={wallW} height={foundY + 16 - 76} fill="#263348" />
-      <rect x={bx + bw - wallW} y={76} width={wallW} height={foundY + 16 - 76} fill="#263348" />
-
-      {/* Romskillere — svake, ikke-strukturelle */}
-      <line x1={293} y1={85} x2={293} y2={foundY} stroke="#141e30" strokeDasharray="2,8" strokeWidth="0.5" />
-      <line x1={487} y1={85} x2={487} y2={foundY} stroke="#141e30" strokeDasharray="2,8" strokeWidth="0.5" />
-
-      {/* Bakkenivå — høyre linje starter med avstand fra vegg */}
-      <line x1="55" y1={groundY + 3} x2={bx} y2={groundY + 3} stroke="#2a3a50" strokeWidth="1.5" />
-      <text x="55" y={groundY - 3} fill="#3a4a5c" fontSize="7" fontFamily="'Nunito Sans', sans-serif">BAKKENIV&#197;</text>
-
-      {/* Vinduer på fasade */}
-      {[105, 135, 224, 254, 343, 373].map((wy, i) => (
-        <g key={`w${i}`}>
-          <rect x={bx + 5} y={wy} width={10} height={18} fill="rgba(37,99,235,0.06)" stroke="#1a2840" strokeWidth="0.5" rx="1" />
-          <rect x={bx + bw - 15} y={wy} width={10} height={18} fill="rgba(37,99,235,0.06)" stroke="#1a2840" strokeWidth="0.5" rx="1" />
-        </g>
-      ))}
-
-      {/* Systemnoder — avrundede rektangler (kun bygningsnoder, gruppe >= 0) */}
-      {Object.entries(SYS_POS)
-        .filter(([id]) => (SYS_INFO[id] as SystemInfo).gruppe >= 0)
-        .map(([id, pos]) => {
-        const info = SYS_INFO[id] as SystemInfo;
-        const st = statuses[id];
-        const c = fg(st);
-        const hit = !!st && st !== "normal";
-        const nw = NODE_W, nh = NODE_H;
-        const nx = pos.x - nw / 2;
-        const ny = pos.y - nh / 2;
-        return (
-          <g key={id}>
-            {hit && (
-              <rect x={nx - 6} y={ny - 6} width={nw + 12} height={nh + 12}
-                    rx={11} fill={c} stroke="none"
-                    filter="url(#nodeGlow)"
-                    className="ot-node-glow" />
-            )}
-            <rect x={nx} y={ny} width={nw} height={nh} rx={7}
-                  fill={hit ? `${c}12` : "rgba(8,14,28,0.92)"}
-                  stroke={hit ? c : "#1e2d42"}
-                  strokeWidth={hit ? 1.5 : 1} />
-            <foreignObject x={pos.x - 9} y={ny + 6} width={18} height={18}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon name={info.ikon} size={16} fill={hit} ariaLabel=""
-                      style={{ color: hit ? c : "#6b7280" }} />
-              </div>
-            </foreignObject>
-            <text x={pos.x} y={ny + nh - 9}
-                  textAnchor="middle"
-                  fill={hit ? c : "#8896aa"}
-                  fontSize="7.5" fontWeight={hit ? 700 : 600}
-                  fontFamily="'Nunito Sans', sans-serif">
-              {info.navn}
-            </text>
-            {hit && (
-              <g>
-                <rect x={pos.x - 30} y={ny + nh + 3} width={60} height={14}
-                      rx={3} fill={`${c}18`} stroke={c} strokeWidth={0.5} />
-                <text x={pos.x} y={ny + nh + 13}
-                      textAnchor="middle"
-                      fill={c}
-                      fontSize="7" fontWeight={700}
-                      fontFamily="'Nunito Sans', sans-serif"
-                      letterSpacing="0.04em">
-                  {statusTekst(st)}
-                </text>
-              </g>
-            )}
-          </g>
-        );
-      })}
-
-      {/* Angripernode — ekstern, utenfor bygget (kun for angrepsscenarier) */}
-      {showAngriper && (() => {
-        const pos = SYS_POS.angriper;
-        const info = SYS_INFO.angriper as SystemInfo;
-        const st = statuses.angriper;
-        const c = st ? fg(st) : "#ff003c";
-        const hit = !!st && st !== "normal";
-        const nw = NODE_W, nh = NODE_H;
-        const nx = pos.x - nw / 2;
-        const ny = pos.y - nh / 2;
-        return (
-          <g>
-            <text x={pos.x} y={ny - 8}
-                  textAnchor="middle"
-                  fill="#6b7fa0" fontSize="7" fontWeight={600}
-                  fontFamily="'Nunito Sans', sans-serif"
-                  letterSpacing="0.08em">
-              INTERNETT
-            </text>
-            {hit && (
-              <rect x={nx - 6} y={ny - 6} width={nw + 12} height={nh + 12}
-                    rx={11} fill={c} stroke="none"
-                    filter="url(#nodeGlow)"
-                    className="ot-node-glow" />
-            )}
-            <rect x={nx} y={ny} width={nw} height={nh} rx={7}
-                  fill={hit ? `${c}12` : "#1c0a10"}
-                  stroke={hit ? c : "#ff003c"}
-                  strokeWidth={1.5} />
-            <foreignObject x={pos.x - 9} y={ny + 6} width={18} height={18}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Icon name={info.ikon} size={16} fill={hit} ariaLabel=""
-                      style={{ color: hit ? c : "#ff003c" }} />
-              </div>
-            </foreignObject>
-            <text x={pos.x} y={ny + nh - 9}
-                  textAnchor="middle"
-                  fill={hit ? c : "#ff003c"}
-                  fontSize="7.5" fontWeight={700}
-                  fontFamily="'Nunito Sans', sans-serif">
-              ANGRIPER
-            </text>
-            {hit && (
-              <g>
-                <rect x={pos.x - 30} y={ny + nh + 3} width={60} height={14}
-                      rx={3} fill={`${c}18`} stroke={c} strokeWidth={0.5} />
-                <text x={pos.x} y={ny + nh + 13}
-                      textAnchor="middle"
-                      fill={c}
-                      fontSize="7" fontWeight={700}
-                      fontFamily="'Nunito Sans', sans-serif"
-                      letterSpacing="0.04em">
-                  {statusTekst(st)}
-                </text>
-              </g>
-            )}
-          </g>
-        );
-      })()}
-
-      {/* Etasjelabels — med bakgrunnspille */}
-      {[
-        { y: 140, label: "3. ETG", sub: "Kontorer" },
-        { y: 259, label: "2. ETG", sub: "Serverrom" },
-        { y: 378, label: "1. ETG", sub: "Inngang" },
-        { y: 497, label: "KJELLER", sub: "Teknisk" },
-      ].map(f => (
-        <g key={f.label}>
-          <rect x={10} y={f.y - 14} width={78} height={26} rx={4}
-                fill="rgba(8,14,28,0.85)" stroke="#1a2840" strokeWidth={0.5} />
-          <text x={49} y={f.y - 1} textAnchor="middle"
-                fill="#6b7fa0" fontSize="10" fontWeight={700}
-                fontFamily="'Nunito Sans', sans-serif">{f.label}</text>
-          <text x={49} y={f.y + 10} textAnchor="middle"
-                fill="#3a4a5c" fontSize="7"
-                fontFamily="'Nunito Sans', sans-serif">{f.sub}</text>
-        </g>
-      ))}
-    </svg>
-  );
-});
+const DOMENER = data.gruppeLabels;
 
 interface Props {
   onBack: () => void;
@@ -250,7 +28,7 @@ export default function OTSimulator({ onBack }: Props) {
       backgroundImage: "radial-gradient(ellipse at 15% 40%, rgba(37,99,235,0.05) 0%, transparent 55%)"
     }}>
       {/* TOPPLINJE */}
-      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", paddingBottom: "11px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", borderBottom: "1px solid #1c2a40", paddingBottom: "11px" }}>
         <button className="backbtn" onClick={onBack} style={{
           border: "1px solid #1c2a40", background: "transparent", color: "#8896aa",
           padding: "5px 14px", borderRadius: "6px", fontSize: "13px", fontFamily: "inherit",
@@ -272,7 +50,7 @@ export default function OTSimulator({ onBack }: Props) {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "12px", alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "12px", alignItems: "start" }}>
         {/* VENSTRE KOLONNE */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {/* BYGNINGSVISNING */}
@@ -280,8 +58,46 @@ export default function OTSimulator({ onBack }: Props) {
             <div style={{ padding: "8px 14px", borderBottom: "1px solid #1c2a40", fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", fontWeight: 600 }}>
               BYGNINGSVISNING — SYSTEMSTATUS
             </div>
-            <div style={{ padding: "6px" }}>
-              <BuildingCrossSection statuses={statuses} showAngriper={!!scenario?.steg.some(s => s.sys === "angriper")} />
+            <div style={{ padding: "10px", display: "flex", flexDirection: "column", gap: "3px" }}>
+              {DOMENER.map((domenenavn, dIdx) => {
+                const sys = Object.entries(SYS_INFO)
+                  .filter(([, v]) => v.gruppe === dIdx)
+                  .sort((a, b) => a[1].col - b[1].col);
+                return (
+                  <div key={dIdx} style={{ borderLeft: "2px solid #1c2a40", paddingLeft: "10px", paddingTop: "7px", paddingBottom: "7px" }}>
+                    <div style={{ fontSize: "9px", color: "#7a8a9e", letterSpacing: "0.08em", marginBottom: "7px" }}>{domenenavn}</div>
+                    <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                      {sys.map(([id, info]) => {
+                        const st = statuses[id];
+                        const c = fg(st);
+                        const hit = !!st && st !== "normal";
+                        return (
+                          <div key={id} className={`sysnode${hit ? " hit" : ""}`} style={{
+                            border: `1px solid ${hit ? c : "#1c2a40"}`,
+                            borderRadius: "6px",
+                            padding: "6px 10px",
+                            background: hit ? `${c}12` : "rgba(6,11,24,0.97)",
+                            width: "120px",
+                            height: "68px",
+                            color: hit ? c : "#9ca3af",
+                            position: "relative",
+                            overflow: "hidden",
+                            textAlign: "center",
+                            boxSizing: "border-box",
+                          }}>
+                            {hit && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: c, animation: "blink 0.9s infinite" }} />}
+                            <div style={{ marginBottom: "2px" }}>
+                              <Icon name={info.ikon} size={20} fill={hit} ariaLabel="" />
+                            </div>
+                            <div style={{ fontSize: "10px", fontWeight: 700, lineHeight: 1.3 }}>{info.navn}</div>
+                            <div style={{ fontSize: "9px", marginTop: "2px", color: hit ? c : "#6b7280", letterSpacing: "0.05em" }}>{statusTekst(st)}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
