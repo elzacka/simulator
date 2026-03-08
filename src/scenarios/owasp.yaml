@@ -113,8 +113,8 @@ scenarier:
         - "Include automated DAST testing for access control flaws as part of the CI/CD pipeline."
       respons:
         - "Disable the vulnerable API endpoint immediately. Audit logs to identify all unauthorized access."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Identify all affected data subjects."
-        - "Notify affected individuals iht. GDPR art. 34 if the breach poses high risk to their rights and freedoms."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Identify all affected data subjects."
+        - "Notify affected individuals according to GDPR art. 34 if the breach poses high risk to their rights and freedoms."
 
   - id: misconfig
     navn: "A02 — Security Misconfiguration"
@@ -161,8 +161,8 @@ scenarier:
         - "Set WAF to blocking mode. Disable all services and ports not actively in use."
       respons:
         - "Disable debug mode and shut down unnecessary services immediately. Reset all compromised accounts."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Assume all password hashes are in the attacker's possession."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — national ID numbers and home addresses exposed constitutes high risk."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Assume all password hashes are in the attacker's possession."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — national ID numbers and home addresses exposed constitutes high risk."
         - "Conduct a full configuration audit of all production systems."
 
   - id: supply_chain
@@ -210,8 +210,8 @@ scenarier:
         - "Implement egress filtering: applications communicate only with known, explicitly allowed destinations."
       respons:
         - "Roll back to last known good version immediately. Isolate the compromised environment."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — personal data exfiltrated in real time."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — personal data exfiltrated in real time."
         - "Review all dependencies in the SBOM for similar backdoors. Assume all code deployed during the period is compromised."
 
   - id: crypto_failures
@@ -260,8 +260,8 @@ scenarier:
         - "Encrypt backups end-to-end with AES-256 and a managed key. Require TLS for all transfers."
         - "Run automated TLS scanning (testssl.sh, Qualys SSL Labs) in CI/CD and as part of periodic audits."
       respons:
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Assume all passwords in the backup are compromised."
-        - "Force password reset for all affected users. Notify affected individuals iht. GDPR art. 34 — passwords and PII exposed in cleartext."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Assume all passwords in the backup are compromised."
+        - "Force password reset for all affected users. Notify affected individuals according to GDPR art. 34 — passwords and PII exposed in cleartext."
         - "Encrypt existing backups retroactively or delete and rebuild with correct configuration."
 
   - id: injection
@@ -313,8 +313,8 @@ scenarier:
         - "Set up SIEM alerts on SQL error patterns (syntax errors, UNION SELECT, xp_). Never leave error logs unmonitored."
       respons:
         - "Shut down the search function immediately. Assume all data in the database is exposed and compromised."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Force password reset for all users."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — national ID numbers and passwords compromised."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Force password reset for all users."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — national ID numbers and passwords compromised."
         - "Conduct full forensic analysis — cryptominer and backdoor are installed and active on the server."
 
   - id: insecure_design
@@ -362,8 +362,8 @@ scenarier:
         - "Rate limit all authentication-related endpoints from day one — this is a design requirement, not an operational configuration."
       respons:
         - "Invalidate all active reset tokens immediately."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 6,200 citizen profiles with personal data exposed."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — 6,200 citizen profiles with personal data exposed."
         - "Plan full rewrite of the password reset module. Security review of all authentication code."
 
   - id: auth_failure
@@ -411,7 +411,7 @@ scenarier:
         - "Check passwords against known breached databases (HaveIBeenPwned API) on creation and change."
       respons:
         - "Invalidate all active sessions and session IDs immediately. Force password change for all affected accounts."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Notify affected individuals iht. GDPR art. 34."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Notify affected individuals according to GDPR art. 34."
         - "Conduct access audit — map what the compromised accounts accessed and exported."
 
   - id: integrity_failures
@@ -460,8 +460,8 @@ scenarier:
       respons:
         - "Shut down the exposed API endpoint immediately. Rebuild the application server from a known clean baseline — not from backup."
         - "Conduct full forensic analysis. Attacker has persistent remote access via reverse shell."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 9,200 user records including decision data compromised."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — 9,200 user records including decision data compromised."
 
   - id: logging_failures
     navn: "A09 — Security Logging and Monitoring Failures"
@@ -514,8 +514,8 @@ scenarier:
         - "Conduct quarterly tabletop exercises to verify that alerts, escalation, and response plans actually work."
       respons:
         - "Activate incident response immediately. Ransomware requires full isolation of affected systems."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 45 GB of personal data exfiltrated over 6 weeks."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay according to GDPR art. 34 — 45 GB of personal data exfiltrated over 6 weeks."
         - "Assess whether recovery from offline backup or external backup outside the primary provider is possible."
 
   - id: exceptional_conditions
@@ -564,6 +564,6 @@ scenarier:
         - "Test all critical flows with concurrent request testing tools (Apache JMeter, Gatling) to uncover race conditions."
       respons:
         - "Set all race-condition-approved applications to under manual review."
-        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 — session tokens leaked in logs and 340 decisions tampered with."
-        - "Notify affected applicants individually iht. GDPR art. 34. Review the validity of all 340 approvals."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 — session tokens leaked in logs and 340 decisions tampered with."
+        - "Notify affected applicants individually according to GDPR art. 34. Review the validity of all 340 approvals."
         - "Conduct full code review of all asynchronous and parallel operations in the system."

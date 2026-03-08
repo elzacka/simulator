@@ -116,8 +116,10 @@ export function useScenarioEngine(scenarier: Scenario[]) {
 
   const simuler = () => {
     if (!valgt) return;
+    const id = valgt;
     nullstill();
-    const sc = scenarier.find(s => s.id === valgt);
+    setValgt(id);
+    const sc = scenarier.find(s => s.id === id);
     if (!sc) return;
     setRunning(true);
     sc.steg.forEach((steg, idx) => {
