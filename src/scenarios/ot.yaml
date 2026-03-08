@@ -156,7 +156,7 @@ scenarier:
       - tid: 7800
         sys: fagsystem
         status: nede
-        melding: "Alle tjenester utilgjengelige. Samfunnsoppdrag ikke oppfylt."
+        melding: "Alle tjenester utilgjengelige."
         lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:

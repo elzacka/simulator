@@ -19,6 +19,7 @@ export interface Scenario {
   beskrivelse: string;
   owasp?: string;
   steg: Steg[];
+  tiltak?: { forebygging?: string[]; respons?: string[] };
 }
 
 export interface LoggInnslag extends Steg {

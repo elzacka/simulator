@@ -19,116 +19,17 @@ const SYS_INFO = data.systemer;
 const SCENARIOS = data.scenarier;
 const LAG = data.gruppeLabels;
 
-const OWASP_PREVENTION: Record<string, { tiltak: string[]; lenke: string }> = {
-  broken_access: {
-    tiltak: [
-      "Except for public resources, deny by default.",
-      "Implement access control mechanisms once and re-use them.",
-      "Model access controls should enforce record ownership.",
-      "Unique application business limit requirements should be enforced by domain models.",
-      "Disable web server directory listing.",
-      "Log access control failures, alert admins.",
-      "Rate limit API and controller access to minimize the harm.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/",
-  },
-  misconfig: {
-    tiltak: [
-      "A repeatable hardening process makes it fast and easy to deploy another environment that is appropriately locked down.",
-      "Remove or do not install unused features and frameworks.",
-      "Review and update configurations appropriate to all security notes, updates, and patches.",
-      "A segmented application architecture provides effective and secure separation between components or tenants.",
-      "Send security directives to clients, e.g., Security Headers.",
-      "An automated process to verify the effectiveness of the configurations and settings in all environments.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A02_2025-Security_Misconfiguration/",
-  },
-  supply_chain: {
-    tiltak: [
-      "Remove unused dependencies, unnecessary features, components, files, and documentation.",
-      "Continuously inventory the versions of both client-side and server-side components and their dependencies.",
-      "Only obtain components from official sources over secure links.",
-      "Monitor for libraries and components that are unmaintained or do not create security patches for older versions.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/",
-  },
-  crypto_failures: {
-    tiltak: [
-      "Classify data processed, stored, or transmitted. Identify which data is sensitive according to privacy laws, regulatory requirements, or business needs.",
-      "Don\u2019t store sensitive data unnecessarily.",
-      "Encrypt all sensitive data at rest and in transit.",
-      "Disable caching for responses that contain sensitive data.",
-      "Do not use legacy protocols such as FTP and SMTP for transporting sensitive data.",
-      "Store passwords using strong adaptive and salted hashing functions (Argon2, scrypt, bcrypt or PBKDF2).",
-      "Avoid deprecated cryptographic functions and padding schemes (MD5, SHA1, PKCS #1 v1.5).",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A04_2025-Cryptographic_Failures/",
-  },
-  injection: {
-    tiltak: [
-      "Use a safe API which avoids using the interpreter entirely, or provides a parameterized interface.",
-      "Use positive server-side input validation.",
-      "For residual dynamic queries, escape special characters using the specific escape syntax for that interpreter.",
-      "Use LIMIT and other SQL controls within queries to prevent mass disclosure of records.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A05_2025-Injection/",
-  },
-  insecure_design: {
-    tiltak: [
-      "Establish and use a secure development lifecycle with AppSec.",
-      "Establish and use a library of secure design patterns.",
-      "Use threat modeling for critical authentication, access control, business logic, and key flows.",
-      "Integrate security language and controls into user stories.",
-      "Integrate plausibility checks at each tier of your application.",
-      "Write unit and integration tests to validate that all critical flows.",
-      "Segregate tier layers on the system and network layers.",
-      "Segregate tenants robustly by design throughout all tiers.",
-      "Limit resource consumption by user or service.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A06_2025-Insecure_Design/",
-  },
-  auth_failure: {
-    tiltak: [
-      "Implement multi-factor authentication to prevent automated credential stuffing, brute force, and stolen credential reuse attacks.",
-      "Do not ship or deploy with any default credentials.",
-      "Implement weak password checks, such as testing new or changed passwords against the top 10,000 worst passwords list.",
-      "Align password length, complexity, and rotation policies with NIST 800-63b.",
-      "Ensure registration, credential recovery, and API pathways are hardened against account enumeration attacks.",
-      "Limit or increasingly delay failed login attempts, but be careful not to create a denial of service scenario.",
-      "Use a server-side, secure, built-in session manager that generates a new random session ID with high entropy after login.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A07_2025-Authentication_Failures/",
-  },
-  integrity_failures: {
-    tiltak: [
-      "Use digital signatures or similar mechanisms to verify the software or data is from the expected source and has not been altered.",
-      "Ensure libraries and dependencies are consuming trusted repositories. Consider hosting an internal known-good repository.",
-      "Ensure that a software supply chain security tool is used to verify that components do not contain known vulnerabilities.",
-      "Ensure that there is a review process for code and configuration changes to minimize the chance that malicious code could be introduced into your software pipeline.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A08_2025-Software_or_Data_Integrity_Failures/",
-  },
-  logging_failures: {
-    tiltak: [
-      "Log important security events consistently.",
-      "Monitor logs for suspicious behavior.",
-      "Store logs centrally and securely.",
-      "Set alerts that actually trigger and escalate.",
-      "Detect and respond to attacks in real time.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A09_2025-Security_Logging_and_Alerting_Failures/",
-  },
-  exceptional_conditions: {
-    tiltak: [
-      "Catch errors early and fail safely.",
-      "Centralize and standardize exception handling.",
-      "Validate and sanitize all inputs.",
-      "Apply limits on resources and requests.",
-      "Log, monitor, and alert on anomalies.",
-      "Test failure scenarios and secure the design.",
-    ],
-    lenke: "https://owasp.org/Top10/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
-  },
+const OWASP_LINKS: Record<string, string> = {
+  broken_access: "https://owasp.org/Top10/2025/A01_2025-Broken_Access_Control/",
+  misconfig: "https://owasp.org/Top10/2025/A02_2025-Security_Misconfiguration/",
+  supply_chain: "https://owasp.org/Top10/2025/A03_2025-Software_Supply_Chain_Failures/",
+  crypto_failures: "https://owasp.org/Top10/2025/A04_2025-Cryptographic_Failures/",
+  injection: "https://owasp.org/Top10/2025/A05_2025-Injection/",
+  insecure_design: "https://owasp.org/Top10/2025/A06_2025-Insecure_Design/",
+  auth_failure: "https://owasp.org/Top10/2025/A07_2025-Authentication_Failures/",
+  integrity_failures: "https://owasp.org/Top10/2025/A08_2025-Software_or_Data_Integrity_Failures/",
+  logging_failures: "https://owasp.org/Top10/2025/A09_2025-Security_Logging_and_Alerting_Failures/",
+  exceptional_conditions: "https://owasp.org/Top10/2025/A10_2025-Mishandling_of_Exceptional_Conditions/",
 };
 
 interface Props {
@@ -384,24 +285,40 @@ export default function OwaspSimulator({ onBack }: Props) {
             </div>
           )}
 
-          {/* TILTAK */}
-          {done && scenario && OWASP_PREVENTION[scenario.id] && (
+          {/* RESPONS */}
+          {done && scenario?.tiltak?.respons && (
+            <div style={{ border: "1px solid #dc2626", borderRadius: "6px", background: "rgba(30,0,6,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
+              <div style={{ fontSize: "10px", color: "#ef4444", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Icon name="emergency" size={12} fill={true} ariaLabel="" /> RESPONSE
+              </div>
+              {scenario.tiltak.respons.map((t, i) => (
+                <div key={i} style={{ fontSize: "10px", color: "#9ca3af", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "6px", lineHeight: 1.5 }}>
+                  <span style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }}><Icon name="arrow_forward" size={10} ariaLabel="" /></span> {t}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* FOREBYGGING */}
+          {done && scenario?.tiltak?.forebygging && (
             <div style={{ border: "1px solid #1e40af", borderRadius: "6px", background: "rgba(8,16,40,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
               <div style={{ fontSize: "10px", color: "#3b82f6", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
                 <Icon name="verified_user" size={12} fill={true} ariaLabel="" /> PREVENTION ({scenario.owasp})
               </div>
-              {OWASP_PREVENTION[scenario.id].tiltak.map((t, i) => (
+              {scenario.tiltak.forebygging.map((t, i) => (
                 <div key={i} style={{ fontSize: "10px", color: "#9ca3af", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "6px", lineHeight: 1.5 }}>
                   <span style={{ color: "#3b82f6", flexShrink: 0, marginTop: "2px" }}><Icon name="arrow_forward" size={10} ariaLabel="" /></span> {t}
                 </div>
               ))}
-              <div style={{ marginTop: "10px", paddingTop: "8px", borderTop: "1px solid #1c2a40" }}>
-                <div style={{ fontSize: "9px", color: "#8896aa", letterSpacing: "0.08em", marginBottom: "6px", fontWeight: 600 }}>CHEAT SHEETS & MORE</div>
-                <a href={OWASP_PREVENTION[scenario.id].lenke} target="_blank" rel="noopener noreferrer"
-                  style={{ fontSize: "10px", color: "#60a5fa", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
-                  <Icon name="open_in_new" size={12} ariaLabel="" /> {scenario.owasp} — OWASP Top 10:2025
-                </a>
-              </div>
+              {OWASP_LINKS[scenario.id] && (
+                <div style={{ marginTop: "10px", paddingTop: "8px", borderTop: "1px solid #1c2a40" }}>
+                  <div style={{ fontSize: "9px", color: "#8896aa", letterSpacing: "0.08em", marginBottom: "6px", fontWeight: 600 }}>CHEAT SHEETS & MORE</div>
+                  <a href={OWASP_LINKS[scenario.id]} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: "10px", color: "#60a5fa", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Icon name="open_in_new" size={12} ariaLabel="" /> {scenario.owasp} — OWASP Top 10:2025
+                  </a>
+                </div>
+              )}
             </div>
           )}
         </div>

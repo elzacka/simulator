@@ -260,6 +260,34 @@ export default function RisikoSimulator({ onBack }: Props) {
               ))}
             </div>
           )}
+
+          {/* RESPONS */}
+          {done && scenario?.tiltak?.respons && (
+            <div style={{ border: "1px solid #dc2626", borderRadius: "6px", background: "rgba(30,0,6,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
+              <div style={{ fontSize: "10px", color: "#ef4444", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Icon name="emergency" size={12} fill={true} ariaLabel="" /> RESPONSTILTAK
+              </div>
+              {scenario.tiltak.respons.map((t, i) => (
+                <div key={i} style={{ fontSize: "10px", color: "#9ca3af", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "6px", lineHeight: 1.5 }}>
+                  <span style={{ color: "#ef4444", flexShrink: 0, marginTop: "2px" }}><Icon name="arrow_forward" size={10} ariaLabel="" /></span> {t}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* FOREBYGGING */}
+          {done && scenario?.tiltak?.forebygging && (
+            <div style={{ border: "1px solid #1e40af", borderRadius: "6px", background: "rgba(8,16,40,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
+              <div style={{ fontSize: "10px", color: "#3b82f6", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Icon name="verified_user" size={12} fill={true} ariaLabel="" /> FOREBYGGING
+              </div>
+              {scenario.tiltak.forebygging.map((t, i) => (
+                <div key={i} style={{ fontSize: "10px", color: "#9ca3af", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "6px", lineHeight: 1.5 }}>
+                  <span style={{ color: "#3b82f6", flexShrink: 0, marginTop: "2px" }}><Icon name="arrow_forward" size={10} ariaLabel="" /></span> {t}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
