@@ -96,7 +96,7 @@ scenarier:
         sys: TVO
         status: nede
         melding: "Kamera / NVR uten strøm. Alle kameraer svarte. Opptak stopper."
-        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
       - tid: 4100
         sys: aak
         status: svekket
@@ -105,7 +105,7 @@ scenarier:
         sys: fagsystem
         status: nede
         melding: "Alle fagsystemer utilgjengelige. Saksbehandling umulig."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
         - "Endre SNMP community string fra default. Bruk SNMPv3 med autentisering og kryptering (authPriv)."
@@ -113,7 +113,7 @@ scenarier:
         - "Konfigurer grace period (minimum 60 sekunder) på UPS-nedstenging for å hindre umiddelbar avslåing."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri eksponeres mot internett."
       respons:
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
         - "Gjennomgå alle nettverkstilkoblede OT-enheter for default credentials — anta at ingen er endret."
         - "Vurder dataintegriteten på servere som ble ukontrollert avsluttet. Sjekk filsystemstatus ved oppstart."
 
@@ -143,7 +143,7 @@ scenarier:
         sys: servertemp
         status: kritisk
         melding: "Temperatur >35°C. Automatisk nedstenging initieres."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 6400
         sys: server
         status: nede
@@ -152,12 +152,12 @@ scenarier:
         sys: TVO
         status: nede
         melding: "VMS-server ned. Alle kameraopptak stopper."
-        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
       - tid: 7800
         sys: fagsystem
         status: nede
         melding: "Alle tjenester utilgjengelige. Samfunnsoppdrag ikke oppfylt."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
         - "Steng BACnet port 47808 mot internett. BACnet har ingen innebygd autentisering og skal aldri eksponeres."
@@ -166,7 +166,7 @@ scenarier:
         - "Vurder overgang til BACnet/SC (Secure Connect) dersom autentisert kommunikasjon er nødvendig."
       respons:
         - "Resett BACnet-kontroller til korrekte settpunkter manuelt. Verifiser alle BACnet-objektverdier mot baseline."
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
         - "Gjennomfør fullstendig nettverkssegmenteringsgjennomgang — angi hva som er eksponert og steng umiddelbart."
 
   - id: patching
@@ -187,7 +187,7 @@ scenarier:
         sys: TVO
         status: nede
         melding: "NVR mister kontakt med alle kameraer via VLAN 30. Svarte skjermer."
-        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
       - tid: 2000
         sys: aak
         status: svekket
@@ -244,7 +244,7 @@ scenarier:
         sys: bms
         status: advarsel
         melding: "FASE C — VERIFISERING: Shodan-søk 2: «port:47808 org:[virksomhet]». Tridium Niagara 4, firmware 4.7.110.26, modell B-AWS bekreftet. Dette er supervisornoden — den ser og kan styre ALLE BACnet-enheter i bygget."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
 
       - tid: 9000
         sys: angriper
@@ -255,7 +255,7 @@ scenarier:
         sys: bms
         status: kompromittert
         melding: "FASE D — YABE TILKOBLET: IP-adresse fra Shodan legges inn i YABE. BACnet Who-Is-pakke sendt til port 47808. Enheten svarer umiddelbart med komplett enhetsprofil. Ingen brukernavn. Ingen passord. Ingen sertifikat."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
 
       - tid: 13000
         sys: hvac
@@ -266,7 +266,7 @@ scenarier:
         sys: bms
         status: manipulert
         melding: "FASE F — ANGREP UTFØRT: YABE WriteProperty → HVAC_Cooling_Setpoint = 45°C. Kommando akseptert og bekreftet av enheten. Kontrolleren registrerer at romtemperaturen (18°C) er langt under nytt settpunkt — og stopper all kjøling. Operasjonstid fra YABE-oppstart til utført angrep: under 4 minutter."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
 
       - tid: 17000
         sys: hvac
@@ -287,7 +287,7 @@ scenarier:
         sys: servertemp
         status: kritisk
         melding: "FASE I — KRITISK: Servertemperatur >35°C. Automatisk nedstenging av servere initieres av termisk vern."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
 
       - tid: 24000
         sys: server
@@ -298,7 +298,7 @@ scenarier:
         sys: fagsystem
         status: nede
         melding: "FASE I — TOTAL NEDETID: Alle fagsystemer utilgjengelige. Virksomhetens tjenester stanset. Angrepet er fullført — av en angriper uten hackerkompetanse, med ett gratis verktøy, på under 10 minutter."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
         - "Steng BACnet-porten mot internett. OT-protokoller uten autentisering skal aldri eksponeres på nett."
@@ -306,7 +306,7 @@ scenarier:
         - "Gjennomfør periodisk Shodan/Censys-søk mot egne IP-adresser og ASN. Sett opp automatisk varsling."
         - "Implementer nettverkssegmentering: BMS i eget OT-VLAN uten internettaksess. Bruk enveis datadiode eller DMZ for eventuell fjernovervåking."
       respons:
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17. Angriperen er sporløs — men hendelsen skal rapporteres."
+        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17. Angriperen er sporløs — men hendelsen skal rapporteres."
         - "Resett kjølesettpunkt manuelt. Verifiser alle skrivbare BACnet-objekter mot baseline-verdier."
         - "Gjennomfør full forensisk nettverksanalyse. Sjekk om BACnet-kontrolleren ble benyttet til ytterligere manipulering."
         - "Revider sikkerhetsarkitektur for all OT-infrastruktur. Bruk Shodan-funnet som argument for investeringer i nettverkssegmentering."

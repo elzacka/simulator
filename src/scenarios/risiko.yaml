@@ -67,7 +67,7 @@ scenarier:
         sys: leverandor
         status: kompromittert
         melding: "IT-leverandørens fjernstyringsverktøy er kompromittert. Angriperen har full tilgang til alle kunders systemer."
-        lovkrav: "Digitalsikkerhetsforskriften § 14 — leverandøroppfølging"
+        lovkrav: "Digitalsikkerhetsforskriften § 14. Oppfølgingsplikt"
       - tid: 1200
         sys: nettverk
         status: kompromittert
@@ -80,17 +80,17 @@ scenarier:
         sys: fagsystem
         status: kompromittert
         melding: "Saksbehandlingssystemet med personsensitive data kompromitteres via leverandørtilgangen."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: personopplysninger
         status: kompromittert
         melding: "Personopplysninger om ansatte og borgere kopieres ut av virksomheten."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 6000
         sys: okonomi
         status: manipulert
         melding: "Angriperen endrer kontonummer i fakturarutinene. Neste utbetaling på 4,2 mill. kr sendes til angriperens konto."
-        lovkrav: "GDPR art. 28 — databehandleravtale"
+        lovkrav: "GDPR art. 28. Databehandler"
       - tid: 7200
         sys: backup
         status: kompromittert
@@ -99,7 +99,7 @@ scenarier:
         sys: skytjeneste
         status: nede
         melding: "Leverandørens skytjeneste stenges ned som følge av hendelsen. Alle avhengige systemer er utilgjengelige."
-        lovkrav: "Digitalsikkerhetsforskriften § 8 — risikohåndtering"
+        lovkrav: "Digitalsikkerhetsforskriften § 8. Risikohåndtering"
     tiltak:
       forebygging:
         - "Inkluder minimumskrav til informasjonssikkerhet i alle leverandørkontrakter — ref. NSM Veileder for sikkerhet i anskaffelser."
@@ -109,8 +109,9 @@ scenarier:
       respons:
         - "Frys leverandørens tilgang umiddelbart. Gjennomfør full tilgangsrevisjon for alle leverandørkontoer."
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger er berørt."
+        - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34 — personopplysninger om ansatte og borgere er kopiert ut."
         - "Kontakt politiet ang. svindelforsøket mot kontonummer. Kontakt banken umiddelbart for å forsøke å stoppe overføringen."
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
 
   - id: innsiderisiko
     navn: "Innsiderisiko — «Ola Nordmann»"
@@ -138,17 +139,17 @@ scenarier:
         sys: personopplysninger
         status: kompromittert
         melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning — bevisst eller under press."
-        lovkrav: "Digitalsikkerhetsforskriften § 12 — personellmessige sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 12. Sikkerhetstiltak for personell"
       - tid: 7500
         sys: tilgang
         status: feil
         melding: "Autorisasjonsansvarlig er aldri blitt varslet om samboerforholdet. Ingen revurdering av «Ola»s klarering er gjennomført."
-        lovkrav: "Digitalsikkerhetsforskriften § 12 — personellmessige sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 12. Sikkerhetstiltak for personell"
       - tid: 9000
         sys: backup
         status: svekket
         melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til gradert informasjon."
-        lovkrav: "Digitalsikkerhetsforskriften § 10 — teknologiske sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak"
     tiltak:
       forebygging:
         - "Implementer rutiner for å melde endringer i livssituasjon til autorisasjonsansvarlig (jf. digitalsikkerhetsforskriften § 12 — personellmessige sikkerhetstiltak)."
@@ -178,7 +179,7 @@ scenarier:
         sys: tilgang
         status: nede
         melding: "Felles innloggingsløsning (SSO) i skyen er nede. Ingen ansatte kan logge inn på noe system."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 2400
         sys: fagsystem
         status: nede
@@ -187,11 +188,12 @@ scenarier:
         sys: okonomi
         status: nede
         melding: "Lønn- og faktureringssystem er nede. Ansatte risikerer å ikke få utbetalt lønn ved neste termin."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 4000
         sys: backup
         status: nede
         melding: "Backup er lagret hos samme skyleverandør. Ingen data kan gjenopprettes fra alternativ kilde."
+        lovkrav: "Digitalsikkerhetsforskriften § 13. Hendelseshåndtering og beredskap"
       - tid: 5000
         sys: nettverk
         status: svekket
@@ -200,16 +202,16 @@ scenarier:
         sys: fysisk
         status: svekket
         melding: "Bygningsstyring og adgangskort knyttet til skytjenesten svikter. Dører må låses opp manuelt."
-        lovkrav: "Digitalsikkerhetsforskriften § 8 — risikohåndtering"
+        lovkrav: "Digitalsikkerhetsforskriften § 8. Risikohåndtering"
     tiltak:
       forebygging:
         - "Distribuer tjenester og data på tvers av minst to leverandører og to geografier. Unngå konsentrasjonsrisiko."
         - "Krev at backup lagres hos en annen leverandør enn primær skytjeneste, fortrinnsvis med norsk/europeisk databehandling."
         - "Etabler en offline beredskapsplan for e-post, tilgangsstyring og kritiske fagsystemer som ikke er avhengig av én skyleverandør."
-        - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. Digitalsikkerhetsforskriften § 8 — risikohåndtering om kontinuitet)."
+        - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. digitalsikkerhetsforskriften § 8. Risikohåndtering om kontinuitet)."
       respons:
         - "Aktiver beredskapsplan umiddelbart: alternativ kommunikasjonskanal, manuell innlogging, papirbaserte nødprosedyrer."
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
         - "Initier prosess for å anskaffet alternativ eller supplerende tjenesteleverandør for kritiske funksjoner."
 
   - id: fysisk_brist
@@ -226,7 +228,7 @@ scenarier:
         sys: tilgang
         status: kompromittert
         melding: "Falskt adgangskort produseres basert på fotografiet. Inntrengeren bruker «tailgating» ved hovedinngangen."
-        lovkrav: "Digitalsikkerhetsforskriften § 11 — fysiske sikkerhetstiltak"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
       - tid: 2400
         sys: fysisk
         status: svekket
@@ -243,12 +245,12 @@ scenarier:
         sys: epost
         status: kompromittert
         melding: "Intern e-post overvåkes. Budsjettrammer og konkurransegrunnlag for pågående anskaffelser avdekkes."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 7200
         sys: personopplysninger
         status: kompromittert
         melding: "Personopplysninger og sensitiv informasjon kopieres til USB-enhet og bringes ut av bygget."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
     tiltak:
       forebygging:
         - "Opplær ansatte i å bære adgangskortet skjult. Kortet er ikke en del av uniformen og skal ikke vises utenfor arbeidsplassen."
@@ -258,6 +260,7 @@ scenarier:
       respons:
         - "Sperre adgangskortet umiddelbart og igangsette politianmeldelse."
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger er bekreftet eksponert."
+        - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34 dersom bruddet medfører høy risiko for deres rettigheter og friheter."
         - "Gjennomfør incident response for bakdøren som ble installert — anses aktiv inntil motbevist."
         - "Kartlegg omfang via adgangskortlogger og kameraopptak. Identifiser alle rom inntrengeren besøkte."
 
@@ -279,7 +282,7 @@ scenarier:
         sys: okonomi
         status: manipulert
         melding: "Angriperen endrer leverandørens kontonummer i økonomisystemet. Neste betaling på 2,8 mill. kr sendes til feil konto."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 3600
         sys: epost
         status: svekket
@@ -292,12 +295,12 @@ scenarier:
         sys: personopplysninger
         status: kompromittert
         melding: "Budsjettrammer, kontraktsverdier og leverandørlister eksfiltreres. Kan brukes til fremtidige angrep."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 7200
         sys: nettverk
         status: kompromittert
         melding: "Vedvarende bakdør installeres i nettverket for fremtidig tilgang og overvåkning."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
         - "Innfør fire-øyne-prinsipp ved alle endringer av konto- og betalingsinformasjon for leverandører."
@@ -306,6 +309,7 @@ scenarier:
         - "Innfør anti-phishing-filtrering og sandboxing av vedlegg. Sett opp DMARC, DKIM og SPF."
       respons:
         - "Kontakt banken umiddelbart for å forsøke å stoppe eller reversere overføringen."
-        - "Varsle politiet og dokumenter deepfake-bevisene. NSM/NCSC varsles iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Varsle politiet og dokumenter deepfake-bevisene. NSM/NCSC varsles iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
         - "Gjennomfør fullstendig forensisk analyse av nettverket — bakdøren er aktiv og angriper har fortsatt tilgang."
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger ble eksponert."
+        - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34 dersom personopplysninger er kompromittert."

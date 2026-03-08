@@ -1,37 +1,37 @@
 gruppeLabels:
-  - "PRESENTASJON — Frontend / Edge"
-  - "APPLIKASJON — Backend / API"
-  - "DATA — Database / Personopplysninger"
-  - "DRIFT — Logging / Backup"
+  - "PRESENTATION — Frontend / Edge"
+  - "APPLICATION — Backend / API"
+  - "DATA — Database / PII"
+  - "OPERATIONS — Logging / Backup"
 
 systemer:
   portal:
-    navn: Innbyggerportal
+    navn: Citizen Portal
     gruppe: 0
     col: 0
     ikon: language
   webserver:
-    navn: Webserver
+    navn: Web Server
     gruppe: 0
     col: 1
     ikon: dns
   brannmur:
-    navn: "WAF / Brannmur"
+    navn: "WAF / Firewall"
     gruppe: 0
     col: 2
     ikon: shield_locked
   api:
-    navn: API-lag
+    navn: API Layer
     gruppe: 1
     col: 0
     ikon: hub
   admin:
-    navn: Admin-panel
+    navn: Admin Panel
     gruppe: 1
     col: 1
     ikon: admin_panel_settings
   cicd:
-    navn: CI/CD-pipeline
+    navn: CI/CD Pipeline
     gruppe: 1
     col: 2
     ikon: build
@@ -41,12 +41,12 @@ systemer:
     col: 0
     ikon: database
   persondata:
-    navn: Personopplysninger
+    navn: PII Store
     gruppe: 2
     col: 1
     ikon: person
   epost:
-    navn: "E-post / SSO"
+    navn: "Email / SSO"
     gruppe: 2
     col: 2
     ikon: mail
@@ -66,496 +66,504 @@ scenarier:
     navn: "A01 — Broken Access Control"
     ikon: shield
     owasp: "A01:2025"
-    kort: "IDOR-sårbarhet i portal — innbyggere ser andres data"
-    beskrivelse: "En innbyggerportal mangler tilgangskontroll på API-nivå. Ved å endre bruker-ID i URL-en kan en angriper se og endre andre innbyggeres søknader, vedtak og personopplysninger. Feilen skyldes at autorisasjonssjekk kun gjøres i frontend, ikke i backend-API-et."
+    kort: "IDOR vulnerability in citizen portal — unauthorized access to personal data"
+    beskrivelse: "A citizen-facing portal lacks server-side authorization checks on its API. By manipulating the user ID parameter in the URL, an attacker can read and modify other citizens' applications, decisions, and personal data. The flaw exists because authorization is enforced only in the frontend, not in the backend API."
     steg:
       - tid: 0
         sys: api
         status: kompromittert
-        melding: "Angriper oppdager at GET /api/soknader/{id} returnerer data uten autorisasjonssjekk. Endrer ID fra egen til vilkårlig."
+        melding: "Attacker discovers GET /api/applications/{id} returns data without authorization check. Enumerates IDs sequentially."
       - tid: 1200
         sys: database
         status: kompromittert
-        melding: "Databasen returnerer søknadsdata for alle innbyggere. Ingen row-level security. 14 000 søknader eksponert."
-        lovkrav: "GDPR art. 32 — tilgangskontroll"
+        melding: "Database returns application data for all citizens. No row-level security. 14,000 records exposed."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 2400
         sys: persondata
         status: kompromittert
-        melding: "Personnummer, inntektsopplysninger og helsedata leses ut via IDOR-sårbarheten."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "National ID numbers, income data, and health information exfiltrated via IDOR vulnerability."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 3600
         sys: portal
         status: manipulert
-        melding: "Angriper bruker PUT /api/soknader/{id} til å endre status på andres søknader. Vedtak manipuleres."
+        melding: "Attacker uses PUT /api/applications/{id} to alter the status of others' applications. Decisions tampered with."
       - tid: 4800
         sys: epost
         status: svekket
-        melding: "Automatisk e-postvarsling sender bekreftelse på endret søknad til uskyldig innbygger. Hendelsen oppdages."
+        melding: "Automated email notification sends confirmation of altered application to unsuspecting citizen. Incident detected."
       - tid: 6000
         sys: logg
         status: advarsel
-        melding: "Loggene viser 4 300 uautoriserte API-kall siste 72 timer. Ingen alarm ble utløst."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "Logs show 4,300 unauthorized API calls in the last 72 hours. No alert was ever triggered."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 7200
         sys: brannmur
         status: feil
-        melding: "WAF var konfigurert til å logge, ikke blokkere. Rate limiting var deaktivert for «intern» trafikk."
+        melding: "WAF was configured to log only, not block. Rate limiting was disabled for traffic classified as internal."
       - tid: 8400
         sys: backup
         status: svekket
-        melding: "Omfanget av dataeksponering er ukjent. Alle backups siden sårbarheten ble introdusert må gjennomgås."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "Extent of data exposure is unknown. All backups since the vulnerability was introduced must be reviewed."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
     tiltak:
       forebygging:
-        - "Gjennomfør autorisasjonssjekk på server-siden for alle API-forespørsler — aldri kun i frontend."
-        - "Implementer row-level security i databasen. Ingen bruker skal kunne hente andres data uavhengig av UI-logikk."
-        - "Bruk indirekte referanser (UUID, opaque tokens) i stedet for sekvensielle ID-er i URL-er."
-        - "Inkluder automatisert DAST-testing for tilgangskontrollfeil som del av CI/CD-pipeline."
+        - "Enforce authorization checks server-side for every API request — never rely on frontend-only enforcement."
+        - "Implement row-level security in the database. No user should be able to retrieve another user's data regardless of UI logic."
+        - "Use indirect references (UUIDs, opaque tokens) instead of sequential IDs in URLs."
+        - "Include automated DAST testing for access control flaws as part of the CI/CD pipeline."
       respons:
-        - "Steng det sårbare API-endepunktet umiddelbart. Kartlegg alle uautoriserte oppslag i loggene."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33. Identifiser alle berørte registrerte."
-        - "Varsle berørte innbyggere iht. GDPR art. 34 dersom bruddet medfører høy risiko for den enkeltes rettigheter."
+        - "Disable the vulnerable API endpoint immediately. Audit logs to identify all unauthorized access."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Identify all affected data subjects."
+        - "Notify affected individuals iht. GDPR art. 34 if the breach poses high risk to their rights and freedoms."
 
   - id: misconfig
     navn: "A02 — Security Misconfiguration"
     ikon: settings
     owasp: "A02:2025"
-    kort: "Debug-modus i produksjon — feilmeldinger avslører infrastruktur"
-    beskrivelse: "En webapplikasjon deployes til produksjon med debug-modus aktivert. Stack traces, databasetilkoblingsstrenger og interne IP-adresser eksponeres i feilmeldinger. Default admin-konto er ikke deaktivert. Unødvendige tjenester og porter er åpne."
+    kort: "Debug mode in production — error messages expose infrastructure"
+    beskrivelse: "A web application is deployed to production with debug mode enabled. Stack traces, database connection strings, and internal IP addresses are exposed in error messages. The default admin account has not been disabled. Unnecessary services and ports are open."
     steg:
       - tid: 0
         sys: webserver
         status: advarsel
-        melding: "Debug-modus er aktiv i produksjon. Detaljerte stack traces returneres ved alle feil."
+        melding: "Debug mode is active in production. Detailed stack traces returned on every error response."
       - tid: 1000
         sys: api
         status: svekket
-        melding: "Feilmelding avslører databasetype, versjon og intern IP: PostgreSQL 14.2 på 10.0.3.47."
+        melding: "Error message reveals database type, version, and internal IP: PostgreSQL 14.2 on 10.0.3.47."
       - tid: 2000
         sys: admin
         status: kompromittert
-        melding: "Default admin-konto «admin/admin» er aktiv. Angriper logger inn på /admin-panelet."
+        melding: "Default admin account admin/admin is active. Attacker logs into the /admin panel."
       - tid: 3200
         sys: database
         status: kompromittert
-        melding: "Admin-panelet gir direkte databasetilgang. Hele bruker-tabellen med passord-hasher eksporteres."
+        melding: "Admin panel provides direct database access. Entire user table with password hashes exported."
       - tid: 4400
         sys: persondata
         status: kompromittert
-        melding: "12 500 brukerprofiler med personnummer, e-post og adresse lastes ned."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "12,500 user profiles with national ID numbers, email addresses, and home addresses downloaded."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 5600
         sys: webserver
         status: kompromittert
-        melding: "Unødvendig tjeneste (phpMyAdmin) kjører på port 8080 uten autentisering. Full DB-tilgang."
+        melding: "Unnecessary service (phpMyAdmin) running on port 8080 without authentication. Full database access."
       - tid: 6800
         sys: logg
         status: feil
-        melding: "Logging skriver til lokal fil som roterer hver 24 timer. Eldre logger er allerede slettet."
-        lovkrav: "Digitalsikkerhetsforskriften § 10 — teknologiske sikkerhetstiltak"
+        melding: "Logging writes to a local file that rotates every 24 hours. Older logs have already been deleted."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Bruk hardened baseline-konfigurasjoner. Deaktiver debug-modus, stack trace-output og verbose feilmeldinger i produksjon."
-        - "Fjern alle default-kontoer og endre standardpassord før deployment. Automatiser validering av dette i pipeline."
-        - "Kjør automatisert konfigurasjonsvalidering (CIS Benchmark) og portskanningstest i CI/CD-pipeline."
-        - "Sett WAF i blokkerende modus. Deaktiver alle tjenester og porter som ikke er i aktiv bruk."
+        - "Use hardened baseline configurations. Disable debug mode, stack trace output, and verbose error messages in production."
+        - "Remove all default accounts and change default passwords before deployment. Automate validation in the pipeline."
+        - "Run automated configuration validation (CIS Benchmarks) and port scanning in the CI/CD pipeline."
+        - "Set WAF to blocking mode. Disable all services and ports not actively in use."
       respons:
-        - "Deaktiver debug-modus og steng unødvendige tjenester umiddelbart. Nullstill alle kompromitterte kontoer."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33. Anta at alle passord-hasher er i angriperens besittelse."
-        - "Gjennomfør fullstendig konfigurasjonsrevisjon av alle produksjonssystemer."
+        - "Disable debug mode and shut down unnecessary services immediately. Reset all compromised accounts."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Assume all password hashes are in the attacker's possession."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — national ID numbers and home addresses exposed constitutes high risk."
+        - "Conduct a full configuration audit of all production systems."
 
   - id: supply_chain
     navn: "A03 — Software Supply Chain Failures"
     ikon: link
     owasp: "A03:2025"
-    kort: "Kompromittert npm-pakke — bakdør i CI/CD-pipeline"
-    beskrivelse: "En populær npm-pakke som brukes i virksomhetens webapplikasjon blir kompromittert via en dependency confusion-angrep. Ondsinnet kode injiseres i en patch-oppdatering og deployes automatisk via CI/CD-pipelinen uten manuell gjennomgang."
+    kort: "Compromised npm package — backdoor deployed via CI/CD pipeline"
+    beskrivelse: "A popular npm package used in the organization's web application is compromised via a dependency confusion attack. Malicious code is injected in a patch update and automatically deployed through the CI/CD pipeline without manual review."
     steg:
       - tid: 0
         sys: cicd
         status: kompromittert
-        melding: "npm-pakken «form-validator-utils» v2.1.4 inneholder bakdør. Automatisk oppdatering via Dependabot."
+        melding: "npm package form-validator-utils v2.1.4 contains a backdoor. Auto-updated via Dependabot."
       - tid: 1200
         sys: webserver
         status: kompromittert
-        melding: "Ondsinnet kode deployes til produksjon via automatisk CI/CD-pipeline. Ingen manuell kodegjennomgang."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "Malicious code deployed to production via automated CI/CD pipeline. No manual code review performed."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 2400
         sys: portal
         status: kompromittert
-        melding: "Bakdøren samler inn alle skjemadata (inkl. personnummer) og sender til ekstern server."
+        melding: "Backdoor harvests all form data (including national ID numbers) and exfiltrates to external server."
       - tid: 3600
         sys: persondata
         status: kompromittert
-        melding: "Innbyggernes personopplysninger eksfiltreres i sanntid. 850 søknader kompromittert første døgn."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "Citizens' personal data exfiltrated in real time. 850 applications compromised in the first 24 hours."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: api
         status: svekket
-        melding: "Bakdøren installerer en sekundær payload som kartlegger interne API-endepunkter og tokens."
+        melding: "Backdoor installs a secondary payload that maps internal API endpoints and harvests tokens."
       - tid: 6000
         sys: database
         status: advarsel
-        melding: "SCA-verktøy (Software Composition Analysis) var ikke konfigurert. Ingen SBOM finnes for applikasjonen."
+        melding: "SCA tooling (Software Composition Analysis) was not configured. No SBOM exists for the application."
       - tid: 7200
         sys: logg
         status: svekket
-        melding: "Utgående trafikk til ukjent IP ble ikke fanget opp. Egress-filtrering var ikke implementert."
+        melding: "Outbound traffic to unknown IP was not detected. Egress filtering was not implemented."
     tiltak:
       forebygging:
-        - "Lås avhengigheter til spesifikke versjoner med hash-verifisering i CI/CD (lock-filer, pip-compile, npm ci)."
-        - "Implementer SCA-verktøy (Snyk, Dependabot med alerting) og generer SBOM for alle bygg."
-        - "Krev manuell godkjenning for produksjonsdeploy — ingen automatisk push av avhengighetsoppdateringer til produksjon."
-        - "Sett opp egress-filtrering: applikasjoner kommuniserer kun med kjente, eksplisitt tillatte mål."
+        - "Pin dependencies to specific versions with hash verification in CI/CD (lock files, npm ci)."
+        - "Implement SCA tooling (Snyk, Dependabot with alerting) and generate SBOM for every build."
+        - "Require manual approval for production deploys — no automatic push of dependency updates to production."
+        - "Implement egress filtering: applications communicate only with known, explicitly allowed destinations."
       respons:
-        - "Rull tilbake til siste kjente gode versjon umiddelbart. Isoleér det kompromitterte miljøet."
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 og Datatilsynet iht. GDPR art. 33."
-        - "Gjennomgå alle avhengigheter i SBOM for lignende bakdører. Anta at all kode deployet i perioden er kompromittert."
+        - "Roll back to last known good version immediately. Isolate the compromised environment."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — personal data exfiltrated in real time."
+        - "Review all dependencies in the SBOM for similar backdoors. Assume all code deployed during the period is compromised."
 
   - id: crypto_failures
     navn: "A04 — Cryptographic Failures"
     ikon: lock
     owasp: "A04:2025"
-    kort: "TLS-nedgradering og ukryptert backup — personopplysninger eksponeres i klartekst"
-    beskrivelse: "Portalen støtter utdaterte TLS-versjoner og svake siffersuiter. En MITM-angriper i nettverket nedgraderer krypteringen og fanger opp sensitiv trafikk. Backup sendes ukryptert til ekstern skylagring, og passord er hashet med MD5 uten salt."
+    kort: "TLS downgrade and unencrypted backup — personal data exposed in cleartext"
+    beskrivelse: "The portal supports outdated TLS versions and weak cipher suites. A MITM attacker on the network downgrades the encryption and intercepts sensitive traffic. Backups are sent unencrypted to external cloud storage, and passwords are hashed with MD5 without salt."
     steg:
       - tid: 0
         sys: webserver
         status: advarsel
-        melding: "TLS 1.1 er aktivert på webserveren. Svake siffersuiter (RC4, 3DES) er tilgjengelige for forhandling."
+        melding: "TLS 1.1 is enabled on the web server. Weak cipher suites (RC4, 3DES) available for negotiation."
       - tid: 1200
         sys: brannmur
         status: kompromittert
-        melding: "Angriper utfører MITM og gjennomfører et TLS-nedgraderingsangrep. Forbindelsen tvinges fra TLS 1.3 til TLS 1.1."
+        melding: "Attacker performs MITM and executes TLS downgrade attack. Connection forced from TLS 1.3 to TLS 1.1."
       - tid: 2400
         sys: persondata
         status: kompromittert
-        melding: "Sesjonsdata og personopplysninger eksponeres i klartekst. Personnummer og inntektsopplysninger avleses."
-        lovkrav: "GDPR art. 32 — kryptering og konfidensialitet"
+        melding: "Session data and PII exposed in cleartext. National ID numbers and income data intercepted."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 3600
         sys: backup
         status: svekket
-        melding: "Automatisk backup kjører. 14 GB overføres ukryptert til skylagring via HTTP. Ingen server-side encryption aktivert."
-        lovkrav: "GDPR art. 32 — kryptering av data i hvile"
+        melding: "Automated backup runs. 14 GB transferred unencrypted to cloud storage via HTTP. No server-side encryption."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: database
         status: kompromittert
-        melding: "Backup inneholder passord-hasher med MD5 uten salt. 8 500 passord knekkes med regnbuetabeller på 4 timer."
+        melding: "Backup contains password hashes using MD5 without salt. 8,500 passwords cracked with rainbow tables in 4 hours."
       - tid: 6000
         sys: epost
         status: advarsel
-        melding: "Systemet sender vedtaksbrev med personnummer i klartekst via e-post. Ingen TLS-krav satt for e-posttransport."
-        lovkrav: "GDPR art. 5(1)(f) — konfidensialitet og integritet"
+        melding: "System sends decision letters with national ID numbers in cleartext via email. No TLS requirement set for mail transport."
+        lovkrav: "GDPR art. 5 nr. 1 bokstav f. Integritet og konfidensialitet"
       - tid: 7200
         sys: logg
         status: feil
-        melding: "Kryptografisk konfigurasjon er aldri testet automatisk. Ingen TLS-skanning (testssl.sh, Qualys) i CI/CD-pipeline."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "Cryptographic configuration has never been tested automatically. No TLS scanning (testssl.sh, Qualys) in CI/CD pipeline."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Deaktiver TLS 1.0 og 1.1 samt svake siffersuiter (RC4, 3DES, NULL). Tillat kun TLS 1.2 og 1.3."
-        - "Hash passord med bcrypt, Argon2 eller PBKDF2 — aldri MD5 eller SHA1."
-        - "Krypter backup end-to-end med AES-256 og egenforvaltet nøkkel. Krev TLS for alle overføringer."
-        - "Kjør automatisert TLS-skanning (testssl.sh, Qualys SSL Labs) i CI/CD og som del av periodisk revisjon."
+        - "Disable TLS 1.0 and 1.1 and weak cipher suites (RC4, 3DES, NULL). Allow only TLS 1.2 and 1.3."
+        - "Hash passwords with bcrypt, Argon2, or PBKDF2 — never MD5 or SHA-1."
+        - "Encrypt backups end-to-end with AES-256 and a managed key. Require TLS for all transfers."
+        - "Run automated TLS scanning (testssl.sh, Qualys SSL Labs) in CI/CD and as part of periodic audits."
       respons:
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33. Anta at alle passord i backupen er kompromittert."
-        - "Rull ut tvungen passordendring for alle berørte brukere. Varsle brukerne om hendelsen."
-        - "Krypter eksisterende backup retroaktivt eller slett og gjenoppbygg med korrekt konfigurasjon."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Assume all passwords in the backup are compromised."
+        - "Force password reset for all affected users. Notify affected individuals iht. GDPR art. 34 — passwords and PII exposed in cleartext."
+        - "Encrypt existing backups retroactively or delete and rebuild with correct configuration."
 
   - id: injection
     navn: "A05 — Injection"
     ikon: code
     owasp: "A05:2025"
-    kort: "SQL-injeksjon i søkefelt — hele databasen dumpes"
-    beskrivelse: "Søkefeltet i en offentlig tjeneste validerer ikke brukerinput. En angriper bruker SQL-injeksjon til å hente ut hele databasen, inkludert intern saksbehandlerdata, før angrepet eskaleres til OS-kommandoer via xp_cmdshell."
+    kort: "SQL injection in search field — entire database dumped"
+    beskrivelse: "The search field in a public-facing service does not validate user input. An attacker uses SQL injection to extract the entire database, including internal case worker data, before escalating to OS command execution via xp_cmdshell."
     steg:
       - tid: 0
         sys: portal
         status: kompromittert
-        melding: "Angriper sender ' OR 1=1 -- i søkefeltet. Applikasjonen returnerer alle poster i tabellen (45 000 rader)."
+        melding: "Attacker submits ' OR 1=1 -- in the search field. Application returns all rows in the table (45,000 records)."
       - tid: 1200
         sys: database
         status: kompromittert
-        melding: "UNION SELECT avslører tabellstruktur. Angriper finner tabellene «brukere», «vedtak» og «dokumenter»."
+        melding: "UNION SELECT reveals table structure. Attacker discovers tables: users, decisions, and documents."
       - tid: 2400
         sys: persondata
         status: kompromittert
-        melding: "Tabellen «brukere» inneholder personnummer, passord-hasher (MD5 uten salt) og adresser."
-        lovkrav: "GDPR art. 32 — kryptering"
+        melding: "Users table contains national ID numbers, password hashes (MD5, unsalted), and home addresses."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 3600
         sys: admin
         status: kompromittert
-        melding: "Admin-passord knekkes (MD5: «Sommer2024!»). Angriper logger inn som systemadministrator."
+        melding: "Admin password cracked (MD5: Summer2024!). Attacker logs in as system administrator."
       - tid: 4800
         sys: webserver
         status: kompromittert
-        melding: "Via admin-tilgang aktiveres xp_cmdshell. Angriper har nå OS-tilgang på databaseserveren."
+        melding: "Via admin access, xp_cmdshell is enabled. Attacker now has OS-level access on the database server."
       - tid: 6000
         sys: api
         status: nede
-        melding: "Angriper installerer kryptominer og bakdør. Serverlast øker til 98%. Tjenesten svarer ikke."
+        melding: "Attacker installs cryptominer and backdoor. Server load reaches 98%. Service unresponsive."
       - tid: 7200
         sys: brannmur
         status: svekket
-        melding: "Utgående C2-trafikk over port 443 blandes med normal HTTPS. Ingen DPI-inspeksjon konfigurert."
+        melding: "Outbound C2 traffic over port 443 blends with normal HTTPS. No deep packet inspection configured."
       - tid: 8400
         sys: logg
         status: feil
-        melding: "SQL-feilmeldinger ble logget men aldri overvåket. 3 uker med angrepsforsøk ble ignorert."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "SQL errors were logged but never monitored. 3 weeks of attack attempts went unnoticed."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Bruk prepared statements og parameteriserte spørringer konsekvent — aldri strengkonkatenering i SQL."
-        - "Valider og sanitiser all brukerinput på server-siden. Bruk ORM med innebygd escaping."
-        - "Deaktiver xp_cmdshell og alle andre farlige databasefunksjoner. Kjør databaseprosessen med minste privilegium."
-        - "Sett opp SIEM-alert på SQL-feilmønstre (syntax errors, UNION SELECT, xp_). Aldri la feillogger stå uovervåket."
+        - "Use prepared statements and parameterized queries consistently — never string concatenation in SQL."
+        - "Validate and sanitize all user input server-side. Use an ORM with built-in escaping."
+        - "Disable xp_cmdshell and all other dangerous database functions. Run the database process with least privilege."
+        - "Set up SIEM alerts on SQL error patterns (syntax errors, UNION SELECT, xp_). Never leave error logs unmonitored."
       respons:
-        - "Steng søkefunksjonen umiddelbart. Anta at alle data i databasen er eksponert og kompromittert."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33. Rull ut tvungen passordendring for alle brukere."
-        - "Gjennomfør fullstendig forensisk analyse — kryptominer og bakdør er installert og aktive på serveren."
+        - "Shut down the search function immediately. Assume all data in the database is exposed and compromised."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Force password reset for all users."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — national ID numbers and passwords compromised."
+        - "Conduct full forensic analysis — cryptominer and backdoor are installed and active on the server."
 
   - id: insecure_design
     navn: "A06 — Insecure Design"
     ikon: design_services
     owasp: "A06:2025"
-    kort: "Passordgjenoppretting med sekvensielle tokens — ingen identitetsverifisering i design"
-    beskrivelse: "Passordgjenopprettingsfunksjonen ble designet uten sikkerhetskrav. Tokens er sekvensnumre, ikke kryptografisk tilfeldige strenger. Funksjonen lar seg bruke til å enumerere brukere og tilbakestille andres passord. Rate limiting og varsling til kontoinnehaver ble aldri vurdert i designfasen."
+    kort: "Password reset with sequential tokens — no identity verification by design"
+    beskrivelse: "The password reset function was designed without security requirements. Tokens are sequential integers, not cryptographically random strings. The function can be used to enumerate users and reset others' passwords. Rate limiting and notification to the account holder were never considered in the design phase."
     steg:
       - tid: 0
         sys: portal
         status: kompromittert
-        melding: "Angriper oppdager at reset-URL har formen /reset?token=4821. Enumerering av nabotokens starter."
+        melding: "Attacker discovers reset URL uses /reset?token=4821. Enumeration of adjacent tokens begins."
       - tid: 1200
         sys: epost
         status: kompromittert
-        melding: "Token er et 6-sifret sekvensielt heltall. Med botnet: 1 million forsøk på 8 timer. Ingen rate limiting."
+        melding: "Token is a 6-digit sequential integer. With botnet: 1 million attempts in 8 hours. No rate limiting."
       - tid: 2400
         sys: admin
         status: kompromittert
-        melding: "Admin-kontoen tilbakestilles. Ingen varsling sendes til eksisterende registrert e-post. Angriper setter nytt passord."
+        melding: "Admin account is reset. No notification sent to the registered email address. Attacker sets new password."
       - tid: 3600
         sys: persondata
         status: kompromittert
-        melding: "Admin-tilgang brukes til å eksportere alle brukerprofiler — 6 200 innbyggere med navn, adresse og saksstatus."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "Admin access used to export all user profiles — 6,200 citizens with names, addresses, and case status."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: api
         status: svekket
-        melding: "Reset-endepunktet returnerer ulik respons for eksisterende og ikke-eksisterende e-post. Alle kontoer kan enumereres."
+        melding: "Reset endpoint returns different responses for existing vs. non-existing emails. All accounts can be enumerated."
       - tid: 6000
         sys: logg
         status: feil
-        melding: "50 000 reset-forsøk siste 48 timer er logget, men ingen alarm er definert. Loggene er aldri gjennomgått."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "50,000 reset attempts in the last 48 hours are logged, but no alert is defined. Logs never reviewed."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 7200
         sys: brannmur
         status: svekket
-        melding: "Rate limiting ble ikke planlagt i designfasen. Kan ikke implementeres uten full omskriving av autentiseringsmodulen."
+        melding: "Rate limiting was not planned in the design phase. Cannot be implemented without a full rewrite of the authentication module."
     tiltak:
       forebygging:
-        - "Integrer trusselsmodellering (STRIDE) i designfasen — sikkerhetskrav skal komme fra trusselsmodellen, ikke legges til i etterkant."
-        - "Bruk kryptografisk tilfeldige tokens (UUID v4 eller minimum 128 bits entropi) for alle one-time-codes og reset-lenker."
-        - "Send alltid varsel til den registrerte e-postadressen ved forsøk på kontoendring eller passordtilbakestilling."
-        - "Rate limit alle autentiseringsrelaterte endepunkter fra dag én — dette er et designkrav, ikke en drift-konfigurasjon."
+        - "Integrate threat modeling (STRIDE) in the design phase — security requirements must come from the threat model, not be added as an afterthought."
+        - "Use cryptographically random tokens (UUID v4 or minimum 128 bits of entropy) for all one-time codes and reset links."
+        - "Always send a notification to the registered email address on any account change or password reset attempt."
+        - "Rate limit all authentication-related endpoints from day one — this is a design requirement, not an operational configuration."
       respons:
-        - "Invalider alle aktive reset-tokens umiddelbart. Varsle berørte brukere om at kontoene kan ha blitt kompromittert."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33."
-        - "Planlegg full omskriving av passordgjenopprettingsmodulen. Sikkerhetsgjennomgang av all autentiseringskode."
+        - "Invalidate all active reset tokens immediately."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 6,200 citizen profiles with personal data exposed."
+        - "Plan full rewrite of the password reset module. Security review of all authentication code."
 
   - id: auth_failure
     navn: "A07 — Authentication Failures"
     ikon: passkey
     owasp: "A07:2025"
-    kort: "Credential stuffing mot ansattportal — ingen MFA, ingen rate limiting"
-    beskrivelse: "En ansattportal med VPN-tilgang mangler flerfaktorautentisering og rate limiting. En angriper bruker lekkede brukernavn/passord-par fra et tidligere databrudd til å systematisk logge inn som ansatte. Session-ID-er er forutsigbare og invalideres ikke ved passordendring."
+    kort: "Credential stuffing against employee portal — no MFA, no rate limiting"
+    beskrivelse: "An employee portal with VPN access lacks multi-factor authentication and rate limiting. An attacker uses leaked username/password pairs from a previous breach to systematically log in as employees. Session IDs are predictable and not invalidated on password change."
     steg:
       - tid: 0
         sys: portal
         status: advarsel
-        melding: "Automatisert credential stuffing startes. 200 innloggingsforsøk per minutt. Ingen rate limiting."
+        melding: "Automated credential stuffing begins. 200 login attempts per minute. No rate limiting."
       - tid: 1200
         sys: admin
         status: kompromittert
-        melding: "5 av 200 passord-par gir treff. Ansatt med rollen «saksbehandler» kompromitteres. Ingen MFA."
+        melding: "5 of 200 credential pairs succeed. Employee with case worker role compromised. No MFA."
       - tid: 2400
         sys: epost
         status: kompromittert
-        melding: "Angriperen leser ansattes e-post via SSO-token. Intern kommunikasjon om pågående anskaffelse avdekkes."
+        melding: "Attacker reads employee email via SSO token. Internal communications about ongoing procurement discovered."
       - tid: 3600
         sys: api
         status: kompromittert
-        melding: "API-tokenet er en forutsigbar JWT uten utløpstid. Token gjenbrukes selv etter at ansatt bytter passord."
+        melding: "API token is a predictable JWT with no expiration. Token remains valid even after the employee changes password."
       - tid: 4800
         sys: persondata
         status: kompromittert
-        melding: "Saksbehandlerens tilgang brukes til å eksportere personopplysninger om 2 300 innbyggere."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "Case worker access used to export personal data of 2,300 citizens."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 6000
         sys: database
         status: svekket
-        melding: "Session-ID-er er sekvensielle (1001, 1002, 1003...). Angriper kaprer 12 aktive sesjoner."
+        melding: "Session IDs are sequential (1001, 1002, 1003...). Attacker hijacks 12 active sessions."
       - tid: 7200
         sys: logg
         status: feil
-        melding: "Mislykkede innloggingsforsøk logges, men ingen alarm utløses. Terskelverdier er satt til 10 000."
-        lovkrav: "Digitalsikkerhetsforskriften § 10 — teknologiske sikkerhetstiltak"
+        melding: "Failed login attempts are logged, but no alert is triggered. Alert threshold set to 10,000."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Krev MFA for alle kontoer — obligatorisk for VPN, admin-panel og alle kontoer med tilgang til personopplysninger."
-        - "Innfør rate limiting og automatisk konto-lockout etter 5–10 mislykkede forsøk. Varsle brukeren ved lockout."
-        - "Bruk JWT med kort levetid (15–60 min) og invalider alle tokens ved passordendring eller avlogging."
-        - "Sjekk passord mot kjente lekkede databaser (HaveIBeenPwned API) ved opprettelse og endring."
+        - "Require MFA for all accounts — mandatory for VPN, admin panel, and all accounts with access to personal data."
+        - "Implement rate limiting and automatic account lockout after 5–10 failed attempts. Notify the user on lockout."
+        - "Use JWTs with short lifetimes (15–60 min) and invalidate all tokens on password change or logout."
+        - "Check passwords against known breached databases (HaveIBeenPwned API) on creation and change."
       respons:
-        - "Invalider alle aktive sesjoner og session-ID-er umiddelbart. Tvungen passordendring for alle berørte kontoer."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33. Varsle berørte innbyggere iht. GDPR art. 34."
-        - "Gjennomfør tilgangsrevisjon — kartlegg hva de kompromitterte kontoene har aksessert og eksportert."
+        - "Invalidate all active sessions and session IDs immediately. Force password change for all affected accounts."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33. Notify affected individuals iht. GDPR art. 34."
+        - "Conduct access audit — map what the compromised accounts accessed and exported."
 
   - id: integrity_failures
     navn: "A08 — Software and Data Integrity Failures"
     ikon: security
     owasp: "A08:2025"
-    kort: "Usikker deserialisering i API — vilkårlig kodekjøring via manipulert objekt"
-    beskrivelse: "REST-API-et aksepterer Java-serialiserte objekter uten validering av innhold eller kilde. En angriper sender et konstruert objekt med en gadget chain mot et utdatert deserialiseringsbibliotek. Koden kjøres med applikasjonsserverens rettigheter. CI/CD-pipelinen mangler signering av deployment-artefakter."
+    kort: "Insecure deserialization in API — arbitrary code execution via crafted object"
+    beskrivelse: "The REST API accepts Java-serialized objects without validating content or source. An attacker sends a crafted object with a gadget chain targeting an outdated deserialization library. The code executes with the application server's privileges. The CI/CD pipeline lacks signing of deployment artifacts."
     steg:
       - tid: 0
         sys: api
         status: kompromittert
-        melding: "Angriper sender manipulert Java-serialisert objekt til /api/import. Content-Type: application/x-java-serialized-object aksepteres."
+        melding: "Attacker sends crafted Java-serialized object to /api/import. Content-Type: application/x-java-serialized-object accepted."
       - tid: 1200
         sys: webserver
         status: kompromittert
-        melding: "Apache Commons Collections (v3.1) deserialiserer objektet. Gadget chain eksekveres. Vilkårlig OS-kommando kjøres på serveren."
+        melding: "Apache Commons Collections (v3.1) deserializes the object. Gadget chain executes. Arbitrary OS command runs on the server."
       - tid: 2400
         sys: admin
         status: kompromittert
-        melding: "Reverse shell etablert med applikasjonsserverens tjenestekontorettigheter. Lateral movement starter internt."
+        melding: "Reverse shell established with the application server's service account privileges. Lateral movement begins."
       - tid: 3600
         sys: database
         status: kompromittert
-        melding: "Direkte databasetilgang via tjenestekontoen. Tabellene «vedtak» og «brukere» dumpes — 9 200 rader."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "Direct database access via service account. Tables decisions and users dumped — 9,200 rows."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: cicd
         status: svekket
-        melding: "Ingen digital signering av deployment-artefakter. Angriper injiserer modifisert JAR i neste planlagte deploy."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "No digital signing of deployment artifacts. Attacker injects modified JAR into next scheduled deploy."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 6000
         sys: logg
         status: svekket
-        melding: "Exception-logging for deserialisering er deaktivert for å redusere støy. Ingen spor etter eksekveringen i logg."
+        melding: "Exception logging for deserialization is disabled to reduce noise. No trace of the execution in logs."
       - tid: 7200
         sys: backup
         status: advarsel
-        melding: "Ved rollback deployes kompromittert kode på nytt fra backup. Ingen integritetskontroll på backup-artefakter."
+        melding: "On rollback, compromised code is redeployed from backup. No integrity check on backup artifacts."
     tiltak:
       forebygging:
-        - "Aldri deserialiser untrusted data. Erstatt binær Java-serialisering med JSON, XML med schema-validering, eller Protobuf."
-        - "Oppdater alle tredjepartsbiblioteker regelmessig. Overvåk CVE-varsler for kritiske avhengigheter (Apache Commons, Xstream)."
-        - "Signer alle deployment-artefakter digitalt med en kontrollert nøkkel. Verifiser signaturer automatisk i CI/CD."
-        - "Aktiver logging og alerting ved uventede klasse-instansieringer og reflection-kall i applikasjonen."
+        - "Never deserialize untrusted data. Replace binary Java serialization with JSON, XML with schema validation, or Protobuf."
+        - "Update all third-party libraries regularly. Monitor CVE alerts for critical dependencies (Apache Commons, Xstream)."
+        - "Digitally sign all deployment artifacts with a controlled key. Verify signatures automatically in CI/CD."
+        - "Enable logging and alerting on unexpected class instantiations and reflection calls in the application."
       respons:
-        - "Steng det eksponerte API-endepunktet umiddelbart. Gjenoppbygg applikasjonsserver fra kjent ren baseline — ikke fra backup."
-        - "Gjennomfør fullstendig forensisk analyse. Angriper har persistent fjerntilgang via reverse shell."
-        - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 og NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Shut down the exposed API endpoint immediately. Rebuild the application server from a known clean baseline — not from backup."
+        - "Conduct full forensic analysis. Attacker has persistent remote access via reverse shell."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 9,200 user records including decision data compromised."
 
   - id: logging_failures
     navn: "A09 — Security Logging and Monitoring Failures"
     ikon: manage_search
     owasp: "A09:2025"
-    kort: "Uoppdaget innbrudd i 11 uker — SIEM uten regler, logger uten eier"
-    beskrivelse: "SIEM er installert, men ingen korrelasjonsregler er konfigurert og ingen eier loggberedskapen. Angriperen beveger seg lateralt i 11 uker uten at noen reagerer. Bruddet oppdages først når ransomware deployes og tjenestene faller ned — ikke av sikkerhetsovervåkingen."
+    kort: "Undetected breach for 11 weeks — SIEM without rules, logs without an owner"
+    beskrivelse: "SIEM is installed, but no correlation rules are configured and no one owns the log monitoring function. The attacker moves laterally for 11 weeks without anyone reacting. The breach is discovered only when ransomware is deployed and services go down — not by the security monitoring."
     steg:
       - tid: 0
         sys: logg
         status: advarsel
-        melding: "SIEM er installert, men ingen korrelasjonsregler er konfigurert. Logger samles inn. Ingen varsler er definert. Ingen eier."
+        melding: "SIEM is installed, but no correlation rules configured. Logs are collected. No alerts defined. No owner assigned."
       - tid: 1200
         sys: portal
         status: kompromittert
-        melding: "Angriper utnytter kjent sårbarhet. Feilkoder og unormal trafikk vises tydelig i logg. Ingen overvåker."
+        melding: "Attacker exploits known vulnerability. Error codes and anomalous traffic are clearly visible in logs. Nobody monitors."
       - tid: 2400
         sys: api
         status: svekket
-        melding: "Lateral movement over 3 uker. Logg-volum er 2 GB per dag — for høyt til manuell gjennomgang uten automatiserte regler."
+        melding: "Lateral movement over 3 weeks. Log volume is 2 GB per day — too high for manual review without automated rules."
       - tid: 3600
         sys: database
         status: kompromittert
-        melding: "45 GB data eksfiltreres over 6 uker til ekstern server. Ingen egress-alarm er satt opp på brannmur eller SIEM."
-        lovkrav: "GDPR art. 32 — sikkerhet ved behandling"
+        melding: "45 GB of data exfiltrated over 6 weeks to external server. No egress alarm configured on firewall or SIEM."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: admin
         status: kompromittert
-        melding: "Angriper oppretter skjult admin-bruker. Ingen varsling utløses ved oppretting av privilegert konto."
-        lovkrav: "Digitalsikkerhetsloven § 7 — sikkerhetskrav"
+        melding: "Attacker creates hidden admin user. No alert triggered on creation of privileged account."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
       - tid: 6000
         sys: backup
         status: kompromittert
-        melding: "Backup-systemet infiseres stille. Shadow copies slettes. Mulighet for gjenoppretting er eliminert."
+        melding: "Backup system silently infected. Shadow copies deleted. Ability to restore data eliminated."
       - tid: 7200
         sys: logg
         status: nede
-        melding: "Ransomware deployes. Tjenestene faller ned. Bruddet oppdages — 11 uker etter initial kompromittering."
+        melding: "Ransomware deployed. Services go down. Breach discovered — 11 weeks after initial compromise."
+        lovkrav: "Digitalsikkerhetsforskriften § 13. Hendelseshåndtering og beredskap"
       - tid: 8400
         sys: brannmur
         status: feil
-        melding: "Post-mortem: 847 unike IOC-er lå i loggen. Alle oversett. SIEM-regler var aldri satt opp etter installasjon."
-        lovkrav: "Digitalsikkerhetsforskriften § 6 — styringssystem for digital sikkerhet"
+        melding: "Post-mortem: 847 unique IOCs were present in the logs. All missed. SIEM rules were never configured after installation."
+        lovkrav: "Digitalsikkerhetsloven § 8. Krav om varsling for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Konfigurer SIEM med korrelasjonsregler fra dag én: lateral movement, privilege escalation, bulk data exfiltration, ny admin-bruker."
-        - "Utnevn en navngitt eier for loggberedskapen med definert oppfølgingsansvar, eskaleringsplan og periodisk gjennomgang."
-        - "Sett opp egress-alarm for uvanlig store dataoverføringer (volum og destinasjon) og varsling ved oppretting av privilegerte kontoer."
-        - "Gjennomfør kvartalsvise tabletop-øvelser for å teste at alarmer, eskalering og responsplan faktisk virker."
+        - "Configure SIEM with correlation rules from day one: lateral movement, privilege escalation, bulk data exfiltration, new admin accounts."
+        - "Assign a named owner for log monitoring with defined escalation responsibilities and periodic review."
+        - "Set up egress alarms for unusually large data transfers (volume and destination) and alerts on creation of privileged accounts."
+        - "Conduct quarterly tabletop exercises to verify that alerts, escalation, and response plans actually work."
       respons:
-        - "Aktiver incident response umiddelbart. Ransomware krever full isolasjon av berørte systemer."
-        - "Varsle NSM/NCSC iht. Digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 og Datatilsynet iht. GDPR art. 33."
-        - "Vurder om gjenoppretting fra offline backup eller ekstern backup utenfor primær leverandør er mulig."
+        - "Activate incident response immediately. Ransomware requires full isolation of affected systems."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 and NSM/NorCERT iht. digitalsikkerhetsloven § 8."
+        - "Notify affected individuals without undue delay iht. GDPR art. 34 — 45 GB of personal data exfiltrated over 6 weeks."
+        - "Assess whether recovery from offline backup or external backup outside the primary provider is possible."
 
   - id: exceptional_conditions
     navn: "A10 — Mishandling of Exceptional Conditions"
     ikon: warning
     owasp: "A10:2025"
-    kort: "Race condition i søknadsbehandling — vedtak godkjent uten saksbehandling"
-    beskrivelse: "Søknads-API-et mangler låsemekanisme på kritiske operasjoner. En angriper sender samtidige forespørsler og utnytter race condition til å få søknader godkjent uten å passere saksbehandlingskøen. Unntakshåndteringen er ikke designet for samtidige feil — stack traces eksponeres og thread pool exhaustion blokkerer legitime brukere."
+    kort: "Race condition in application processing — approvals granted without review"
+    beskrivelse: "The application API lacks locking mechanisms on critical operations. An attacker sends concurrent requests and exploits a race condition to get applications approved without passing through the review queue. The exception handling is not designed for concurrent failures — stack traces are exposed and thread pool exhaustion blocks legitimate users."
     steg:
       - tid: 0
         sys: api
         status: advarsel
-        melding: "Søknads-API mangler optimistisk låsing (ETag/versjonsnummer) og databasetransaksjonslåser på statusendringer."
+        melding: "Application API lacks optimistic locking (ETag/version number) and database transaction locks on status changes."
       - tid: 1200
         sys: portal
         status: kompromittert
-        melding: "Angriper sender 50 samtidige PUT-forespørsler til samme søknad. Race condition aktiveres mellom statussjekk og statusendring."
+        melding: "Attacker sends 50 concurrent PUT requests to the same application. Race condition triggered between status check and status update."
       - tid: 2400
         sys: database
         status: kompromittert
-        melding: "To transaksjoner fullfører parallelt i feil rekkefølge (TOCTOU). Søknad settes til godkjent uten å passere saksbehandlingskø."
-        lovkrav: "Forvaltningsloven § 17 — utredningsplikt"
+        melding: "Two transactions complete in parallel in wrong order (TOCTOU). Application set to approved without passing review queue."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 3600
         sys: admin
         status: svekket
-        melding: "Uventet tilstand utløser ubehandlet unntak. Stack trace med interne filstier og klassenavn returneres i HTTP 500-respons."
+        melding: "Unexpected state triggers unhandled exception. Stack trace with internal file paths and class names returned in HTTP 500 response."
       - tid: 4800
         sys: api
         status: nede
-        melding: "Angriper provoserer gjentatte unntak. Exception-handler allokerer ny tråd per feil uten øvre grense. Thread pool exhaustion."
+        melding: "Attacker provokes repeated exceptions. Exception handler allocates a new thread per error with no upper bound. Thread pool exhaustion."
       - tid: 6000
         sys: logg
         status: feil
-        melding: "Unntakshåndtering skriver full kontekst til logg — inkludert aktive session-tokens. Loggfiler er lesbare uten autentisering."
-        lovkrav: "GDPR art. 32 — konfidensialitet i behandling"
+        melding: "Exception handler writes full context to log — including active session tokens. Log files readable without authentication."
+        lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 7200
         sys: backup
         status: advarsel
-        melding: "340 søknader er godkjent uten saksbehandling. Forensisk rekonstruksjon krever gjennomgang av alle vedtak de siste 30 dagene."
-        lovkrav: "Forvaltningsloven § 41 — ugyldig vedtak"
+        melding: "340 applications approved without review. Forensic reconstruction requires audit of all decisions in the last 30 days."
+        lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Implementer optimistisk låsing (ETag/versjonsnummer) og databasetransaksjonslåser (SELECT FOR UPDATE) på alle kritiske statusendringer."
-        - "Definer maksimal thread pool-størrelse og request-timeout i exception-handler. Aldri ubegrenset trådallokkering ved feil."
-        - "Aldri returner stack traces, interne filstier eller klassenavn i HTTP-responser til sluttbrukere — bruk generiske feilmeldinger."
-        - "Test alle kritiske flyter med verktøy for concurrent request-testing (Apache JMeter, Gatling) for å avdekke race conditions."
+        - "Implement optimistic locking (ETag/version number) and database transaction locks (SELECT FOR UPDATE) on all critical status changes."
+        - "Define maximum thread pool size and request timeout in exception handler. Never allow unbounded thread allocation on error."
+        - "Never return stack traces, internal file paths, or class names in HTTP responses to end users — use generic error messages."
+        - "Test all critical flows with concurrent request testing tools (Apache JMeter, Gatling) to uncover race conditions."
       respons:
-        - "Sett alle race-condition-godkjente søknader til «under manuell gjennomgang». Varsle berørte søkere individuelt."
-        - "Dokumenter hendelsen. Ugyldig vedtak iht. Forvaltningsloven § 41 — gjennomgå gyldigheten av alle 340 godkjenninger."
-        - "Gjennomfør full kodegjennomgang av alle asynkrone og parallelle operasjoner i systemet."
+        - "Set all race-condition-approved applications to under manual review."
+        - "Notify the supervisory authority within 72 hours iht. GDPR art. 33 — session tokens leaked in logs and 340 decisions tampered with."
+        - "Notify affected applicants individually iht. GDPR art. 34. Review the validity of all 340 approvals."
+        - "Conduct full code review of all asynchronous and parallel operations in the system."
