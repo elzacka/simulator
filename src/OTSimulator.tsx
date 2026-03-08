@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "./Icon";
 import otYaml from "./scenarios/ot.yaml?raw";
 import { parseSimulatorData, useScenarioEngine, fg, statusTekst } from "./scenarioEngine";
@@ -17,6 +18,7 @@ export default function OTSimulator({ onBack }: Props) {
     scenario, antallBrutt, lovkravListe,
     velgScenario, simuler, nullstill,
   } = useScenarioEngine(SCENARIOS);
+  const [scOpen, setScOpen] = useState(false);
 
   return (
     <div style={{
@@ -50,7 +52,7 @@ export default function OTSimulator({ onBack }: Props) {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: "12px", alignItems: "start" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "12px", alignItems: "start" }}>
         {/* VENSTRE KOLONNE */}
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {/* BYGNINGSVISNING */}
@@ -136,52 +138,46 @@ export default function OTSimulator({ onBack }: Props) {
               }
             </div>
           </div>
-
-          {/* OPPSUMMERING */}
-          {done && (
-            <div style={{ border: "1px solid #dc2626", borderRadius: "6px", background: "rgba(30,0,6,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
-              <div style={{ fontSize: "10px", color: "#ef4444", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
-                <Icon name="stop" size={12} fill={true} ariaLabel="" /> KONSEKVENSOPPSUMMERING
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px" }}>
-                <div>
-                  <div style={{ fontSize: "9px", color: "#7a8a9e", marginBottom: "3px" }}>SYSTEMER RAMMET</div>
-                  <div style={{ color: "#ef4444", fontSize: "28px", fontWeight: 700, lineHeight: 1 }}>{antallBrutt}</div>
-                </div>
-                <div>
-                  <div style={{ fontSize: "9px", color: "#7a8a9e", marginBottom: "3px" }}>LOVKRAV BERØRT</div>
-                  <div style={{ color: "#f59e0b", fontSize: "28px", fontWeight: 700, lineHeight: 1 }}>{lovkravListe.length}</div>
-                </div>
-              </div>
-              {lovkravListe.map((l, i) => (
-                <div key={i} style={{ fontSize: "10px", color: "#d97706", padding: "2px 0", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Icon name="arrow_forward" size={12} ariaLabel="" /> {l}
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
-        {/* HØYRE KOLONNE */}
+        {/* HØYRE KOLONNE — SCENARIOVELGER + KONTROLLER */}
         <div style={{ display: "flex", flexDirection: "column", gap: "9px" }}>
-          {/* SCENARIOVELGER */}
-          <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", background: "rgba(8,16,32,0.95)" }}>
-            <div style={{ padding: "8px 14px", borderBottom: "1px solid #1c2a40", fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", fontWeight: 600 }}>VELG HENDELSE</div>
-            <div style={{ padding: "7px", display: "flex", flexDirection: "column", gap: "5px" }}>
-              {SCENARIOS.map(sc => (
-                <div key={sc.id} className={`sccard${valgt === sc.id ? " sel" : ""}`} onClick={() => velgScenario(sc.id)}
-                  style={{ padding: "10px", borderRadius: "5px", border: "1px solid #1c2a40", background: "rgba(6,11,24,0.95)" }}>
-                  <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
-                    <Icon name={sc.ikon} size={20} fill={valgt === sc.id} ariaLabel="" />
-                    <div>
-                      <div style={{ fontSize: "10px", fontWeight: 700, color: valgt === sc.id ? "#60a5fa" : "#93c5fd", marginBottom: "3px", lineHeight: 1.4 }}>{sc.navn}</div>
-                      <div style={{ fontSize: "9px", color: "#7a8a9e", lineHeight: 1.4 }}>{sc.kort}</div>
+          <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", background: "rgba(8,16,32,0.95)", position: "relative" }}>
+            <div onClick={() => setScOpen(!scOpen)} style={{
+              padding: "8px 14px", fontSize: "10px", color: "#8896aa", letterSpacing: "0.08em", fontWeight: 600,
+              cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", userSelect: "none",
+            }}>
+              <span>{scenario ? scenario.navn : "Velg scenario"}</span>
+              <Icon name={scOpen ? "expand_less" : "expand_more"} size={16} ariaLabel="" />
+            </div>
+            {scOpen && (
+              <div style={{ borderTop: "1px solid #1c2a40", padding: "7px", display: "flex", flexDirection: "column", gap: "5px", maxHeight: "400px", overflowY: "auto" }}>
+                {SCENARIOS.map(sc => (
+                  <div key={sc.id} className={`sccard${valgt === sc.id ? " sel" : ""}`} onClick={() => { velgScenario(sc.id); setScOpen(false); }}
+                    style={{ padding: "10px", borderRadius: "5px", border: "1px solid #1c2a40", background: "rgba(6,11,24,0.95)" }}>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
+                      <Icon name={sc.ikon} size={20} fill={valgt === sc.id} ariaLabel="" />
+                      <div>
+                        <div style={{ fontSize: "10px", fontWeight: 700, color: valgt === sc.id ? "#60a5fa" : "#93c5fd", marginBottom: "3px", lineHeight: 1.4 }}>{sc.navn}</div>
+                        <div style={{ fontSize: "9px", color: "#7a8a9e", lineHeight: 1.4 }}>{sc.kort}</div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
+
+          {/* KONTEKST */}
+          {valgt && (
+            <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", background: "rgba(8,16,32,0.95)", padding: "10px", animation: "fadein 0.3s ease" }}>
+              <div style={{ fontSize: "9px", color: "#8896aa", letterSpacing: "0.08em", marginBottom: "6px", fontWeight: 600 }}>KONTEKST</div>
+              <div style={{ fontSize: "10px", color: "#9ca3af", lineHeight: 1.6 }}>{scenario?.beskrivelse}</div>
+              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #1c2a40", fontSize: "9px", color: "#5a6a80" }}>
+                Basert på hendelsesmønstre relatert til OT i typiske norske kontorbygg
+              </div>
+            </div>
+          )}
 
           {/* SIMULERINGSKNAPP */}
           <button className="simbtn" onClick={simuler} disabled={!valgt || running} style={{
@@ -241,14 +237,27 @@ export default function OTSimulator({ onBack }: Props) {
             ))}
           </div>
 
-          {/* KONTEKST */}
-          {valgt && (
-            <div style={{ border: "1px solid #1c2a40", borderRadius: "6px", background: "rgba(8,16,32,0.95)", padding: "10px", animation: "fadein 0.3s ease" }}>
-              <div style={{ fontSize: "9px", color: "#8896aa", letterSpacing: "0.08em", marginBottom: "6px", fontWeight: 600 }}>KONTEKST</div>
-              <div style={{ fontSize: "10px", color: "#9ca3af", lineHeight: 1.6 }}>{scenario?.beskrivelse}</div>
-              <div style={{ marginTop: "8px", paddingTop: "8px", borderTop: "1px solid #1c2a40", fontSize: "9px", color: "#5a6a80" }}>
-                Basert på hendelsesmønstre relatert til OT i typiske norske kontorbygg
+          {/* OPPSUMMERING */}
+          {done && (
+            <div style={{ border: "1px solid #dc2626", borderRadius: "6px", background: "rgba(30,0,6,0.95)", padding: "14px", animation: "fadein 0.4s ease" }}>
+              <div style={{ fontSize: "10px", color: "#ef4444", letterSpacing: "0.08em", marginBottom: "10px", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Icon name="stop" size={12} fill={true} ariaLabel="" /> KONSEKVENSOPPSUMMERING
               </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginBottom: "10px" }}>
+                <div>
+                  <div style={{ fontSize: "9px", color: "#7a8a9e", marginBottom: "3px" }}>SYSTEMER RAMMET</div>
+                  <div style={{ color: "#ef4444", fontSize: "28px", fontWeight: 700, lineHeight: 1 }}>{antallBrutt}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: "9px", color: "#7a8a9e", marginBottom: "3px" }}>LOVKRAV BERØRT</div>
+                  <div style={{ color: "#f59e0b", fontSize: "28px", fontWeight: 700, lineHeight: 1 }}>{lovkravListe.length}</div>
+                </div>
+              </div>
+              {lovkravListe.map((l, i) => (
+                <div key={i} style={{ fontSize: "10px", color: "#d97706", padding: "2px 0", display: "flex", alignItems: "center", gap: "6px" }}>
+                  <Icon name="arrow_forward" size={12} ariaLabel="" /> {l}
+                </div>
+              ))}
             </div>
           )}
         </div>

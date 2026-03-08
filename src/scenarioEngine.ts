@@ -105,6 +105,7 @@ export function useScenarioEngine(scenarier: Scenario[]) {
   const nullstill = () => {
     timers.current.forEach(clearTimeout);
     timers.current = [];
+    setValgt(null);
     setStatuses({});
     setLog([]);
     setAktivIdx(-1);
