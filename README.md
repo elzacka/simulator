@@ -13,7 +13,7 @@ Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og dig
 ## Teknologi
 
 - React 19, TypeScript 5.9, Vite 7
-- Scenariodata i YAML (`src/scenarios/`)
+- Scenariodata i YAML (`src/scenarios/`). Tekstfeltene støtter `**fet**` og `*kursiv*`.
 - Lyst standardtema og mørk modus via CSS-variabler
 - Material Symbols Rounded, Public Sans, Source Serif 4
 - GitHub Pages via GitHub Actions

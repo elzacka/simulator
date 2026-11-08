@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Icon from "./Icon";
 import ThemeToggle from "./ThemeToggle";
+import RikTekst from "./RikTekst";
 import { type ThemeState } from "./theme";
 import {
   type SimulatorData, type Scenario, type Lang,
@@ -335,7 +336,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                               </span>
                             )}
                           </div>
-                          <div style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.5 }}>{e.melding}</div>
+                          <div style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.5 }}><RikTekst tekst={e.melding} /></div>
                         </div>
                       </div>
                       </div>
@@ -373,7 +374,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                             <Icon name={sc.ikon} size={20} fill={valgt === sc.id} ariaLabel="" style={{ color: valgt === sc.id ? "var(--accent)" : "var(--ink-2)", flexShrink: 0 }} />
                             <div>
                               <div style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: valgt === sc.id ? "var(--accent)" : "var(--ink)", marginBottom: "2px", lineHeight: 1.35 }}>{sc.navn}</div>
-                              <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", lineHeight: 1.45 }}>{sc.kort}</div>
+                              <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", lineHeight: 1.45 }}><RikTekst tekst={sc.kort} /></div>
                             </div>
                           </div>
                         </div>
@@ -411,7 +412,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     })()}
                   </div>
                 )}
-                <div style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6 }}>{scenario?.beskrivelse}</div>
+                <div style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6 }}>{scenario && <RikTekst tekst={scenario.beskrivelse} />}</div>
                 <div style={{ marginTop: "var(--space-3)", paddingTop: "var(--space-3)", borderTop: "1px solid var(--line)", fontSize: "var(--text-xs)", color: "var(--ink-3)" }}>
                   {config.kontekstFot(scenario)}
                 </div>
@@ -502,7 +503,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 )}
                 {lovkravListe.map((l, i) => (
                   <div key={i} style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", padding: "2px 0", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                    <Icon name="gavel" size={12} ariaLabel="" style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> {l}
+                    <Icon name="gavel" size={12} ariaLabel="" style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={l} />
                   </div>
                 ))}
               </div>
@@ -516,7 +517,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 </div>
                 {scenario.tiltak.respons.map((tx, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--danger-ink)", flexShrink: 0, marginTop: "3px" }} /> {tx}
+                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--danger-ink)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
                   </div>
                 ))}
               </div>
@@ -530,7 +531,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 </div>
                 {scenario.tiltak.forebygging.map((tx, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--accent)", flexShrink: 0, marginTop: "3px" }} /> {tx}
+                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--accent)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
                   </div>
                 ))}
                 {config.lenker && scenario && lenkeHref && (

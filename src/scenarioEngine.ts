@@ -163,7 +163,7 @@ export function useScenarioEngine(scenarier: Scenario[]) {
 
   const scenario = scenarier.find(s => s.id === valgt);
   const antallBrutt = Object.values(statuses).filter(s => BRUTT_STATUSER.includes(s)).length;
-  const lovkravListe = [...new Set(log.filter(l => l.lovkrav).map(l => l.lovkrav))];
+  const lovkravListe = [...new Set(log.flatMap(l => (l.lovkrav ? [l.lovkrav] : [])))];
 
   return {
     valgt, running, done, statuses, log, aktivIdx, logRef,

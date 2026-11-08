@@ -88,7 +88,7 @@ export default function App() {
           <div style={{ marginTop: "var(--space-3)" }}>
           <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
             Bevisstheten om risiko i operasjonell teknologi (OT) er lav
-            sammenlignet med IT. Det ligger i ordet: Informasjonsteknologi gir oss informasjonen og systemene vi bruker privat og på jobb. Operasjonell teknologi handler om det fysiske – en type teknologi vi sjelden ser eller vet at eksisterer. Men som trengs for å opprettholde strømleveransen og andre kritiske sammfunnstjenester vi tar for gitt. Men også automatikken som finnes i bowlinghaller, fabrikker. Som styrer rulletrapper, hovedinngangen og kameraovervåkingen på kjøpesenteret, det du må gå gjennom i sikkerhetskontrollen på flyplassen. 
+            sammenlignet med IT. Det ligger i ordet. <em>Informasjonsteknologi</em> gir oss informasjonen og systemene vi bruker privat og på jobb. Operasjonell teknologi handler om det fysiske – en type teknologi vi sjelden ser eller vet eksisterer. Som trengs for å opprettholde strømleveransen og andre kritiske samfunnstjenester vi tar for gitt. Det som ligger bak automatikken i bowlinghaller, på fabrikkene. Hovedinngangen, rulletrappen og kameraovervåkingen på kjøpesenteret. Det du passerer i sikkerhetskontrollen på flyplassen. 
           </p>
           <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
             Angrep mot OT rammer sjelden deg personlig, men det kan fort endre seg. De koordinerte angrepene mot kjøle- og fryseanlegg i Europa i
