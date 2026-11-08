@@ -1,8 +1,8 @@
 gruppeLabels:
-  - "PRESENTATION — Frontend / Edge"
-  - "APPLICATION — Backend / API"
-  - "DATA — Database / PII"
-  - "OPERATIONS — Logging / Backup"
+  - "Presentation: Frontend and edge"
+  - "Application: Backend and API"
+  - "Data: Database and PII"
+  - "Operations: Logging and backup"
 
 systemer:
   portal:
@@ -63,10 +63,10 @@ systemer:
 
 scenarier:
   - id: broken_access
-    navn: "A01 — Broken Access Control"
+    navn: "A01: Broken Access Control"
     ikon: shield
     owasp: "A01:2025"
-    kort: "IDOR vulnerability in citizen portal — unauthorized access to personal data"
+    kort: "IDOR vulnerability in citizen portal. Unauthorized access to personal data"
     beskrivelse: "A citizen-facing portal lacks server-side authorization checks on its API. By manipulating the user ID parameter in the URL, an attacker can read and modify other citizens' applications, decisions, and personal data. The flaw exists because authorization is enforced only in the frontend, not in the backend API."
     steg:
       - tid: 0
@@ -107,7 +107,7 @@ scenarier:
         lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
     tiltak:
       forebygging:
-        - "Enforce authorization checks server-side for every API request — never rely on frontend-only enforcement."
+        - "Enforce authorization checks server-side for every API request. Never rely on frontend-only enforcement."
         - "Implement row-level security in the database. No user should be able to retrieve another user's data regardless of UI logic."
         - "Use indirect references (UUIDs, opaque tokens) instead of sequential IDs in URLs."
         - "Include automated DAST testing for access control flaws as part of the CI/CD pipeline."
@@ -117,10 +117,10 @@ scenarier:
         - "Notify affected individuals according to GDPR art. 34 if the breach poses high risk to their rights and freedoms."
 
   - id: misconfig
-    navn: "A02 — Security Misconfiguration"
+    navn: "A02: Security Misconfiguration"
     ikon: settings
     owasp: "A02:2025"
-    kort: "Debug mode in production — error messages expose infrastructure"
+    kort: "Debug mode in production. Error messages expose infrastructure"
     beskrivelse: "A web application is deployed to production with debug mode enabled. Stack traces, database connection strings, and internal IP addresses are exposed in error messages. The default admin account has not been disabled. Unnecessary services and ports are open."
     steg:
       - tid: 0
@@ -162,14 +162,14 @@ scenarier:
       respons:
         - "Disable debug mode and shut down unnecessary services immediately. Reset all compromised accounts."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Assume all password hashes are in the attacker's possession."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — national ID numbers and home addresses exposed constitutes high risk."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. National ID numbers and home addresses exposed constitutes high risk."
         - "Conduct a full configuration audit of all production systems."
 
   - id: supply_chain
-    navn: "A03 — Software Supply Chain Failures"
+    navn: "A03: Software Supply Chain Failures"
     ikon: link
     owasp: "A03:2025"
-    kort: "Compromised npm package — backdoor deployed via CI/CD pipeline"
+    kort: "Compromised npm package. Backdoor deployed via CI/CD pipeline"
     beskrivelse: "A popular npm package used in the organization's web application is compromised via a dependency confusion attack. Malicious code is injected in a patch update and automatically deployed through the CI/CD pipeline without manual review."
     steg:
       - tid: 0
@@ -206,19 +206,19 @@ scenarier:
       forebygging:
         - "Pin dependencies to specific versions with hash verification in CI/CD (lock files, npm ci)."
         - "Implement SCA tooling (Snyk, Dependabot with alerting) and generate SBOM for every build."
-        - "Require manual approval for production deploys — no automatic push of dependency updates to production."
+        - "Require manual approval for production deploys. No automatic push of dependency updates to production."
         - "Implement egress filtering: applications communicate only with known, explicitly allowed destinations."
       respons:
         - "Roll back to last known good version immediately. Isolate the compromised environment."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — personal data exfiltrated in real time."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. Personal data exfiltrated in real time."
         - "Review all dependencies in the SBOM for similar backdoors. Assume all code deployed during the period is compromised."
 
   - id: crypto_failures
-    navn: "A04 — Cryptographic Failures"
+    navn: "A04: Cryptographic Failures"
     ikon: lock
     owasp: "A04:2025"
-    kort: "TLS downgrade and unencrypted backup — personal data exposed in cleartext"
+    kort: "TLS downgrade and unencrypted backup. Personal data exposed in cleartext"
     beskrivelse: "The portal supports outdated TLS versions and weak cipher suites. A MITM attacker on the network downgrades the encryption and intercepts sensitive traffic. Backups are sent unencrypted to external cloud storage, and passwords are hashed with MD5 without salt."
     steg:
       - tid: 0
@@ -256,19 +256,19 @@ scenarier:
     tiltak:
       forebygging:
         - "Disable TLS 1.0 and 1.1 and weak cipher suites (RC4, 3DES, NULL). Allow only TLS 1.2 and 1.3."
-        - "Hash passwords with bcrypt, Argon2, or PBKDF2 — never MD5 or SHA-1."
+        - "Hash passwords with bcrypt, Argon2, or PBKDF2. Never MD5 or SHA-1."
         - "Encrypt backups end-to-end with AES-256 and a managed key. Require TLS for all transfers."
         - "Run automated TLS scanning (testssl.sh, Qualys SSL Labs) in CI/CD and as part of periodic audits."
       respons:
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Assume all passwords in the backup are compromised."
-        - "Force password reset for all affected users. Notify affected individuals according to GDPR art. 34 — passwords and PII exposed in cleartext."
+        - "Force password reset for all affected users. Notify affected individuals according to GDPR art. 34. Passwords and PII exposed in cleartext."
         - "Encrypt existing backups retroactively or delete and rebuild with correct configuration."
 
   - id: injection
-    navn: "A05 — Injection"
+    navn: "A05: Injection"
     ikon: code
     owasp: "A05:2025"
-    kort: "SQL injection in search field — entire database dumped"
+    kort: "SQL injection in search field. Entire database dumped"
     beskrivelse: "The search field in a public-facing service does not validate user input. An attacker uses SQL injection to extract the entire database, including internal case worker data, before escalating to OS command execution via xp_cmdshell."
     steg:
       - tid: 0
@@ -307,21 +307,21 @@ scenarier:
         lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Use prepared statements and parameterized queries consistently — never string concatenation in SQL."
+        - "Use prepared statements and parameterized queries consistently. Never string concatenation in SQL."
         - "Validate and sanitize all user input server-side. Use an ORM with built-in escaping."
         - "Disable xp_cmdshell and all other dangerous database functions. Run the database process with least privilege."
         - "Set up SIEM alerts on SQL error patterns (syntax errors, UNION SELECT, xp_). Never leave error logs unmonitored."
       respons:
         - "Shut down the search function immediately. Assume all data in the database is exposed and compromised."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Force password reset for all users."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — national ID numbers and passwords compromised."
-        - "Conduct full forensic analysis — cryptominer and backdoor are installed and active on the server."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. National ID numbers and passwords compromised."
+        - "Conduct full forensic analysis. Cryptominer and backdoor are installed and active on the server."
 
   - id: insecure_design
-    navn: "A06 — Insecure Design"
+    navn: "A06: Insecure Design"
     ikon: design_services
     owasp: "A06:2025"
-    kort: "Password reset with sequential tokens — no identity verification by design"
+    kort: "Password reset with sequential tokens. No identity verification by design"
     beskrivelse: "The password reset function was designed without security requirements. Tokens are sequential integers, not cryptographically random strings. The function can be used to enumerate users and reset others' passwords. Rate limiting and notification to the account holder were never considered in the design phase."
     steg:
       - tid: 0
@@ -339,7 +339,7 @@ scenarier:
       - tid: 3600
         sys: persondata
         status: kompromittert
-        melding: "Admin access used to export all user profiles — 6,200 citizens with names, addresses, and case status."
+        melding: "Admin access used to export all user profiles. 6,200 citizens with names, addresses, and case status."
         lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: api
@@ -356,21 +356,21 @@ scenarier:
         melding: "Rate limiting was not planned in the design phase. Cannot be implemented without a full rewrite of the authentication module."
     tiltak:
       forebygging:
-        - "Integrate threat modeling (STRIDE) in the design phase — security requirements must come from the threat model, not be added as an afterthought."
+        - "Integrate threat modeling (STRIDE) in the design phase. Security requirements must come from the threat model, not be added as an afterthought."
         - "Use cryptographically random tokens (UUID v4 or minimum 128 bits of entropy) for all one-time codes and reset links."
         - "Always send a notification to the registered email address on any account change or password reset attempt."
-        - "Rate limit all authentication-related endpoints from day one — this is a design requirement, not an operational configuration."
+        - "Rate limit all authentication-related endpoints from day one. This is a design requirement, not an operational configuration."
       respons:
         - "Invalidate all active reset tokens immediately."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — 6,200 citizen profiles with personal data exposed."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. 6,200 citizen profiles with personal data exposed."
         - "Plan full rewrite of the password reset module. Security review of all authentication code."
 
   - id: auth_failure
-    navn: "A07 — Authentication Failures"
+    navn: "A07: Authentication Failures"
     ikon: passkey
     owasp: "A07:2025"
-    kort: "Credential stuffing against employee portal — no MFA, no rate limiting"
+    kort: "Credential stuffing against employee portal. No MFA, no rate limiting"
     beskrivelse: "An employee portal with VPN access lacks multi-factor authentication and rate limiting. An attacker uses leaked username/password pairs from a previous breach to systematically log in as employees. Session IDs are predictable and not invalidated on password change."
     steg:
       - tid: 0
@@ -405,20 +405,20 @@ scenarier:
         lovkrav: "Digitalsikkerhetsloven § 7. Krav om sikkerhet for tilbydere av samfunnsviktige tjenester"
     tiltak:
       forebygging:
-        - "Require MFA for all accounts — mandatory for VPN, admin panel, and all accounts with access to personal data."
+        - "Require MFA for all accounts. Mandatory for VPN, admin panel, and all accounts with access to personal data."
         - "Implement rate limiting and automatic account lockout after 5–10 failed attempts. Notify the user on lockout."
         - "Use JWTs with short lifetimes (15–60 min) and invalidate all tokens on password change or logout."
         - "Check passwords against known breached databases (HaveIBeenPwned API) on creation and change."
       respons:
         - "Invalidate all active sessions and session IDs immediately. Force password change for all affected accounts."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Notify affected individuals according to GDPR art. 34."
-        - "Conduct access audit — map what the compromised accounts accessed and exported."
+        - "Conduct access audit. Map what the compromised accounts accessed and exported."
 
   - id: integrity_failures
-    navn: "A08 — Software and Data Integrity Failures"
+    navn: "A08: Software and Data Integrity Failures"
     ikon: security
     owasp: "A08:2025"
-    kort: "Insecure deserialization in API — arbitrary code execution via crafted object"
+    kort: "Insecure deserialization in API. Arbitrary code execution via crafted object"
     beskrivelse: "The REST API accepts Java-serialized objects without validating content or source. An attacker sends a crafted object with a gadget chain targeting an outdated deserialization library. The code executes with the application server's privileges. The CI/CD pipeline lacks signing of deployment artifacts."
     steg:
       - tid: 0
@@ -436,7 +436,7 @@ scenarier:
       - tid: 3600
         sys: database
         status: kompromittert
-        melding: "Direct database access via service account. Tables decisions and users dumped — 9,200 rows."
+        melding: "Direct database access via service account. Tables decisions and users dumped. 9,200 rows."
         lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 4800
         sys: cicd
@@ -458,17 +458,17 @@ scenarier:
         - "Digitally sign all deployment artifacts with a controlled key. Verify signatures automatically in CI/CD."
         - "Enable logging and alerting on unexpected class instantiations and reflection calls in the application."
       respons:
-        - "Shut down the exposed API endpoint immediately. Rebuild the application server from a known clean baseline — not from backup."
+        - "Shut down the exposed API endpoint immediately. Rebuild the application server from a known clean baseline. Not from backup."
         - "Conduct full forensic analysis. Attacker has persistent remote access via reverse shell."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — 9,200 user records including decision data compromised."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. 9,200 user records including decision data compromised."
 
   - id: logging_failures
-    navn: "A09 — Security Logging and Monitoring Failures"
+    navn: "A09: Security Logging and Monitoring Failures"
     ikon: manage_search
     owasp: "A09:2025"
-    kort: "Undetected breach for 11 weeks — SIEM without rules, logs without an owner"
-    beskrivelse: "SIEM is installed, but no correlation rules are configured and no one owns the log monitoring function. The attacker moves laterally for 11 weeks without anyone reacting. The breach is discovered only when ransomware is deployed and services go down — not by the security monitoring."
+    kort: "Undetected breach for 11 weeks. SIEM without rules, logs without an owner"
+    beskrivelse: "SIEM is installed, but no correlation rules are configured and no one owns the log monitoring function. The attacker moves laterally for 11 weeks without anyone reacting. The breach is discovered only when ransomware is deployed and services go down. Not by the security monitoring."
     steg:
       - tid: 0
         sys: logg
@@ -481,7 +481,7 @@ scenarier:
       - tid: 2400
         sys: api
         status: svekket
-        melding: "Lateral movement over 3 weeks. Log volume is 2 GB per day — too high for manual review without automated rules."
+        melding: "Lateral movement over 3 weeks. Log volume is 2 GB per day. Too high for manual review without automated rules."
       - tid: 3600
         sys: database
         status: kompromittert
@@ -499,7 +499,7 @@ scenarier:
       - tid: 7200
         sys: logg
         status: nede
-        melding: "Ransomware deployed. Services go down. Breach discovered — 11 weeks after initial compromise."
+        melding: "Ransomware deployed. Services go down. Breach discovered. 11 weeks after initial compromise."
         lovkrav: "Digitalsikkerhetsforskriften § 13. Hendelseshåndtering og beredskap"
       - tid: 8400
         sys: brannmur
@@ -515,15 +515,15 @@ scenarier:
       respons:
         - "Activate incident response immediately. Ransomware requires full isolation of affected systems."
         - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NorCERT according to digitalsikkerhetsloven § 8."
-        - "Notify affected individuals without undue delay according to GDPR art. 34 — 45 GB of personal data exfiltrated over 6 weeks."
+        - "Notify affected individuals without undue delay according to GDPR art. 34. 45 GB of personal data exfiltrated over 6 weeks."
         - "Assess whether recovery from offline backup or external backup outside the primary provider is possible."
 
   - id: exceptional_conditions
-    navn: "A10 — Mishandling of Exceptional Conditions"
+    navn: "A10: Mishandling of Exceptional Conditions"
     ikon: warning
     owasp: "A10:2025"
-    kort: "Race condition in application processing — approvals granted without review"
-    beskrivelse: "The application API lacks locking mechanisms on critical operations. An attacker sends concurrent requests and exploits a race condition to get applications approved without passing through the review queue. The exception handling is not designed for concurrent failures — stack traces are exposed and thread pool exhaustion blocks legitimate users."
+    kort: "Race condition in application processing. Approvals granted without review"
+    beskrivelse: "The application API lacks locking mechanisms on critical operations. An attacker sends concurrent requests and exploits a race condition to get applications approved without passing through the review queue. The exception handling is not designed for concurrent failures. Stack traces are exposed and thread pool exhaustion blocks legitimate users."
     steg:
       - tid: 0
         sys: api
@@ -549,7 +549,7 @@ scenarier:
       - tid: 6000
         sys: logg
         status: feil
-        melding: "Exception handler writes full context to log — including active session tokens. Log files readable without authentication."
+        melding: "Exception handler writes full context to log. Including active session tokens. Log files readable without authentication."
         lovkrav: "GDPR art. 32. Sikkerhet ved behandlingen"
       - tid: 7200
         sys: backup
@@ -560,10 +560,10 @@ scenarier:
       forebygging:
         - "Implement optimistic locking (ETag/version number) and database transaction locks (SELECT FOR UPDATE) on all critical status changes."
         - "Define maximum thread pool size and request timeout in exception handler. Never allow unbounded thread allocation on error."
-        - "Never return stack traces, internal file paths, or class names in HTTP responses to end users — use generic error messages."
+        - "Never return stack traces, internal file paths, or class names in HTTP responses to end users. Use generic error messages."
         - "Test all critical flows with concurrent request testing tools (Apache JMeter, Gatling) to uncover race conditions."
       respons:
         - "Set all race-condition-approved applications to under manual review."
-        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 — session tokens leaked in logs and 340 decisions tampered with."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33. Session tokens leaked in logs and 340 decisions tampered with."
         - "Notify affected applicants individually according to GDPR art. 34. Review the validity of all 340 approvals."
         - "Conduct full code review of all asynchronous and parallel operations in the system."

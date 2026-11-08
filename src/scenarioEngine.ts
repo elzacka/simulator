@@ -18,6 +18,18 @@ export interface Scenario {
   kort: string;
   beskrivelse: string;
   owasp?: string;
+  eksponert?: boolean;
+  angrepsvektor?: string[];
+  // Merkelapper som skiller scenariene: hva slags virksomhet og funksjon som
+  // rammes, og trusselens art (tilsiktet/utilsiktet) og kilde.
+  virksomhet?: string;
+  funksjon?: string;
+  trussel?: { art: string; kilde: string };
+  // Fagområde som grupperer scenariene i nedtrekksmenyen.
+  kategori?: string;
+  // Når angrepet faktisk oppdages. vedSteg er indeks i steg[]; alt før er
+  // uoppdaget. overvaket = true når uavhengig overvåkning fanger det tidlig.
+  deteksjon?: { vedSteg: number; kilde: string; forsinkelse: string; overvaket?: boolean };
   steg: Steg[];
   tiltak?: { forebygging?: string[]; respons?: string[] };
 }
@@ -43,27 +55,38 @@ export interface SimulatorData {
 /* ── Hjelpefunksjoner ── */
 
 const FARGER: Record<string, string> = {
-  kompromittert: "#ff003c", nede: "#ff2244", kritisk: "#ff5500",
-  feil: "#ff6600", manipulert: "#e06000", svekket: "#cc8800",
-  advarsel: "#ccaa00", eksponert: "#a855f7", oppdateres: "#3b82f6",
-  normal: "#00cc66",
+  kompromittert: "var(--st-kompromittert)", odelagt: "var(--st-odelagt)",
+  nede: "var(--st-nede)", kritisk: "var(--st-kritisk)",
+  feil: "var(--st-feil)", manipulert: "var(--st-manipulert)", svekket: "var(--st-svekket)",
+  advarsel: "var(--st-advarsel)", eksponert: "var(--st-eksponert)", oppdateres: "var(--st-oppdateres)",
+  normal: "var(--st-normal)",
 };
 
 const TEKST: Record<string, string> = {
-  kompromittert: "KOMPROMITTERT", nede: "NEDE", kritisk: "KRITISK",
-  feil: "FEIL", manipulert: "MANIPULERT", svekket: "SVEKKET",
-  advarsel: "ADVARSEL", eksponert: "EKSPONERT", oppdateres: "OPPDATERES",
-  normal: "NORMAL",
+  kompromittert: "Kompromittert", odelagt: "Ødelagt", nede: "Nede", kritisk: "Kritisk",
+  feil: "Feil", manipulert: "Manipulert", svekket: "Svekket",
+  advarsel: "Advarsel", eksponert: "Eksponert", oppdateres: "Oppdateres",
+  normal: "Normal",
 };
 
+const TEXT_EN: Record<string, string> = {
+  kompromittert: "Compromised", odelagt: "Destroyed", nede: "Down", kritisk: "Critical",
+  feil: "Error", manipulert: "Tampered", svekket: "Degraded",
+  advarsel: "Warning", eksponert: "Exposed", oppdateres: "Updating",
+  normal: "Normal",
+};
+
+export type Lang = "no" | "en";
+
 export function fg(s?: string): string {
-  if (!s) return "#2563eb";
-  return FARGER[s] || "#2563eb";
+  if (!s) return "var(--accent)";
+  return FARGER[s] || "var(--accent)";
 }
 
-export function statusTekst(s?: string): string {
+export function statusLabel(s: string | undefined, lang: Lang): string {
+  const map = lang === "en" ? TEXT_EN : TEKST;
   if (!s) return "NORMAL";
-  return TEKST[s] || s.toUpperCase();
+  return map[s] || s.toUpperCase();
 }
 
 /* ── YAML-parser ── */
@@ -83,7 +106,7 @@ export function parseSimulatorData(yamlString: string): SimulatorData {
 
 /* ── Felles scenariomotor-hook ── */
 
-const BRUTT_STATUSER = ["nede", "kritisk", "kompromittert", "feil", "manipulert", "eksponert"];
+const BRUTT_STATUSER = ["nede", "kritisk", "kompromittert", "odelagt", "feil", "manipulert", "eksponert"];
 
 export function useScenarioEngine(scenarier: Scenario[]) {
   const [valgt, setValgt] = useState<string | null>(null);

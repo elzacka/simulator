@@ -6,7 +6,7 @@ Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og dig
 
 ## Simulatorer
 
-- **Operasjonell teknologi** — Angrep mot OT-systemer i kontorbygg (UPS, BMS, HVAC, adgangskontroll)
+- **Operasjonell teknologi** — Angrep mot OT-systemer i bygg og anlegg (UPS, BMS, HVAC, adgangskontroll, kjøl og frys)
 - **NSM Risiko 2026** — Uønskede hendelser knyttet til anskaffelser og leverandørkjeder
 - **OWASP Top 10 2025** — Angrep mot webapplikasjoner basert på OWASP Top 10:2025
 
@@ -14,7 +14,8 @@ Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og dig
 
 - React 19, TypeScript 5.9, Vite 7
 - Scenariodata i YAML (`src/scenarios/`)
-- Material Symbols Rounded, Nunito Sans
+- Lyst standardtema og mørk modus via CSS-variabler
+- Material Symbols Rounded, Public Sans, Source Serif 4
 - GitHub Pages via GitHub Actions
 
 ## Kom i gang

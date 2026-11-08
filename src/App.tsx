@@ -3,188 +3,161 @@ import OTSimulator from "./OTSimulator";
 import RisikoSimulator from "./RisikoSimulator";
 import OwaspSimulator from "./OwaspSimulator";
 import Icon from "./Icon";
+import ThemeToggle from "./ThemeToggle";
+import { useTheme } from "./theme";
 
 type Page = "start" | "ot" | "risiko" | "owasp";
 
+interface Kort {
+  id: Exclude<Page, "start">;
+  tittel: string;
+  tekst: string;
+  antall: string;
+  aktuell?: boolean;
+  // Gated-kategorier er inaktive i produksjon (GitHub Pages), klikkbare i dev.
+  gated?: boolean;
+}
+
+const KORT: Kort[] = [
+  {
+    id: "ot",
+    tittel: "Operasjonell teknologi",
+    tekst: "Feilkjeder i OT i bygg og anlegg: Strøm, kjøl og frys, serverkjøling, VVS, ventilasjon og adgangskontroll. Tilsiktede og utilsiktede hendelser.",
+    antall: "9 scenarier",
+    aktuell: true,
+  },
+  {
+    id: "risiko",
+    tittel: "Risiko 2026",
+    tekst: "Uønskede hendelser i anskaffelser og leverandørkjeder. Basert på NSMs risikovurdering for 2026.",
+    antall: "5 scenarier",
+    gated: true,
+  },
+  {
+    id: "owasp",
+    tittel: "OWASP Top Ten 2025",
+    tekst: "Angrepskjeder mot webapplikasjoner: Broken access control, injection, feilkonfigurasjon og mer.",
+    antall: "10 scenarier",
+    gated: true,
+  },
+];
+
+// I produksjon (GitHub Pages) er bare OT aktiv.
+const erAktiv = (k: Kort) => !k.gated || !import.meta.env.PROD;
+
 export default function App() {
   const [page, setPage] = useState<Page>("start");
+  const theme = useTheme();
 
-  if (page === "ot") return <OTSimulator onBack={() => setPage("start")} />;
-  if (page === "risiko") return <RisikoSimulator onBack={() => setPage("start")} />;
-  if (page === "owasp") return <OwaspSimulator onBack={() => setPage("start")} />;
+  if (page === "ot") return <OTSimulator onBack={() => setPage("start")} theme={theme} />;
+  if (page === "risiko") return <RisikoSimulator onBack={() => setPage("start")} theme={theme} />;
+  if (page === "owasp") return <OwaspSimulator onBack={() => setPage("start")} theme={theme} />;
 
   return (
-    <div style={{
-      minHeight: "100vh",
-      background: "#060b18",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 20px",
-      backgroundImage: "radial-gradient(ellipse at 30% 50%, rgba(37,99,235,0.05) 0%, transparent 60%)",
-    }}>
-      <div style={{ textAlign: "center", marginBottom: "48px" }}>
-        <h1 style={{
-          fontSize: "clamp(28px, 5vw, 42px)",
-          fontWeight: 700,
-          color: "#e5e7eb",
-          letterSpacing: "0.02em",
-          marginBottom: "12px",
-        }}>
-          Scenariosimulator
-        </h1>
-        <p style={{
-          fontSize: "clamp(14px, 2.5vw, 17px)",
-          color: "#8896aa",
-          maxWidth: "540px",
-          lineHeight: 1.6,
-        }}>
-          Simuler realistiske sikkerhetshendelser og se hvordan feilkjeder
-          sprer seg gjennom en virksomhet
+    <div style={{ minHeight: "100vh", background: "var(--bg)", padding: "var(--space-5) var(--space-4)" }}>
+      <div style={{ maxWidth: "880px", margin: "0 auto" }}>
+        <header style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "var(--space-4)", marginBottom: "var(--space-6)" }}>
+          <div>
+            <div className="eyebrow" style={{ marginBottom: "var(--space-2)" }}>Sikkerhet og beredskap</div>
+            <h1 style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(30px, 5vw, 46px)",
+              fontWeight: 600,
+              color: "var(--ink)",
+              lineHeight: 1.1,
+              letterSpacing: "-0.01em",
+            }}>
+              Scenariosimulator
+            </h1>
+          </div>
+          <ThemeToggle tema={theme.tema} bytt={theme.bytt} />
+        </header>
+
+        <p style={{ fontSize: "var(--text-md)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-4)" }}>
+          Simuler realistiske sikkerhetshendelser og se hvordan en feilkjede
+          utvikler seg steg for steg.
         </p>
-      </div>
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(260px, 320px))",
-        gap: "24px",
-        justifyContent: "center",
-        width: "100%",
-        maxWidth: "1040px",
-      }}>
-        <button
-          className="navcard"
-          onClick={() => setPage("ot")}
-          style={{
-            padding: "32px 28px",
-            borderRadius: "8px",
-            border: "1px solid #1c2a40",
-            background: "rgba(8, 16, 32, 0.95)",
-            textAlign: "left",
-            fontFamily: "inherit",
-          }}
-        >
-          <h2 style={{
-            fontSize: "20px",
-            fontWeight: 700,
-            color: "#e5e7eb",
-            marginBottom: "10px",
-          }}>
-            Operasjonell teknologi
-          </h2>
-          <p style={{
-            fontSize: "14px",
-            color: "#8896aa",
-            lineHeight: 1.55,
-          }}>
-            Feilkjeder i operasjonell teknologi. Simuler angrep mot UPS, BMS
-            og nettverksinfrastruktur i kontorbygg.
+        <details className="situasjon" style={{ marginBottom: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)" }}>
+          <summary className="eyebrow" style={{ color: "var(--accent)", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span className="situasjon-chevron" style={{ display: "inline-flex", transition: "transform 0.2s ease" }}>
+              <Icon name="expand_more" size={16} ariaLabel="" />
+            </span>
+            Situasjonsbilde: Operasjonell teknologi
+          </summary>
+          <div style={{ marginTop: "var(--space-3)" }}>
+          <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
+            Bevisstheten om risiko i operasjonell teknologi (OT) er lav
+            sammenlignet med IT. Det ligger i ordet: Informasjonsteknologi gir oss informasjonen og systemene vi bruker privat og på jobb. Operasjonell teknologi handler om det fysiske – en type teknologi vi sjelden ser eller vet at eksisterer. Men som trengs for å opprettholde strømleveransen og andre kritiske sammfunnstjenester vi tar for gitt. Men også automatikken som finnes i bowlinghaller, fabrikker. Som styrer rulletrapper, hovedinngangen og kameraovervåkingen på kjøpesenteret, det du må gå gjennom i sikkerhetskontrollen på flyplassen. 
           </p>
-          <div style={{
-            marginTop: "20px",
-            fontSize: "13px",
-            color: "#3b82f6",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}>
-            4 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
-          </div>
-        </button>
-
-        <button
-          className="navcard"
-          onClick={() => setPage("risiko")}
-          style={{
-            padding: "32px 28px",
-            borderRadius: "8px",
-            border: "1px solid #1c2a40",
-            background: "rgba(8, 16, 32, 0.95)",
-            textAlign: "left",
-            fontFamily: "inherit",
-          }}
-        >
-          <h2 style={{
-            fontSize: "20px",
-            fontWeight: 700,
-            color: "#e5e7eb",
-            marginBottom: "10px",
-          }}>
-            Risiko 2026
-          </h2>
-          <p style={{
-            fontSize: "14px",
-            color: "#8896aa",
-            lineHeight: 1.55,
-          }}>
-            Uønskede hendelser relatert til anskaffelser og leverandørkjeder.
-            Basert på NSMs risikovurdering for 2026.
+          <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
+            Angrep mot OT rammer sjelden deg personlig, men det kan fort endre seg. De koordinerte angrepene mot kjøle- og fryseanlegg i Europa i
+            oktober og november 2026 har blitt en øyeåpner for mange. Hendelsene viser hvordan sårbarheter i teknologi kan påvirke oss på flere områder enn vi har kunnet forestille oss. I dette tilfellet: Matforsyningen der vi bor.
           </p>
-          <div style={{
-            marginTop: "20px",
-            fontSize: "13px",
-            color: "#3b82f6",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}>
-            5 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
-          </div>
-        </button>
-
-        <button
-          className="navcard"
-          onClick={() => setPage("owasp")}
-          style={{
-            padding: "32px 28px",
-            borderRadius: "8px",
-            border: "1px solid #1c2a40",
-            background: "rgba(8, 16, 32, 0.95)",
-            textAlign: "left",
-            fontFamily: "inherit",
-          }}
-        >
-          <h2 style={{
-            fontSize: "20px",
-            fontWeight: 700,
-            color: "#e5e7eb",
-            marginBottom: "10px",
-          }}>
-            OWASP Top Ten 2025
-          </h2>
-          <p style={{
-            fontSize: "14px",
-            color: "#8896aa",
-            lineHeight: 1.55,
-          }}>
-            Angrepskjeder basert på OWASP Top Ten 2025. Simuler
-            broken access control, injection, feilkonfigurasjon og mer.
+          <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6 }}>
+            Simulatoren er laget for opplæring. Målet er å øke bevisstheten ved å
+            vise sammenhengene.
           </p>
-          <div style={{
-            marginTop: "20px",
-            fontSize: "13px",
-            color: "#3b82f6",
-            fontWeight: 600,
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-          }}>
-            10 scenarier <Icon name="arrow_forward" size={16} ariaLabel="" />
           </div>
-        </button>
-      </div>
+        </details>
 
-      <div style={{
-        marginTop: "48px",
-        fontSize: "12px",
-        color: "#5a6a80",
-        textAlign: "center",
-        lineHeight: 1.6,
-      }}>
-        Kilder: OT/ICS-rammeverk ISA/NIST/SANS · NSM Risiko 2026 · OWASP Top Ten 2025
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
+          {KORT.map(k => {
+            const aktiv = erAktiv(k);
+            return (
+              <button
+                key={k.id}
+                className={aktiv ? "navcard panel" : "panel"}
+                onClick={aktiv ? () => setPage(k.id) : undefined}
+                disabled={!aktiv}
+                aria-disabled={!aktiv}
+                style={{
+                  display: "block", width: "100%", textAlign: "left", fontFamily: "inherit",
+                  padding: "var(--space-4) var(--space-5)",
+                  opacity: aktiv ? 1 : 0.55,
+                  cursor: aktiv ? "pointer" : "not-allowed",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-4)" }}>
+                  <div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-1)" }}>
+                      <h2 style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
+                        {k.tittel}
+                      </h2>
+                      {k.aktuell && aktiv && (
+                        <span style={{
+                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)",
+                          padding: "1px 8px", borderRadius: "999px", background: "var(--accent-surface)",
+                        }}>
+                          Aktuelt nå
+                        </span>
+                      )}
+                      {!aktiv && (
+                        <span style={{
+                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--ink-3)",
+                          padding: "1px 8px", borderRadius: "999px", border: "1px solid var(--line)",
+                        }}>
+                          Kommer senere
+                        </span>
+                      )}
+                    </div>
+                    <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.55 }}>
+                      {k.tekst}
+                    </p>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", color: "var(--ink-3)", flexShrink: 0 }}>
+                    <span style={{ fontSize: "var(--text-sm)" }}>{k.antall}</span>
+                    {aktiv && <Icon name="chevron_right" size={20} ariaLabel="" />}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <footer style={{ marginTop: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)", fontSize: "var(--text-xs)", color: "var(--ink-3)", lineHeight: 1.6 }}>
+          Kilder: Historiske hendelser omtalt i åpne kilder · NSM Risiko 2026 · OWASP Top Ten 2025 · OT/ICS-rammeverk (ISA, NIST, SANS) · Lovdata.no
+        </footer>
       </div>
     </div>
   );
