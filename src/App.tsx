@@ -113,20 +113,20 @@ export default function App() {
                 aria-disabled={!aktiv}
                 style={{
                   display: "block", width: "100%", textAlign: "left", fontFamily: "inherit",
-                  padding: "var(--space-4) var(--space-5)",
+                  padding: "var(--space-4)",
                   opacity: aktiv ? 1 : 0.55,
                   cursor: aktiv ? "pointer" : "not-allowed",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "var(--space-4)" }}>
-                  <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", marginBottom: "var(--space-1)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: "var(--space-2)", rowGap: "var(--space-1)" }}>
                       <h2 style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
                         {k.tittel}
                       </h2>
                       {k.aktuell && aktiv && (
                         <span style={{
-                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)",
+                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)", whiteSpace: "nowrap",
                           padding: "1px 8px", borderRadius: "999px", background: "var(--accent-surface)",
                         }}>
                           Aktuelt nå
@@ -134,21 +134,21 @@ export default function App() {
                       )}
                       {!aktiv && (
                         <span style={{
-                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--ink-3)",
+                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--ink-3)", whiteSpace: "nowrap",
                           padding: "1px 8px", borderRadius: "999px", border: "1px solid var(--line)",
                         }}>
                           Kommer senere
                         </span>
                       )}
                     </div>
+                    <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginTop: "2px", marginBottom: "var(--space-2)" }}>
+                      {k.antall}
+                    </div>
                     <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.55 }}>
                       {k.tekst}
                     </p>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", color: "var(--ink-3)", flexShrink: 0 }}>
-                    <span style={{ fontSize: "var(--text-sm)" }}>{k.antall}</span>
-                    {aktiv && <Icon name="chevron_right" size={20} ariaLabel="" />}
-                  </div>
+                  {aktiv && <Icon name="chevron_right" size={20} ariaLabel="" style={{ color: "var(--ink-3)", flexShrink: 0 }} />}
                 </div>
               </button>
             );
