@@ -22,7 +22,7 @@ const KORT: Kort[] = [
   {
     id: "ot",
     tittel: "Operasjonell teknologi",
-    tekst: "Feilkjeder i OT i bygg og anlegg: Strøm, kjøl og frys, serverkjøling, VVS, ventilasjon og adgangskontroll. Tilsiktede og utilsiktede hendelser.",
+    tekst: "Feilkjeder i OT i bygg og anlegg: Bygningsautomatisering (BMS/HVAC), energiforsyning, elektroniske sikringsanlegg og butikkjøling. Tilsiktede og utilsiktede hendelser.",
     antall: "9 scenarier",
     aktuell: true,
   },
@@ -36,7 +36,7 @@ const KORT: Kort[] = [
   {
     id: "owasp",
     tittel: "OWASP Top Ten 2025",
-    tekst: "Angrepskjeder mot webapplikasjoner: Broken access control, injection, feilkonfigurasjon og mer.",
+    tekst: "Angrepskjeder mot webapplikasjoner: Feil i tilgangskontroll, «injection», feilkonfigurasjon og mer.",
     antall: "10 scenarier",
     gated: true,
   },
@@ -88,14 +88,14 @@ export default function App() {
           <div style={{ marginTop: "var(--space-3)" }}>
           <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
             Bevisstheten om risiko i operasjonell teknologi (OT) er lav
-            sammenlignet med IT. Det ligger i ordet. <em>Informasjonsteknologi</em> gir oss informasjonen og systemene vi bruker privat og på jobb. Operasjonell teknologi handler om det fysiske – en type teknologi vi sjelden ser eller vet eksisterer. Som trengs for å opprettholde strømleveransen og andre kritiske samfunnstjenester vi tar for gitt. Det som ligger bak automatikken i bowlinghaller, på fabrikkene. Hovedinngangen, rulletrappen og kameraovervåkingen på kjøpesenteret. Det du passerer i sikkerhetskontrollen på flyplassen. 
+            sammenlignet med IT. Det ligger i ordet. <em>Informasjonsteknologi</em> gir oss informasjonen og systemene vi bruker privat og på jobb. Operasjonell teknologi handler om det fysiske; en type teknologi vi sjelden ser eller vet eksisterer. Det som må fungere for å opprettholde energiforsyning og mange andre kritiske tjenester vi tar for gitt. OT er også det som gir automatikken i bowlinghallen og fabrikken. Hovedinngangen, rulletrappen og kameraovervåkingen på kjøpesenteret. Det du passerer i sikkerhetskontrollen på flyplassen. 
           </p>
           <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6, marginBottom: "var(--space-3)" }}>
             Angrep mot OT rammer sjelden deg personlig, men det kan fort endre seg. De koordinerte angrepene mot kjøle- og fryseanlegg i Europa i
-            oktober og november 2026 har blitt en øyeåpner for mange. Hendelsene viser hvordan sårbarheter i teknologi kan påvirke oss på flere områder enn vi har kunnet forestille oss. I dette tilfellet: Matforsyningen der vi bor.
+            okt/nov 2026 har blitt en øyeåpner for mange. Hendelsene viser hvordan sårbarheter i teknologi kan påvirke oss på flere områder enn vi har kunnet forestille oss. I dette tilfellet: Matforsyningen der vi bor.
           </p>
           <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.6 }}>
-            Simulatoren er laget for opplæring. Målet er å øke bevisstheten ved å
+            Simulatoren er laget for å bruke i opplæring. Målet er å øke bevisstheten ved å
             vise sammenhengene.
           </p>
           </div>
@@ -156,7 +156,7 @@ export default function App() {
         </div>
 
         <footer style={{ marginTop: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)", fontSize: "var(--text-xs)", color: "var(--ink-3)", lineHeight: 1.6 }}>
-          Kilder: Historiske hendelser omtalt i åpne kilder · NSM Risiko 2026 · OWASP Top Ten 2025 · OT/ICS-rammeverk (ISA, NIST, SANS) · Lovdata.no
+          Kilder: Faktiske hendelser omtalt i åpne kilder · NSM Risiko 2026 · OWASP Top Ten 2025 · OT/ICS-rammeverk (ISA, NIST, SANS) · Lovdata.no
         </footer>
       </div>
     </div>
