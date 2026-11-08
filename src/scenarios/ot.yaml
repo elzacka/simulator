@@ -294,134 +294,6 @@ scenarier:
         - "Kontroller dataintegriteten på servere som ble avsluttet ukontrollert."
         - "Registrer hendelsen som avvik, og planlegg batteribytte og fast testrutine for aggregatet."
 
-  - id: kjoleanlegg
-    navn: "Kjøleanlegg i butikk manipulert utenfra"
-    ikon: kitchen
-    kategori: "Kjøl og frys"
-    virksomhet: Dagligvarebutikk
-    funksjon: "Kjøl og frys (matforsyning)"
-    trussel:
-      art: Tilsiktet
-      kilde: "Ekstern aktør"
-    eksponert: true
-    angrepsvektor:
-      - "Shodan finner kjøle-/frysekontrolleren på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502). Enhetsnavnet røper ofte butikken."
-      - "Med fabrikkpassord eller uten pålogging endres settpunktet rett i nettleseren eller med et fritt Modbus-verktøy. Dette er mønsteret fra angrepene mot Danfoss-utstyr i Frankrike i oktober 2026."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Åpen kontroller på internett → settpunkt hevet → kjøling stanser → mat ødelagt"
-    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i rundt 700 franske butikker manipulert utenfra, og mønsteret spredte seg til flere land. Kontrolleren styrer settpunktet og står ofte åpen på internett for fjernservice. Hever en angriper settpunktet, stanser kjølingen, temperaturen stiger, og matvarene blir ødelagt. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
-    deteksjon:
-      vedSteg: 7
-      kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
-      forsinkelse: "Hele natten"
-      overvaket: false
-    steg:
-      - tid: 0
-        sys: kjolekontroller
-        status: eksponert
-        melding: "Rekognosering: Kjøle- og fryskontrolleren, av samme type som Danfoss-utstyret rammet i Frankrike, står åpen på internett for fjernservice. Shodan viser den på et web-/skygrensesnitt eller på Modbus TCP (port 502). Navnet røper butikken."
-      - tid: 1500
-        sys: kjolekontroller
-        status: manipulert
-        melding: "Angrep: Uten pålogging heves kjølesettpunktet fra +4°C til +15°C, enten rett i nettleseren eller ved å skrive til holdingregisteret over Modbus. Kontrolleren godtar kommandoen."
-      - tid: 3000
-        sys: fryserom
-        status: manipulert
-        melding: "Kompressor og vifter trappes ned i kjøle- og fryserommet. Anlegget slutter å kjøle, fordi kontrolleren tror måltemperaturen allerede er nådd."
-      - tid: 4500
-        sys: kjoletemp
-        status: advarsel
-        melding: "Temperaturen i kjøl og frys stiger jevnt. Driftsbildet viser fortsatt «normal drift», fordi settpunktet er endret og ikke brutt."
-      - tid: 6500
-        sys: kjolealarm
-        status: svekket
-        melding: "Temperaturalarmen henger på den samme manipulerte kontrolleren og varsler derfor ikke. Angrepet skjer om natten, uten personale til stede."
-      - tid: 8500
-        sys: kjoledisk
-        status: kritisk
-        melding: "Kjøle- og frysediskene passerer trygg temperatur. Kjølekjeden er brutt."
-      - tid: 10500
-        sys: matvarer
-        status: kritisk
-        melding: "Matvarene har vært over trygg temperatur for lenge og er ikke lenger trygge å selge."
-        lovkrav: "Næringsmiddelhygieneforskriften: Krav til temperaturkontroll i kjøl og frys"
-      - tid: 12500
-        sys: matvarer
-        status: odelagt
-        melding: "Matvarene er ødelagt og må kastes. Butikken tømmer diskene om morgenen. Tapet er økonomisk, og driften forstyrres. Overopphetet utstyr kan i verste fall gi brann- eller vannskade."
-    tiltak:
-      forebygging:
-        - "Ta kjøle- og fryskontrollere av internett. Fjernservice skal gå gjennom VPN eller en sikret mellomløsning, ikke en åpen port."
-        - "Krev pålogging på alt OT-utstyr. Bytt fabrikkpassord, og slå av tjenester anlegget ikke bruker."
-        - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
-        - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
-        - "Søk jevnlig etter eget utstyr i offentlige søketjenester som Shodan og Censys, og fjern det som er eksponert. Ta stedsnavn ut av enhetsnavnene."
-        - "Still sikkerhetskrav ved innkjøp. RED-kravene gjelder radioutstyr solgt i EØS fra 01.08.25, og EUs Cyber Resilience Act (CRA) får full virkning 11.12.27. Nkom er tilsynsmyndighet. (Status per 08.11.26.)"
-      respons:
-        - "Sett kjøle- og frysesettpunktene tilbake til riktig verdi manuelt, og kontroller alle skrivbare verdier mot en kjent baseline."
-        - "Steng fjerntilgangen straks, og koble kontrolleren fra internett inntil arkitekturen er sikret."
-        - "Kartlegg matvarer som har vært over trygg temperatur, og kassér dem. Dokumentér for mattrygghet og forsikring."
-        - "Meld hendelsen til politiet og til NSM/NCSC. Varehandelen faller stort sett utenfor digitalsikkerhetsloven, men en melding styrker det nasjonale situasjonsbildet."
-
-  - id: blodbank
-    navn: "Blodlager med uavhengig overvåkning"
-    ikon: bloodtype
-    kategori: "Kjøl og frys"
-    virksomhet: "Sykehus og blodbank"
-    funksjon: "Kjøl (blod og medisin)"
-    trussel:
-      art: Tilsiktet
-      kilde: "Ekstern aktør"
-    eksponert: true
-    angrepsvektor:
-      - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502)."
-      - "Angriperen endrer settpunktet utenfra, akkurat som mot butikkfryseren. Forskjellen ligger ikke i angrepet, men i hva som fanger det opp."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Samme angrep som mot butikk, men uavhengig overvåkning fanger det på minutter"
-    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på blodbanken i Frankrike som fanget temperaturendringen der butikkene ikke gjorde det."
-    deteksjon:
-      vedSteg: 3
-      kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket startet"
-      forsinkelse: "4 minutter"
-      overvaket: true
-    steg:
-      - tid: 0
-        sys: blodkontroller
-        status: eksponert
-        melding: "Rekognosering: Kjølekontrolleren for blodlageret står åpen på internett for fjernservice, uten pålogging. Den er synlig i offentlige søketjenester, akkurat som butikkfryseren."
-      - tid: 1500
-        sys: blodkontroller
-        status: manipulert
-        melding: "Angrep: Angriperen hever settpunktet utenfra til en verdi over trygg grense. Kontrolleren utfører kommandoen uten pålogging, nøyaktig som i butikkangrepet."
-      - tid: 3000
-        sys: blodtemp
-        status: advarsel
-        melding: "Temperaturen i blodlageret begynner å stige. Her sitter en sensor som er uavhengig av styringen, og som måler direkte i lageret."
-      - tid: 4500
-        sys: blodalarm
-        status: advarsel
-        melding: "Den uavhengige overvåkningen fanger avviket straks og varsler døgnbemannet vakt. Alarmen går ikke gjennom den manipulerte kontrolleren, så den kan ikke dempes utenfra."
-      - tid: 6000
-        sys: blodkontroller
-        status: normal
-        melding: "Vakt kobler kontrolleren fra internett og setter settpunktet tilbake manuelt. Angriperen mister tilgangen."
-      - tid: 7500
-        sys: blodlager
-        status: normal
-        melding: "Temperaturen er tilbake innenfor trygg grense før blodet tok skade. Kjølekjeden holdt, og lageret er reddet. Forskjellen fra butikken var overvåkningen, ikke angrepet."
-    tiltak:
-      forebygging:
-        - "Overvåk temperaturen uavhengig av styringssystemet, med egen sensor og alarm som når vakt hele døgnet. Dette grepet skiller dette scenarioet fra butikkfryseren."
-        - "Ta kjølekontrolleren av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
-        - "Krev pålogging på alt OT-utstyr, bytt fabrikkpassord og slå av tjenester som ikke er i bruk."
-        - "Lag en responsrutine for temperaturavvik, så vakt vet hva de skal gjøre når alarmen går."
-        - "Segmenter kjølestyring fra kontor- og internett."
-      respons:
-        - "Koble kontrolleren fra internett, sett settpunktet tilbake og verifiser mot en kjent baseline."
-        - "Kontroller blodenhetene mot temperaturloggen, og kassér bare det som faktisk var utenfor grensen."
-        - "Gjennomgå hvordan kontrolleren ble eksponert, og sikre arkitekturen før den kobles til igjen."
-        - "Meld hendelsen til politiet og til NSM/NCSC. Helsesektoren kan være omfattet av digitalsikkerhetsloven."
-
   - id: serverkjoling
     navn: "Serverromkjøling slått av via BACnet"
     ikon: dns
@@ -727,3 +599,131 @@ scenarier:
         - "Gjennomgå hullet i videohistorikken (1 time 14 minutter) for å verifisere at ingen sikkerhetshendelser var uoppdaget i nedetiden."
         - "Dokumentér hendelsen og oppdater endringsrutinen med krav om ACL-validering etter oppdatering."
         - "Vurder om adgangskortlogger for nedetiden kan rekonstrueres fra alternative kilder."
+
+  - id: kjoleanlegg
+    navn: "Kjøleanlegg i butikk manipulert utenfra"
+    ikon: kitchen
+    kategori: "Kjøl og frys"
+    virksomhet: Dagligvarebutikk
+    funksjon: "Kjøl og frys (matforsyning)"
+    trussel:
+      art: Tilsiktet
+      kilde: "Ekstern aktør"
+    eksponert: true
+    angrepsvektor:
+      - "Shodan finner kjøle-/frysekontrolleren på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502). Enhetsnavnet røper ofte butikken."
+      - "Med fabrikkpassord eller uten pålogging endres settpunktet rett i nettleseren eller med et fritt Modbus-verktøy. Dette er mønsteret fra angrepene mot Danfoss-utstyr i Frankrike i oktober 2026."
+      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
+    kort: "Åpen kontroller på internett → settpunkt hevet → kjøling stanser → mat ødelagt"
+    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i rundt 700 franske butikker manipulert utenfra, og mønsteret spredte seg til flere land. Kontrolleren styrer settpunktet og står ofte åpen på internett for fjernservice. Hever en angriper settpunktet, stanser kjølingen, temperaturen stiger, og matvarene blir ødelagt. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
+    deteksjon:
+      vedSteg: 7
+      kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
+      forsinkelse: "Hele natten"
+      overvaket: false
+    steg:
+      - tid: 0
+        sys: kjolekontroller
+        status: eksponert
+        melding: "Rekognosering: Kjøle- og fryskontrolleren, av samme type som Danfoss-utstyret rammet i Frankrike, står åpen på internett for fjernservice. Shodan viser den på et web-/skygrensesnitt eller på Modbus TCP (port 502). Navnet røper butikken."
+      - tid: 1500
+        sys: kjolekontroller
+        status: manipulert
+        melding: "Angrep: Uten pålogging heves kjølesettpunktet fra +4°C til +15°C, enten rett i nettleseren eller ved å skrive til holdingregisteret over Modbus. Kontrolleren godtar kommandoen."
+      - tid: 3000
+        sys: fryserom
+        status: manipulert
+        melding: "Kompressor og vifter trappes ned i kjøle- og fryserommet. Anlegget slutter å kjøle, fordi kontrolleren tror måltemperaturen allerede er nådd."
+      - tid: 4500
+        sys: kjoletemp
+        status: advarsel
+        melding: "Temperaturen i kjøl og frys stiger jevnt. Driftsbildet viser fortsatt «normal drift», fordi settpunktet er endret og ikke brutt."
+      - tid: 6500
+        sys: kjolealarm
+        status: svekket
+        melding: "Temperaturalarmen henger på den samme manipulerte kontrolleren og varsler derfor ikke. Angrepet skjer om natten, uten personale til stede."
+      - tid: 8500
+        sys: kjoledisk
+        status: kritisk
+        melding: "Kjøle- og frysediskene passerer trygg temperatur. Kjølekjeden er brutt."
+      - tid: 10500
+        sys: matvarer
+        status: kritisk
+        melding: "Matvarene har vært over trygg temperatur for lenge og er ikke lenger trygge å selge."
+        lovkrav: "Næringsmiddelhygieneforskriften: Krav til temperaturkontroll i kjøl og frys"
+      - tid: 12500
+        sys: matvarer
+        status: odelagt
+        melding: "Matvarene er ødelagt og må kastes. Butikken tømmer diskene om morgenen. Tapet er økonomisk, og driften forstyrres. Overopphetet utstyr kan i verste fall gi brann- eller vannskade."
+    tiltak:
+      forebygging:
+        - "Ta kjøle- og fryskontrollere av internett. Fjernservice skal gå gjennom VPN eller en sikret mellomløsning, ikke en åpen port."
+        - "Krev pålogging på alt OT-utstyr. Bytt fabrikkpassord, og slå av tjenester anlegget ikke bruker."
+        - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
+        - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
+        - "Søk jevnlig etter eget utstyr i offentlige søketjenester som Shodan og Censys, og fjern det som er eksponert. Ta stedsnavn ut av enhetsnavnene."
+        - "Still sikkerhetskrav ved innkjøp. RED-kravene gjelder radioutstyr solgt i EØS fra 01.08.25, og EUs Cyber Resilience Act (CRA) får full virkning 11.12.27. Nkom er tilsynsmyndighet. (Status per 08.11.26.)"
+      respons:
+        - "Sett kjøle- og frysesettpunktene tilbake til riktig verdi manuelt, og kontroller alle skrivbare verdier mot en kjent baseline."
+        - "Steng fjerntilgangen straks, og koble kontrolleren fra internett inntil arkitekturen er sikret."
+        - "Kartlegg matvarer som har vært over trygg temperatur, og kassér dem. Dokumentér for mattrygghet og forsikring."
+        - "Meld hendelsen til politiet og til NSM/NCSC. Varehandelen faller stort sett utenfor digitalsikkerhetsloven, men en melding styrker det nasjonale situasjonsbildet."
+
+  - id: blodbank
+    navn: "Blodlager med uavhengig overvåkning"
+    ikon: bloodtype
+    kategori: "Kjøl og frys"
+    virksomhet: "Sykehus og blodbank"
+    funksjon: "Kjøl (blod og medisin)"
+    trussel:
+      art: Tilsiktet
+      kilde: "Ekstern aktør"
+    eksponert: true
+    angrepsvektor:
+      - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502)."
+      - "Angriperen endrer settpunktet utenfra, akkurat som mot butikkfryseren. Forskjellen ligger ikke i angrepet, men i hva som fanger det opp."
+      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
+    kort: "Samme angrep som mot butikk, men uavhengig overvåkning fanger det på minutter"
+    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på blodbanken i Frankrike som fanget temperaturendringen der butikkene ikke gjorde det."
+    deteksjon:
+      vedSteg: 3
+      kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket startet"
+      forsinkelse: "4 minutter"
+      overvaket: true
+    steg:
+      - tid: 0
+        sys: blodkontroller
+        status: eksponert
+        melding: "Rekognosering: Kjølekontrolleren for blodlageret står åpen på internett for fjernservice, uten pålogging. Den er synlig i offentlige søketjenester, akkurat som butikkfryseren."
+      - tid: 1500
+        sys: blodkontroller
+        status: manipulert
+        melding: "Angrep: Angriperen hever settpunktet utenfra til en verdi over trygg grense. Kontrolleren utfører kommandoen uten pålogging, nøyaktig som i butikkangrepet."
+      - tid: 3000
+        sys: blodtemp
+        status: advarsel
+        melding: "Temperaturen i blodlageret begynner å stige. Her sitter en sensor som er uavhengig av styringen, og som måler direkte i lageret."
+      - tid: 4500
+        sys: blodalarm
+        status: advarsel
+        melding: "Den uavhengige overvåkningen fanger avviket straks og varsler døgnbemannet vakt. Alarmen går ikke gjennom den manipulerte kontrolleren, så den kan ikke dempes utenfra."
+      - tid: 6000
+        sys: blodkontroller
+        status: normal
+        melding: "Vakt kobler kontrolleren fra internett og setter settpunktet tilbake manuelt. Angriperen mister tilgangen."
+      - tid: 7500
+        sys: blodlager
+        status: normal
+        melding: "Temperaturen er tilbake innenfor trygg grense før blodet tok skade. Kjølekjeden holdt, og lageret er reddet. Forskjellen fra butikken var overvåkningen, ikke angrepet."
+    tiltak:
+      forebygging:
+        - "Overvåk temperaturen uavhengig av styringssystemet, med egen sensor og alarm som når vakt hele døgnet. Dette grepet skiller dette scenarioet fra butikkfryseren."
+        - "Ta kjølekontrolleren av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
+        - "Krev pålogging på alt OT-utstyr, bytt fabrikkpassord og slå av tjenester som ikke er i bruk."
+        - "Lag en responsrutine for temperaturavvik, så vakt vet hva de skal gjøre når alarmen går."
+        - "Segmenter kjølestyring fra kontor- og internett."
+      respons:
+        - "Koble kontrolleren fra internett, sett settpunktet tilbake og verifiser mot en kjent baseline."
+        - "Kontroller blodenhetene mot temperaturloggen, og kassér bare det som faktisk var utenfor grensen."
+        - "Gjennomgå hvordan kontrolleren ble eksponert, og sikre arkitekturen før den kobles til igjen."
+        - "Meld hendelsen til politiet og til NSM/NCSC. Helsesektoren kan være omfattet av digitalsikkerhetsloven."
