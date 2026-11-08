@@ -108,6 +108,12 @@ export function parseSimulatorData(yamlString: string): SimulatorData {
 
 const BRUTT_STATUSER = ["nede", "kritisk", "kompromittert", "odelagt", "feil", "manipulert", "eksponert"];
 
+// Takt: Neste steg venter til forrige melding er lest (ca. 22 tegn/s),
+// men aldri kortere enn YAML-rytmen (tid) strukket ut.
+const MS_PER_TEGN = 45;
+const MIN_STEG_MS = 3000;
+const TEMPO = 3;
+
 export function useScenarioEngine(scenarier: Scenario[]) {
   const [valgt, setValgt] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
@@ -145,7 +151,12 @@ export function useScenarioEngine(scenarier: Scenario[]) {
     const sc = scenarier.find(s => s.id === id);
     if (!sc) return;
     setRunning(true);
+    let ved = 0;
     sc.steg.forEach((steg, idx) => {
+      if (idx > 0) {
+        const forrige = sc.steg[idx - 1];
+        ved += Math.max(MIN_STEG_MS, forrige.melding.length * MS_PER_TEGN, (steg.tid - forrige.tid) * TEMPO);
+      }
       const t = setTimeout(() => {
         setStatuses(prev => ({ ...prev, [steg.sys]: steg.status }));
         setAktivIdx(idx);
@@ -154,7 +165,7 @@ export function useScenarioEngine(scenarier: Scenario[]) {
           ts: new Date().toLocaleTimeString("no-NO", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
         }]);
         if (idx === sc.steg.length - 1) { setRunning(false); setDone(true); }
-      }, steg.tid);
+      }, ved);
       timers.current.push(t);
     });
   };
