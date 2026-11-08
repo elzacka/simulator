@@ -415,7 +415,7 @@ scenarier:
         - "Conduct access audit. Map what the compromised accounts accessed and exported."
 
   - id: integrity_failures
-    navn: "A08: Software and Data Integrity Failures"
+    navn: "A08: Software or Data Integrity Failures"
     ikon: security
     owasp: "A08:2025"
     kort: "Insecure deserialization in API. Arbitrary code execution via crafted object"
@@ -464,7 +464,7 @@ scenarier:
         - "Notify affected individuals without undue delay according to GDPR art. 34. 9,200 user records including decision data compromised."
 
   - id: logging_failures
-    navn: "A09: Security Logging and Monitoring Failures"
+    navn: "A09: Security Logging and Alerting Failures"
     ikon: manage_search
     owasp: "A09:2025"
     kort: "Undetected breach for 11 weeks. SIEM without rules, logs without an owner"
