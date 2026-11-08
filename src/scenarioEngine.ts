@@ -63,7 +63,7 @@ const FARGER: Record<string, string> = {
 };
 
 const TEKST: Record<string, string> = {
-  kompromittert: "Kompromittert", odelagt: "Ødelagt", nede: "Nede", kritisk: "Kritisk",
+  kompromittert: "Kompromittert", odelagt: "Ødelagt", nede: "Ute av drift", kritisk: "Kritisk",
   feil: "Feil", manipulert: "Manipulert", svekket: "Svekket",
   advarsel: "Advarsel", eksponert: "Eksponert", oppdateres: "Oppdateres",
   normal: "Normal",
@@ -76,7 +76,51 @@ const TEXT_EN: Record<string, string> = {
   normal: "Normal",
 };
 
+// Alvorlighetsrekkefølge for statusforklaringen
+const REKKEFOLGE = [
+  "normal", "oppdateres", "eksponert", "advarsel", "svekket", "feil",
+  "manipulert", "kritisk", "nede", "kompromittert", "odelagt",
+];
+
+const FORKLARING: Record<string, string> = {
+  normal: "Fungerer som det skal",
+  oppdateres: "Ny programvare eller fastvare installeres",
+  eksponert: "Kan nås fra internett uten god nok beskyttelse",
+  advarsel: "Avvik eller svakhet som bør følges opp",
+  svekket: "Fungerer bare delvis",
+  feil: "Teknisk feil eller feilkonfigurasjon",
+  manipulert: "Innstillinger eller data er endret av en angriper",
+  kritisk: "Har passert en sikker grense",
+  nede: "Virker ikke",
+  kompromittert: "En angriper har tilgang eller kontroll",
+  odelagt: "Varig tap, må kastes eller erstattes",
+};
+
+const EXPLANATION_EN: Record<string, string> = {
+  normal: "Working as intended",
+  oppdateres: "New software or firmware is being installed",
+  eksponert: "Reachable from the internet without adequate protection",
+  advarsel: "Deviation or weakness that needs follow-up",
+  svekket: "Only partly working",
+  feil: "Technical fault or misconfiguration",
+  manipulert: "Settings or data changed by an attacker",
+  kritisk: "Past a safe limit",
+  nede: "Not working",
+  kompromittert: "An attacker has access or control",
+  odelagt: "Permanent loss; must be discarded or replaced",
+};
+
 export type Lang = "no" | "en";
+
+// Statusene et scenario bruker, pluss normal, i alvorlighetsrekkefølge
+export function statusForklaring(sc: Scenario | undefined, lang: Lang) {
+  if (!sc) return [];
+  const brukt = new Set(["normal", ...sc.steg.map(s => s.status)]);
+  const tekst = lang === "en" ? EXPLANATION_EN : FORKLARING;
+  return REKKEFOLGE.filter(k => brukt.has(k)).map(k => ({
+    status: k, etikett: statusLabel(k, lang), forklaring: tekst[k], farge: fg(k),
+  }));
+}
 
 export function fg(s?: string): string {
   if (!s) return "var(--accent)";
@@ -85,8 +129,7 @@ export function fg(s?: string): string {
 
 export function statusLabel(s: string | undefined, lang: Lang): string {
   const map = lang === "en" ? TEXT_EN : TEKST;
-  if (!s) return "NORMAL";
-  return map[s] || s.toUpperCase();
+  return map[s ?? "normal"] || s!;
 }
 
 /* ── YAML-parser ── */

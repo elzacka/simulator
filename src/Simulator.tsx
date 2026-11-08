@@ -5,7 +5,7 @@ import RikTekst from "./RikTekst";
 import { type ThemeState } from "./theme";
 import {
   type SimulatorData, type Scenario, type Lang,
-  useScenarioEngine, fg, statusLabel,
+  useScenarioEngine, fg, statusLabel, statusForklaring,
 } from "./scenarioEngine";
 
 // Heroicons 24 solid play-circle (MIT, Tailwind Labs); same symbol as public/favicon.svg
@@ -31,7 +31,6 @@ interface Tekster {
   kjorIgjen: string;
   nullstill: string;
   statuskoder: string;
-  legend: [string, string][];
   oppsummering: string;
   systemerRammet: string;
   lovkravBerort: string;
@@ -41,35 +40,13 @@ interface Tekster {
   forebygging: string;
 }
 
-const LEGEND_NO: [string, string][] = [
-  ["Normal", "var(--st-normal)"],
-  ["Advarsel", "var(--st-advarsel)"],
-  ["Svekket", "var(--st-svekket)"],
-  ["Eksponert", "var(--st-eksponert)"],
-  ["Feil / manipulert", "var(--st-feil)"],
-  ["Nede / kritisk", "var(--st-nede)"],
-  ["Kompromittert", "var(--st-kompromittert)"],
-  ["Ødelagt", "var(--st-odelagt)"],
-];
-
-const LEGEND_EN: [string, string][] = [
-  ["Normal", "var(--st-normal)"],
-  ["Warning", "var(--st-advarsel)"],
-  ["Degraded", "var(--st-svekket)"],
-  ["Exposed", "var(--st-eksponert)"],
-  ["Error / tampered", "var(--st-feil)"],
-  ["Down / critical", "var(--st-nede)"],
-  ["Compromised", "var(--st-kompromittert)"],
-  ["Destroyed", "var(--st-odelagt)"],
-];
-
 const NO: Tekster = {
   tilbake: "Tilbake",
   pagar: "Pågår",
   fullfort: n => `Fullført · ${n} systemer rammet`,
   steg: (n, total) => `Steg ${n} av ${total}`,
   systemstatus: "Systemstatus",
-  visningRamme: "Du ser enhetene i bygget. Det du ikke ser er f. eks den utdaterte programvaren og de åpne portene som gjør dem sårbare.",
+  visningRamme: "Du ser enhetene i bygget. Det du ikke ser er f.eks den utdaterte programvaren og de åpne portene som gjør dem sårbare.",
   visningTom: "Velg et scenario for å se anleggsvisningen",
   loggTittel: "Hendelseslogg",
   loggTom: "Velg et scenario og trykk Simuler",
@@ -81,7 +58,6 @@ const NO: Tekster = {
   kjorIgjen: "Kjør igjen",
   nullstill: "Nullstill",
   statuskoder: "Statusforklaring",
-  legend: LEGEND_NO,
   oppsummering: "Konsekvenser",
   systemerRammet: "Systemer rammet",
   lovkravBerort: "Lovkrav berørt",
@@ -109,7 +85,6 @@ const EN: Tekster = {
   kjorIgjen: "Run again",
   nullstill: "Reset",
   statuskoder: "Status key",
-  legend: LEGEND_EN,
   oppsummering: "Impact",
   systemerRammet: "Systems affected",
   lovkravBerort: "Regulations affected",
@@ -407,7 +382,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                           borderRadius: "var(--radius-sm)",
                           padding: "var(--space-2) var(--space-3)",
                           background: hit ? tint(c, 10) : "transparent",
-                          width: "112px",
+                          width: "120px", hyphens: "auto", overflowWrap: "anywhere",
                           boxSizing: "border-box",
                           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: "3px", textAlign: "center",
                           color: hit ? c : "var(--ink-3)",
@@ -422,17 +397,21 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 </div>
               ))}
             </div>
-            {/* STATUSFORKLARING */}
-            <div style={{ borderTop: "1px solid var(--line)", padding: "var(--space-3) var(--space-4)" }}>
-              <div className="eyebrow" style={{ marginBottom: "var(--space-2)" }}>{t.statuskoder}</div>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "4px var(--space-3)" }}>
-                {t.legend.map(([l, c]) => (
-                  <span key={l} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "var(--text-xs)", color: "var(--ink-2)" }}>
-                    <span style={{ width: "8px", height: "8px", borderRadius: "999px", background: c, flexShrink: 0 }} /> {l}
-                  </span>
-                ))}
+            {/* STATUSFORKLARING: bare statusene scenarioet bruker */}
+            {scenario && (
+              <div style={{ borderTop: "1px solid var(--line)", padding: "var(--space-3) var(--space-4)" }}>
+                <div className="eyebrow" style={{ marginBottom: "var(--space-2)" }}>{t.statuskoder}</div>
+                <dl className="sim-forklaring">
+                  {statusForklaring(scenario, config.lang).map(f => (
+                    <div key={f.status} style={{ display: "flex", alignItems: "flex-start", gap: "6px", fontSize: "var(--text-xs)", lineHeight: 1.45 }}>
+                      <span style={{ width: "8px", height: "8px", borderRadius: "999px", background: f.farge, flexShrink: 0, marginTop: "5px" }} />
+                      <dt style={{ color: "var(--ink)", fontWeight: 600, whiteSpace: "nowrap" }}>{f.etikett}</dt>
+                      <dd style={{ color: "var(--ink-3)" }}>{f.forklaring}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="panel">

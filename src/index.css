@@ -388,6 +388,12 @@ details.situasjon[open] .situasjon-chevron {
   border-left: 1px solid var(--line);
 }
 
+.sim-forklaring {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-1) var(--space-4);
+}
+
 .sim-to {
   display: grid;
   grid-template-columns: 1fr 1fr;
