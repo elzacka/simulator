@@ -8,6 +8,9 @@ import {
   useScenarioEngine, fg, statusLabel,
 } from "./scenarioEngine";
 
+// Heroicons 24 solid play-circle (MIT, Tailwind Labs); same symbol as public/favicon.svg
+const PLAY_CIRCLE = "M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z";
+
 /* ── Språkavhengige faste etiketter ── */
 
 interface Tekster {
@@ -455,7 +458,11 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               ) : done ? (
                 <><Icon name="replay" size={16} ariaLabel="" /> {t.kjorIgjen}</>
               ) : (
-                <><Icon name="play_arrow" size={16} fill={true} ariaLabel="" /> {t.simuler}</>
+                <>
+                  <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path fillRule="evenodd" clipRule="evenodd" d={PLAY_CIRCLE} />
+                  </svg> {t.simuler}
+                </>
               )}
             </button>
 
