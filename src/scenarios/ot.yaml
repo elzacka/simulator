@@ -180,9 +180,9 @@ systemer:
 
 scenarier:
   - id: snmp_ups
-    navn: "UPS slått av via default SNMP"
+    navn: "UPS slått av via SNMP"
     ikon: bolt
-    kategori: "Kraft og nødstrøm"
+    kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
     funksjon: "Strømforsyning (UPS)"
     trussel:
@@ -193,8 +193,8 @@ scenarier:
       - "Shodan finner UPS-ens nettverkskort på SNMP (UDP 161). Default write community «private» gir skrivetilgang, fordi den aldri er endret."
       - "Et fritt kommandolinjeverktøy som snmpset (Net-SNMP) sender avslåingskommandoen. Ingen pålogging utover community-strengen, ingen kryptering i SNMPv2c."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Default community «private» → UPS slås av → momentant strømbortfall"
-    beskrivelse: "En UPS er byggets siste strømlinje for kritisk utstyr. Står nettverkskortet åpent på internett med default SNMP-community, kan en angriper sende én avslåingskommando utenfra. Alt som henger på UPS-en mister strømmen momentant, uten kontrollert nedstenging. Rammer bygget et kritisk ledd i en verdikjede, stanser også leveransene som avhenger av det."
+    kort: "Standard community-streng «private» → angriperen slår av UPS-en → alt utstyr bak den mister strømmen"
+    beskrivelse: "En UPS er byggets siste strømlinje for kritisk utstyr. En angriper kan slå den av med én SNMP-kommando hvis nettverkskortet er eksponert mot internett og fortsatt har standard community-streng. Alt som henger på UPS-en, mister strømmen umiddelbart, uten kontrollert nedstenging. Hvis bygget er et kritisk ledd i en verdikjede, stanser også leveransene som avhenger av det."
     steg:
       - tid: 0
         sys: ups
@@ -207,7 +207,7 @@ scenarier:
       - tid: 1800
         sys: ups
         status: nede
-        melding: "UPS-en slår av utgangen momentant. Alt utstyr som henger på den, mister strømmen uten forvarsel."
+        melding: "UPS-en kobler ut utgangen umiddelbart. Alt utstyr som henger på den, mister strømmen uten forvarsel."
       - tid: 2600
         sys: server
         status: nede
@@ -232,25 +232,25 @@ scenarier:
         lovkrav: "Digitalsikkerhetsloven: Sikkerhetskrav (hvis omfattet)"
     tiltak:
       forebygging:
-        - "Bytt SNMP community string fra default. Bruk SNMPv3 med autentisering og kryptering (authPriv)."
+        - "Bytt ut standard community-streng. Bruk SNMPv3 med autentisering og kryptering (authPriv)."
         - "Begrens SNMP-tilgang med IP-basert ACL. Tillat bare dedikerte administrasjonsstasjoner."
-        - "Konfigurer grace period på minst 60 sekunder på UPS-avslåing, så én kommando ikke slår av momentant."
+        - "Konfigurer grace period på minst 60 sekunder på UPS-avslåing, så én kommando ikke kobler ut lasten umiddelbart."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri være eksponert mot internett."
       respons:
         - "Varsle NSM/NCSC etter digitalsikkerhetsloven hvis virksomheten er omfattet. Sjekk varslingspliktene i loven og forskriften."
-        - "Gjennomgå alt nettverkstilkoblet OT-utstyr for default passord. Anta at ingen er endret."
+        - "Gjennomgå alt nettverkstilkoblet OT-utstyr for fabrikkpassord. Anta at ingen er endret."
         - "Vurder dataintegriteten på servere som ble avsluttet ukontrollert. Sjekk filsystemet ved oppstart."
 
   - id: strombrudd_svikt
     navn: "Strømbrudd og svikt i nødstrøm"
     ikon: power_off
-    kategori: "Kraft og nødstrøm"
+    kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
     funksjon: "Nødstrøm og UPS"
     trussel:
       art: Utilsiktet
       kilde: "Naturhendelse og teknisk svikt"
-    kort: "Lynnedslag → aggregat starter ikke → UPS-batteri utladet → strømbortfall"
+    kort: "Lynnedslag tar nettstrømmen → nødstrømsaggregatet starter ikke → gamle UPS-batterier er tomme etter få minutter"
     beskrivelse: "Samme strømavhengighet som ved et angrep kan ryke uten noen angriper. Et lynnedslag tar nettstrømmen, nødaggregatet starter ikke, og eldre UPS-batterier holder bare noen minutter. Hendelsen er ikke tilsiktet, men følger av naturhendelse, teknisk svikt og manglende vedlikehold. Konsekvensen er den samme som i UPS-angrepet, og viser at OT-beredskap må tåle mer enn menneskelige trusler."
     steg:
       - tid: 0
@@ -297,7 +297,7 @@ scenarier:
   - id: serverkjoling
     navn: "Serverromkjøling slått av via BACnet"
     ikon: dns
-    kategori: "Bygningsautomasjon (BAS)"
+    kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Datasenter og serverrom"
     funksjon: "Presisjonskjøling (CRAC)"
     trussel:
@@ -308,8 +308,8 @@ scenarier:
       - "BMS/SD-anlegget svarer på BACnet Who-Is (UDP 47808) og er synlig i Shodan. Tusenvis av BACnet-enheter svarer uautentisert på slike søk."
       - "Et fritt verktøy som YABE (Yet Another BACnet Explorer) kobler til, leser objekttreet og skriver til «commandable» objekter med WriteProperty. Ingen pålogging, ingen kryptering."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Den sikrede varianten BACnet/SC (TLS) finnes, men tas sjelden i bruk. Eksponeringen er selve sårbarheten."
-    kort: "BACnet-kontroller på internett → kjølesettpunkt satt til 45°C → serverrom overopphetes"
-    beskrivelse: "Serverrom holdes kjølige av presisjonskjøling (CRAC), styrt gjennom byggets BACnet-baserte SD-anlegg. Står anlegget eksponert, kan en angriper heve kjølesettpunktet utenfra med et gratis BACnet-verktøy. Kjølingen stanser, serverrommet overopphetes, og serverne går i termisk nødavstenging. Da faller et kritisk ledd i den digitale infrastrukturen, med tjenester mange andre er avhengige av."
+    kort: "SD-anlegg eksponert mot internett → settpunktet for kjøling heves til 45 °C → serverrommet overopphetes"
+    beskrivelse: "Serverrom holdes kjølige av presisjonskjøling (CRAC), styrt gjennom byggets BACnet-baserte SD-anlegg. En angriper kan heve kjølesettpunktet utenfra med et gratis BACnet-verktøy hvis anlegget er eksponert mot internett. Kjølingen stanser, serverrommet overopphetes, og serverne går i termisk nødavstenging. Da faller et kritisk ledd i den digitale infrastrukturen, med tjenester mange andre er avhengige av."
     deteksjon:
       vedSteg: 5
       kilde: "Oppdaget da serverne gikk i termisk nødavstenging og tjenester falt ut"
@@ -327,7 +327,7 @@ scenarier:
       - tid: 3000
         sys: serverkjoler
         status: manipulert
-        melding: "Angrep: YABE WriteProperty setter kjølesettpunktet til 45°C på høyeste nivå i priority array. Enheten bekrefter kommandoen. Kjølemaskinen tror rommet allerede er kaldere enn mål."
+        melding: "Angrep: YABE WriteProperty setter kjølesettpunktet til 45 °C på høyeste nivå i priority array. Enheten bekrefter kommandoen. Kjølemaskinen tror rommet allerede er kaldere enn mål."
       - tid: 4500
         sys: serverkjoler
         status: nede
@@ -335,7 +335,7 @@ scenarier:
       - tid: 6000
         sys: servertemp
         status: kritisk
-        melding: "Temperaturen i serverrommet stiger raskt mot 35°C. Varmelasten fra serverne har ingen steder å gå."
+        melding: "Temperaturen i serverrommet stiger raskt mot 35 °C. Varmelasten fra serverne har ingen steder å gå."
       - tid: 7500
         sys: server
         status: nede
@@ -359,9 +359,9 @@ scenarier:
         - "Varsle NSM/NCSC etter digitalsikkerhetsloven hvis virksomheten er omfattet."
 
   - id: adgangskontroll
-    navn: "Adgangskontroll manipulert utenfra"
+    navn: "Dører låst opp via adgangskontrollen"
     ikon: lock_open
-    kategori: "Sikring og nettverk"
+    kategori: "Fysisk sikring og nettverk"
     virksomhet: "Lager og offentlig tjenestebygg"
     funksjon: "Fysisk adgangskontroll"
     trussel:
@@ -372,7 +372,7 @@ scenarier:
       - "Shodan finner adgangskontrollerens web-/administrasjonsgrensesnitt (HTTP/HTTPS) åpent mot internett, ofte med fabrikkpassord."
       - "Døren låses opp fra nettleseren eller via enhetens eget API. Ingen BACnet her, bare et styringsgrensesnitt som aldri skulle vært eksponert."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Eksponert dørkontroller → dører låses opp → fri fysisk tilgang om natten"
+    kort: "Adgangskontrollen nås fra internett med fabrikkpassord → dørene låses opp om natten → ingen alarm"
     beskrivelse: "Adgangskontrollen er bygningens usynlige funksjon for å holde uvedkommende ute. I et bygg som er et kritisk ledd i en leveransekjede, for eksempel et lager eller et offentlig tjenestebygg, blir dørene en fjernstyrt bryter hvis kontrolleren står på internett. En angriper låser opp om natten, og adgangsloggen endres så alt ser normalt ut. Konsekvensen er fysisk innbrudd, tukling med utstyr og tap av sporbarhet."
     deteksjon:
       vedSteg: 5
@@ -402,7 +402,7 @@ scenarier:
         melding: "Ingen reagerer. Adgangsloggen viser ikke hvem som gikk inn, fordi angriperen har endret den."
       - tid: 7500
         sys: server
-        status: manipulert
+        status: kompromittert
         melding: "Uvedkommende får fysisk tilgang til serverrom og lager. Utstyr kan manipuleres, kopieres eller fjernes, og et kritisk ledd i leveransekjeden settes ut av spill."
         lovkrav: "Digitalsikkerhetsforskriften: Sikkerhetstiltak (hvis omfattet)"
     tiltak:
@@ -419,21 +419,21 @@ scenarier:
         - "Meld hendelsen til politiet. Varsle NSM/NCSC hvis virksomheten er omfattet av digitalsikkerhetsloven."
 
   - id: varme_legionella
-    navn: "Varmtvann skrudd ned, legionellarisiko"
+    navn: "Senket varmtvannstemperatur gir legionellarisiko"
     ikon: water_heater
-    kategori: "Bygningsautomasjon (BAS)"
+    kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Sykehjem og svømmehall"
-    funksjon: "VVS og varmtvann"
+    funksjon: "Varmt tappevann"
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "VVS-styringen er som regel koblet til byggets automasjon (BMS). Shodan finner den på BACnet (UDP 47808) eller Modbus TCP (502)."
-      - "Mangler enheten pålogging, kan et fritt verktøy skrive settpunktet. For BACnet er YABE (Yet Another BACnet Explorer) et vanlig eksempel."
+      - "Varmestyringen er som regel koblet til byggets SD-anlegg. Shodan finner den på BACnet (UDP 47808) eller Modbus TCP (502)."
+      - "Et fritt verktøy kan skrive settpunktet hvis enheten mangler pålogging. For BACnet er YABE (Yet Another BACnet Explorer) et vanlig eksempel."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Eksponert VVS-styring → varmtvann senket → legionella får vokse"
-    beskrivelse: "Varmtvann holdes varmt med vilje. Ut av berederen bør det være minst 70°C, og minst 60°C ved tappepunktene, for å holde legionella nede. I et offentlig bygg med sårbare brukere, for eksempel et sykehjem eller en svømmehall, står VVS-styringen ofte på internett for fjernservice. Senker en angriper settpunktet, blir vannet lunkent, bakterier formerer seg i rør og dusjer, og faren er usynlig til noen blir syke. Dette er «når hackerne skrur opp varmen» speilvendt: Her skrus den ned."
+    kort: "SD-anlegg eksponert mot internett → settpunktet for varmtvann senkes fra 70 til 38 °C → legionella kan vokse i rørnettet"
+    beskrivelse: "Varmtvannet må holde høy temperatur for å hindre legionella. Helsedirektoratet anbefaler at berederen jevnlig varmes opp til minst 70 °C, og at vannet når minst 60 °C ved tappestedet. I bygg med sårbare brukere, for eksempel sykehjem og svømmehaller, har varmestyringen ofte fjerntilgang for service. En angriper som senker settpunktet, gjør vannet lunkent. Legionella formerer seg i rør og dusjer, og faren er usynlig til noen blir syke. Dette er «når hackerne skrur opp varmen» speilvendt: Her skrus den ned."
     deteksjon:
       vedSteg: 5
       kilde: "Oppdaget da brukere ble syke og prøvene påviste legionella"
@@ -447,7 +447,7 @@ scenarier:
       - tid: 1500
         sys: vvskontroller
         status: manipulert
-        melding: "Angrep: Angriperen senker settpunktet for varmtvann fra 70°C til 38°C, med WriteProperty over BACnet eller ved å skrive registeret over Modbus. Kontrolleren regulerer ned."
+        melding: "Angrep: Angriperen senker settpunktet for varmtvann fra 70 °C til 38 °C, med WriteProperty over BACnet eller ved å skrive registeret over Modbus. Kontrolleren regulerer ned."
       - tid: 3000
         sys: varmtvann
         status: manipulert
@@ -455,7 +455,7 @@ scenarier:
       - tid: 4500
         sys: vvstemp
         status: advarsel
-        melding: "Temp-sensoren viser 38°C. Driftsbildet melder «normalt», fordi settpunktet er endret og ikke brutt. Ingen alarm."
+        melding: "Temp-sensoren viser 38 °C. Driftsbildet melder «normalt», fordi settpunktet er endret og ikke brutt. Ingen alarm."
       - tid: 6500
         sys: tappepunkt
         status: kritisk
@@ -463,7 +463,7 @@ scenarier:
         lovkrav: "Forskrift om miljørettet helsevern: Legionellakontroll"
       - tid: 8500
         sys: tappepunkt
-        status: odelagt
+        status: nede
         melding: "Smitte kan ikke utelukkes. Bygget må stenge berørte dusjer, varsle kommunelegen og desinfisere anlegget termisk. En kritisk tjeneste for sårbare brukere settes ut av spill."
         lovkrav: "Forskrift om miljørettet helsevern: Legionellakontroll"
     tiltak:
@@ -480,9 +480,9 @@ scenarier:
         - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM/NCSC hvis virksomheten er omfattet."
 
   - id: ventilasjon
-    navn: "Ventilasjon stanset utenfra"
+    navn: "Ventilasjonsaggregat stoppet utenfra"
     ikon: air
-    kategori: "Bygningsautomasjon (BAS)"
+    kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Kontorbygg og laboratorium"
     funksjon: "Ventilasjon og inneklima"
     trussel:
@@ -490,11 +490,11 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Ventilasjonsaggregatet styres fra byggets automasjon (BMS). Shodan finner det på BACnet (UDP 47808) eller Modbus TCP (502)."
-      - "Mangler enheten pålogging, skriver et fritt verktøy som YABE (BACnet) rett til drift og settpunkt."
+      - "Ventilasjonsaggregatet styres fra byggets SD-anlegg. Shodan finner det på BACnet (UDP 47808) eller Modbus TCP (502)."
+      - "Et fritt verktøy som YABE (BACnet) skriver rett til drift og settpunkt hvis enheten mangler pålogging."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Eksponert ventilasjonsstyring → lufting stanser → CO2 stiger, drift rammes"
-    beskrivelse: "Ventilasjon går i bakgrunnen og holder lufta pustbar. I noen bygg holder den også trykk, for eksempel i laboratorier eller renrom. Aggregatet styres ofte fra internett for fjernservice. Stanser en angriper det, stiger CO2 og fukt, folk får hodepine og går hjem, og virksomheten som er avhengig av bygget, stopper opp. I trykk-kontrollerte rom er konsekvensen verre, fordi forurensning kan trekke inn."
+    kort: "SD-anlegg eksponert mot internett → aggregatet stoppes → CO2 passerer 1000 ppm, og de ansatte forlater bygget"
+    beskrivelse: "Ventilasjon går i bakgrunnen og holder lufta pustbar. I noen bygg holder den også trykk, for eksempel i laboratorier eller renrom. Aggregatet har ofte fjerntilgang for service. En angriper som stopper det, får CO2 og fukt til å stige. Folk får hodepine og går hjem, og virksomheten som er avhengig av bygget, stopper opp. I trykk-kontrollerte rom er konsekvensen verre, fordi forurensning kan trekke inn."
     deteksjon:
       vedSteg: 4
       kilde: "Oppdaget da ansatte reagerte på tung luft og hodepine"
@@ -540,15 +540,15 @@ scenarier:
         - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM/NCSC hvis virksomheten er omfattet."
 
   - id: patching
-    navn: "Feilkonfigurasjon ved automatisk oppdatering"
+    navn: "Automatisk brannmuroppdatering slår ut kameraene"
     ikon: construction
-    kategori: "Sikring og nettverk"
+    kategori: "Fysisk sikring og nettverk"
     virksomhet: "Virksomhet med videoovervåkning"
     funksjon: "Nettverk og kamera"
     trussel:
       art: Utilsiktet
       kilde: Feilkonfigurasjon
-    kort: "Automatisk oppdatering, feil ACL. Kameraer slokner, ingen alarm"
+    kort: "Ny fastvare på brannmuren → feil tilgangsregel (ACL) blokkerer kameranettet → ingen opptak og ingen alarm"
     beskrivelse: "Ikke alle OT-hendelser er angrep. En automatisk firmware-oppdatering på brannmuren legger inn en feil ACL-regel som blokkerer kamerasegmentet. Ingen angriper er involvert, men konsekvensen er reell: Kameraene blir svarte, adgangsloggen stanser, og feilen ligner ikke et kjent angrep, så den må spores fra bunnen. Scenarioet viser den utilsiktede, menneskeskapte trusselen: Endringer uten testing og kontroll."
     deteksjon:
       vedSteg: 4
@@ -601,7 +601,7 @@ scenarier:
         - "Vurder om adgangskortlogger for nedetiden kan rekonstrueres fra alternative kilder."
 
   - id: kjoleanlegg
-    navn: "Kjøleanlegg i butikk manipulert utenfra"
+    navn: "Kjøleanlegg i dagligvarebutikk manipulert utenfra"
     ikon: kitchen
     kategori: "Kjøl og frys"
     virksomhet: Dagligvarebutikk
@@ -614,8 +614,8 @@ scenarier:
       - "Shodan finner kjøle-/frysekontrolleren på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502). Enhetsnavnet røper ofte butikken."
       - "Med fabrikkpassord eller uten pålogging endres settpunktet rett i nettleseren eller med et fritt Modbus-verktøy. Dette er mønsteret fra angrepene mot Danfoss-utstyr i Frankrike i oktober 2026."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Åpen kontroller på internett → settpunkt hevet → kjøling stanser → mat ødelagt"
-    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i rundt 700 franske butikker manipulert utenfra, og mønsteret spredte seg til flere land. Kontrolleren styrer settpunktet og står ofte åpen på internett for fjernservice. Hever en angriper settpunktet, stanser kjølingen, temperaturen stiger, og matvarene blir ødelagt. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
+    kort: "Kjølestyringen eksponert mot internett → settpunktet heves fra +4 til +15 °C → varene må kastes"
+    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer settpunktet og står ofte åpen på internett for fjernservice. En angriper som hever settpunktet, stanser kjølingen. Temperaturen stiger, og matvarene blir ødelagt. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
     deteksjon:
       vedSteg: 7
       kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
@@ -629,10 +629,10 @@ scenarier:
       - tid: 1500
         sys: kjolekontroller
         status: manipulert
-        melding: "Angrep: Uten pålogging heves kjølesettpunktet fra +4°C til +15°C, enten rett i nettleseren eller ved å skrive til holdingregisteret over Modbus. Kontrolleren godtar kommandoen."
+        melding: "Angrep: Uten pålogging heves kjølesettpunktet fra +4 °C til +15 °C, enten rett i nettleseren eller ved å skrive til holdingregisteret over Modbus. Kontrolleren godtar kommandoen."
       - tid: 3000
         sys: fryserom
-        status: manipulert
+        status: nede
         melding: "Kompressor og vifter trappes ned i kjøle- og fryserommet. Anlegget slutter å kjøle, fordi kontrolleren tror måltemperaturen allerede er nådd."
       - tid: 4500
         sys: kjoletemp
@@ -670,7 +670,7 @@ scenarier:
         - "Meld hendelsen til politiet og til NSM/NCSC. Varehandelen faller stort sett utenfor digitalsikkerhetsloven, men en melding styrker det nasjonale situasjonsbildet."
 
   - id: blodbank
-    navn: "Blodlager med uavhengig overvåkning"
+    navn: "Blodbank med uavhengig temperaturovervåkning"
     ikon: bloodtype
     kategori: "Kjøl og frys"
     virksomhet: "Sykehus og blodbank"
@@ -683,8 +683,8 @@ scenarier:
       - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på et åpent web- eller skygrensesnitt, eller på Modbus TCP (port 502)."
       - "Angriperen endrer settpunktet utenfra, akkurat som mot butikkfryseren. Forskjellen ligger ikke i angrepet, men i hva som fanger det opp."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Samme angrep som mot butikk, men uavhengig overvåkning fanger det på minutter"
-    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på blodbanken i Frankrike som fanget temperaturendringen der butikkene ikke gjorde det."
+    kort: "Samme angrep som mot butikken, men en uavhengig alarm varsler vakten i løpet av minutter"
+    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på tre franske blodbanker som i november 2026 fanget temperaturendringen, der butikkene ikke gjorde det."
     deteksjon:
       vedSteg: 3
       kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket startet"

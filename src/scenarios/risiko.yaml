@@ -133,7 +133,7 @@ scenarier:
         melding: "«Ola» introduseres for fagpersoner fra samboerens nettverk. De utveksler informasjon via privat e-post."
       - tid: 4500
         sys: fagsystem
-        status: kompromittert
+        status: advarsel
         melding: "«Ola» inviteres til fagsamarbeid i utlandet. Han holder foredrag om sitt arbeidsområde for et ukjent publikum."
       - tid: 6000
         sys: personopplysninger
@@ -222,7 +222,7 @@ scenarier:
     steg:
       - tid: 0
         sys: fysisk
-        status: kompromittert
+        status: advarsel
         melding: "Ansatt bærer synlig adgangskort på T-banen. Foto av kortets design og ID-nummer tas av ukjent person."
       - tid: 1200
         sys: tilgang
