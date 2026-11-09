@@ -306,12 +306,12 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "var(--space-3)" }}>
                   {scenario.virksomhet && (
                     <span style={{ fontSize: "var(--text-2xs)", color: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <Icon name="domain" size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} /> {scenario.virksomhet}
+                      {scenario.virksomhetIkon && <Icon name={scenario.virksomhetIkon} size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} />} {scenario.virksomhet}
                     </span>
                   )}
                   {scenario.funksjon && (
                     <span style={{ fontSize: "var(--text-2xs)", color: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <Icon name="category" size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} /> {scenario.funksjon}
+                      {scenario.funksjonIkon && <Icon name={scenario.funksjonIkon} size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} />} {scenario.funksjon}
                     </span>
                   )}
                   {scenario.trussel && (() => {
@@ -319,7 +319,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     const col = tilsiktet ? "var(--danger-ink)" : "var(--st-advarsel)";
                     return (
                       <span style={{ fontSize: "var(--text-2xs)", color: col, border: `1px solid ${col}`, borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                        <Icon name={tilsiktet ? "gpp_maybe" : "report_problem"} size={12} ariaLabel="" /> {scenario.trussel.art}: {scenario.trussel.kilde}
+                        <Icon name={tilsiktet ? "person_alert" : "report_problem"} size={12} ariaLabel="" /> {scenario.trussel.art}: {scenario.trussel.kilde}
                       </span>
                     );
                   })()}
@@ -521,7 +521,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             {scenario.tiltak.respons && (
               <div className="panel" style={{ padding: "var(--space-4)", animation: "reveal 0.4s ease both" }}>
                 <div className="eyebrow" style={{ marginBottom: "var(--space-3)", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Icon name="emergency" size={13} ariaLabel="" style={{ color: "var(--danger-ink)" }} /> {t.respons}
+                  <Icon name="crisis_alert" size={13} ariaLabel="" style={{ color: "var(--danger-ink)" }} /> {t.respons}
                 </div>
                 {scenario.tiltak.respons.map((tx, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>

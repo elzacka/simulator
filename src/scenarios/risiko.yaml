@@ -14,7 +14,7 @@ systemer:
     navn: "Internt nettverk"
     gruppe: 3
     col: 1
-    ikon: hub
+    ikon: lan
   skytjeneste:
     navn: Skytjenester
     gruppe: 3
@@ -115,7 +115,7 @@ scenarier:
 
   - id: innsiderisiko
     navn: "Innsiderisiko: «Ola Nordmann»"
-    ikon: person
+    ikon: person_alert
     kort: "Ansatt med sikkerhetsklarering rekrutteres gradvis av fremmed etterretning"
     beskrivelse: "Basert på et scenario fra NSM Risiko 2026. En ansatt med sikkerhetsklarering for HEMMELIG og bred systemtilgang rekrutteres gradvis av en fremmed etterretningstjeneste, via en nær relasjon. Virksomheten mangler rutiner for å oppdage og håndtere situasjonen."
     steg:

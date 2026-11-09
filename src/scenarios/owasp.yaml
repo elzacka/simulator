@@ -24,7 +24,7 @@ systemer:
     navn: API Layer
     gruppe: 1
     col: 0
-    ikon: hub
+    ikon: api
   admin:
     navn: Admin Panel
     gruppe: 1
@@ -64,7 +64,7 @@ systemer:
 scenarier:
   - id: broken_access
     navn: "A01: Broken Access Control"
-    ikon: shield
+    ikon: key_off
     owasp: "A01:2025"
     kort: "IDOR vulnerability in citizen portal. Unauthorized access to personal data"
     beskrivelse: "A citizen-facing portal lacks server-side authorization checks on its API. By manipulating the user ID parameter in the URL, an attacker can read and modify other citizens' applications, decisions, and personal data. The flaw exists because authorization is enforced only in the frontend, not in the backend API."
@@ -416,7 +416,7 @@ scenarier:
 
   - id: integrity_failures
     navn: "A08: Software or Data Integrity Failures"
-    ikon: security
+    ikon: deployed_code_alert
     owasp: "A08:2025"
     kort: "Insecure deserialization in API. Arbitrary code execution via crafted object"
     beskrivelse: "The REST API accepts Java-serialized objects without validating content or source. An attacker sends a crafted object with a gadget chain targeting an outdated deserialization library. The code executes with the application server's privileges. The CI/CD pipeline lacks signing of deployment artifacts."
@@ -520,7 +520,7 @@ scenarier:
 
   - id: exceptional_conditions
     navn: "A10: Mishandling of Exceptional Conditions"
-    ikon: warning
+    ikon: error
     owasp: "A10:2025"
     kort: "Race condition in application processing. Approvals granted without review"
     beskrivelse: "The application API lacks locking mechanisms on critical operations. An attacker sends concurrent requests and exploits a race condition to get applications approved without passing through the review queue. The exception handling is not designed for concurrent failures. Stack traces are exposed and thread pool exhaustion blocks legitimate users."

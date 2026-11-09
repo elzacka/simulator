@@ -23,7 +23,9 @@ export interface Scenario {
   // Merkelapper som skiller scenariene: hva slags virksomhet og funksjon som
   // rammes, og trusselens art (tilsiktet/utilsiktet) og kilde.
   virksomhet?: string;
+  virksomhetIkon?: string;
   funksjon?: string;
+  funksjonIkon?: string;
   trussel?: { art: string; kilde: string };
   // Fagområde som grupperer scenariene i nedtrekksmenyen.
   kategori?: string;

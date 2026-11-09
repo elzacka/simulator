@@ -11,7 +11,7 @@ systemer:
     navn: UPS
     gruppe: 3
     col: 0
-    ikon: bolt
+    ikon: battery_charging_full
   hvac:
     navn: "HVAC / Kjøling"
     gruppe: 3
@@ -31,17 +31,17 @@ systemer:
     navn: Nødaggregat
     gruppe: 3
     col: 9
-    ikon: electrical_services
+    ikon: bolt
   aak:
     navn: Adgangskontroll
     gruppe: 2
     col: 0
-    ikon: lock
+    ikon: badge
   TVO:
     navn: "Kamera / NVR"
     gruppe: 2
     col: 1
-    ikon: speed_camera
+    ikon: videocam
   vaktrom:
     navn: Vaktrom
     gruppe: 2
@@ -61,7 +61,7 @@ systemer:
     navn: "Temp-sensor server"
     gruppe: 1
     col: 2
-    ikon: thermostat
+    ikon: device_thermostat
   serverkjoler:
     navn: Serverromkjøling
     gruppe: 1
@@ -76,7 +76,7 @@ systemer:
     navn: "Kjøle-/fryskontroller"
     gruppe: 4
     col: 0
-    ikon: thermostat
+    ikon: developer_board
   kjoledisk:
     navn: "Kjøle-/frysedisk"
     gruppe: 4
@@ -111,7 +111,7 @@ systemer:
     navn: "VVS-/varmestyring"
     gruppe: 3
     col: 3
-    ikon: thermostat
+    ikon: developer_board
   varmtvann:
     navn: Varmtvannsbereder
     gruppe: 3
@@ -131,7 +131,7 @@ systemer:
     navn: Ventilasjonsstyring
     gruppe: 3
     col: 6
-    ikon: air
+    ikon: developer_board
   vifte:
     navn: "Vifte / aggregat"
     gruppe: 3
@@ -151,7 +151,7 @@ systemer:
     navn: "Kjølekontroller blod"
     gruppe: 5
     col: 0
-    ikon: thermostat
+    ikon: developer_board
   blodkjol:
     navn: Blodkjøleskap
     gruppe: 5
@@ -181,10 +181,12 @@ systemer:
 scenarier:
   - id: snmp_ups
     navn: "UPS slått av via SNMP"
-    ikon: bolt
+    ikon: battery_charging_full
     kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
+    virksomhetIkon: dns
     funksjon: "Strømforsyning (UPS)"
+    funksjonIkon: battery_charging_full
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -246,7 +248,9 @@ scenarier:
     ikon: power_off
     kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
+    virksomhetIkon: dns
     funksjon: "Nødstrøm og UPS"
+    funksjonIkon: bolt
     trussel:
       art: Utilsiktet
       kilde: "Naturhendelse og teknisk svikt"
@@ -296,10 +300,12 @@ scenarier:
 
   - id: serverkjoling
     navn: "Serverromkjøling slått av via BACnet"
-    ikon: dns
+    ikon: ac_unit
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Datasenter og serverrom"
+    virksomhetIkon: dns
     funksjon: "Presisjonskjøling (CRAC)"
+    funksjonIkon: ac_unit
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -363,7 +369,9 @@ scenarier:
     ikon: lock_open
     kategori: "Fysisk sikring og nettverk"
     virksomhet: "Lager og offentlig tjenestebygg"
+    virksomhetIkon: warehouse
     funksjon: "Fysisk adgangskontroll"
+    funksjonIkon: badge
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -423,7 +431,9 @@ scenarier:
     ikon: water_heater
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Sykehjem og svømmehall"
+    virksomhetIkon: elderly
     funksjon: "Varmt tappevann"
+    funksjonIkon: water_heater
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -484,7 +494,9 @@ scenarier:
     ikon: air
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Kontorbygg og laboratorium"
+    virksomhetIkon: domain
     funksjon: "Ventilasjon og inneklima"
+    funksjonIkon: air
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -541,10 +553,12 @@ scenarier:
 
   - id: patching
     navn: "Automatisk brannmuroppdatering slår ut kameraene"
-    ikon: construction
+    ikon: videocam_off
     kategori: "Fysisk sikring og nettverk"
     virksomhet: "Virksomhet med videoovervåkning"
+    virksomhetIkon: domain
     funksjon: "Nettverk og kamera"
+    funksjonIkon: videocam
     trussel:
       art: Utilsiktet
       kilde: Feilkonfigurasjon
@@ -605,7 +619,9 @@ scenarier:
     ikon: kitchen
     kategori: "Kjøl og frys"
     virksomhet: Dagligvarebutikk
+    virksomhetIkon: local_grocery_store
     funksjon: "Kjøl og frys (matforsyning)"
+    funksjonIkon: ac_unit
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -674,7 +690,9 @@ scenarier:
     ikon: bloodtype
     kategori: "Kjøl og frys"
     virksomhet: "Sykehus og blodbank"
+    virksomhetIkon: local_hospital
     funksjon: "Kjøl (blod og medisin)"
+    funksjonIkon: ac_unit
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
