@@ -705,7 +705,7 @@ scenarier:
     beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på tre franske blodbanker som i november 2026 fanget temperaturendringen, der butikkene ikke gjorde det."
     deteksjon:
       vedSteg: 3
-      kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket startet"
+      kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket oppsto"
       forsinkelse: "4 minutter"
       overvaket: true
     steg:
