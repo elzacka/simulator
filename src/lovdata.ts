@@ -28,18 +28,28 @@ const HJEMLER: Record<string, string> = {
   "forskrift om miljørettet helsevern": MHV,
 };
 
+const POLITIET = "https://anmeldelse.politiet.no/";
+
+/** Reporting bodies as written in the app → their reporting page. */
+const VARSLING: Record<string, string> = {
+  "politiet": POLITIET,
+  "politianmeldelse": POLITIET,
+  "nsm/ncsc": "https://nsm.no/varsle-nsm/",
+};
+
+const LENKER = { ...HJEMLER, ...VARSLING };
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Longest first, so "§ 12" wins over the bare act name
 const MONSTER = new RegExp(
-  `(${Object.keys(HJEMLER).sort((a, b) => b.length - a.length).map(escape).join("|")})(?![\\d-])`,
+  `(${Object.keys(LENKER).sort((a, b) => b.length - a.length).map(escape).join("|")})(?![\\d-])`,
   "gi",
 );
 
 export type Del = string | { tekst: string; href: string };
 
-/** Splits text into plain parts and citations linked to Lovdata. */
+/** Splits text into plain parts and links: citations to Lovdata, reporting bodies to their reporting page. */
 export function medHjemmelLenker(tekst: string): Del[] {
   return tekst.split(MONSTER).map((del, i) =>
-    i % 2 === 1 ? { tekst: del, href: HJEMLER[del.toLowerCase()] } : del,
+    i % 2 === 1 ? { tekst: del, href: LENKER[del.toLowerCase()] } : del,
   ).filter(d => d !== "");
 }
