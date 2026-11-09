@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@500;600;700&display=swap');
 
 /* ── Design-tokens ── */
 
@@ -41,8 +41,8 @@
   --st-oppdateres: var(--accent);
 
   /* Typografi */
-  --font-ui: 'Public Sans', 'Segoe UI', system-ui, sans-serif;
-  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-ui: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Exo 2', 'Segoe UI', system-ui, sans-serif;
   --text-2xs: 11px;
   --text-xs: 12px;
   --text-sm: 13px;
