@@ -13,6 +13,7 @@ interface Kort {
   tekst: string;
   antall: string;
   aktuell?: boolean;
+  underArbeid?: boolean;
 }
 
 const KORT: Kort[] = [
@@ -28,6 +29,7 @@ const KORT: Kort[] = [
     tittel: "OWASP Top Ten 2025",
     tekst: "Angrepskjeder mot webapplikasjoner: Feil i tilgangskontroll, «injection», feilkonfigurasjon og mer.",
     antall: "10 scenarier",
+    underArbeid: true,
   },
 ];
 
@@ -109,6 +111,14 @@ export default function App() {
                         padding: "1px 8px", borderRadius: "999px", background: "var(--accent-surface)",
                       }}>
                         Aktuelt nå
+                      </span>
+                    )}
+                    {k.underArbeid && (
+                      <span style={{
+                        fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--ink-3)", whiteSpace: "nowrap",
+                        padding: "1px 8px", borderRadius: "999px", border: "1px solid var(--line)",
+                      }}>
+                        Under arbeid
                       </span>
                     )}
                   </div>
