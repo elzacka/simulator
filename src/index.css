@@ -13,6 +13,7 @@
   --ink: #1d1b17;
   --ink-2: #5c564d;
   --ink-3: #716b63;
+  --ink-4: #7a746d; /* faintest text that keeps 4.5:1 on --surface */
   --line: #e4dfd5;
   --line-strong: #d3ccbe;
 
@@ -72,6 +73,7 @@
     --ink: #ecead4;
     --ink-2: #aaa398;
     --ink-3: #989083;
+    --ink-4: #91897d;
     --line: #35322d;
     --line-strong: #46433b;
 
@@ -106,6 +108,7 @@
   --ink: #ecead4;
   --ink-2: #aaa398;
   --ink-3: #989083;
+  --ink-4: #91897d;
   --line: #35322d;
   --line-strong: #46433b;
 

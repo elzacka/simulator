@@ -141,7 +141,7 @@ export default function App() {
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginTop: "2px", marginBottom: "var(--space-2)" }}>
+                    <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-4)", marginTop: "2px", marginBottom: "var(--space-2)" }}>
                       {k.antall}
                     </div>
                     <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.55 }}>
