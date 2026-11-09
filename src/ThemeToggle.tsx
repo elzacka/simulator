@@ -6,14 +6,9 @@ export default function ThemeToggle({ tema, bytt }: { tema: Tema; bytt: () => vo
   const tilMork = tema === "light";
   return (
     <button
-      className="btn-ghost"
+      className="btn btn-ghost btn-ikon"
       onClick={bytt}
       aria-label={tilMork ? "Bytt til mørkt tema" : "Bytt til lyst tema"}
-      style={{
-        border: "1px solid var(--line)", background: "transparent", color: "var(--ink-2)",
-        padding: "6px", borderRadius: "var(--radius-sm)", fontFamily: "inherit",
-        display: "flex", alignItems: "center", justifyContent: "center",
-      }}
     >
       <Icon name={tilMork ? "heroicons/outline/moon" : "heroicons/outline/sun"} size={18} />
     </button>

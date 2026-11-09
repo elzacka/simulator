@@ -114,8 +114,9 @@ export interface SimulatorConfig {
     egenkontroll?: string;
     // Overskrift på den sammenfoldede boksen med ramme og egenkontroll
     detaljerTittel?: string;
-    lenker: { tekst: string; href: string }[];
   };
+  // Faste lenker nederst i forebyggingspanelet, felles for alle scenarier
+  ressurser?: { tekst: string; href: string }[];
 }
 
 interface Props {
@@ -203,11 +204,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
 
         {/* TOPPLINJE */}
         <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", flexWrap: "wrap" }}>
-          <button className="btn-ghost" onClick={onBack} style={{
-            border: "1px solid var(--line)", background: "transparent", color: "var(--ink-2)",
-            padding: "6px 14px", borderRadius: "var(--radius-sm)", fontSize: "var(--text-sm)", fontFamily: "inherit",
-            display: "flex", alignItems: "center", gap: "6px",
-          }}>
+          <button className="btn btn-ghost" onClick={onBack}>
             <Icon name="lucide/arrow-left" size={16} /> {t.tilbake}
           </button>
           <div style={{ display: "flex", flexDirection: "column" }}>
@@ -241,22 +238,11 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               </span>
             )}
             {(done || running) && (
-              <button className="btn-ghost" onClick={nullstill} style={{
-                padding: "var(--space-2) var(--space-3)", fontSize: "var(--text-sm)", fontFamily: "inherit",
-                borderRadius: "var(--radius-sm)", border: "1px solid var(--line)", background: "transparent",
-                color: "var(--ink-2)", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
-              }}>
-                <Icon name="lucide/x" size={14} /> {t.nullstill}
+              <button className="btn btn-ghost" onClick={nullstill}>
+                <Icon name="lucide/x" size={16} /> {t.nullstill}
               </button>
             )}
-            <button className="btn-primary" onClick={simuler} disabled={!kanSimulere} style={{
-              padding: "var(--space-3) var(--space-5)", fontSize: "var(--text-base)", fontFamily: "inherit", fontWeight: 600,
-              borderRadius: "var(--radius-sm)", border: "none",
-              background: kanSimulere ? "var(--accent)" : "var(--line)",
-              color: kanSimulere ? "var(--on-accent)" : "var(--ink-3)",
-              cursor: kanSimulere ? "pointer" : "not-allowed",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
-            }}>
+            <button className="btn btn-primary" onClick={simuler} disabled={!kanSimulere}>
               {running ? (
                 <><Icon name="lucide/loader-circle" size={16} style={{ animation: "spin 1s linear infinite" }} /> {t.simulerer}</>
               ) : done ? (
@@ -356,14 +342,6 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     )}
                   </details>
                 )}
-                <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>
-                  {config.angrepsvektor!.lenker.map((l, i) => (
-                    <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
-                      style={{ fontSize: "var(--text-sm)", color: "var(--accent)", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
-                      <Icon name="lucide/external-link" size={13} /> {l.tekst}
-                    </a>
-                  ))}
-                </div>
               </div>
             )}
           </div>
@@ -562,6 +540,16 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                       style={{ fontSize: "var(--text-sm)", color: "var(--accent)", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
                       <Icon name="lucide/external-link" size={13} /> {config.lenker.etikett(scenario)}
                     </a>
+                  </div>
+                )}
+                {config.ressurser && (
+                  <div style={{ marginTop: "var(--space-3)", paddingTop: "var(--space-2)", borderTop: "1px solid var(--line)", display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {config.ressurser.map((l, i) => (
+                      <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: "var(--text-sm)", color: "var(--accent)", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
+                        <Icon name="lucide/external-link" size={13} /> {l.tekst}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>
