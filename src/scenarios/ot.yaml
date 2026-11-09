@@ -353,7 +353,7 @@ scenarier:
         melding: "Angriperen kobler fra. YABE lukkes, og tilgangen avsluttes. Hele forløpet fra Shodan-funn til utført angrep tok under 10 minutter, uten pålogging og uten spor i et påloggingssystem."
     tiltak:
       forebygging:
-        - "Ta BMS/SD-anlegget av internett. BACnet (UDP 47808) skal aldri være eksponert. Fjernservice går via VPN eller en sikret mellomløsning."
+        - "Ta SD-anlegget av internett. BACnet (UDP 47808) skal aldri være eksponert. Fjernservice går via VPN med flerfaktorautentisering eller en sikret mellomløsning."
         - "Blokker UDP 47808 på sonegrensene, og begrens WriteProperty til BMS-operatørens arbeidsstasjon."
         - "Bruk BACnet/SC (TLS) der det støttes, og hold bacnet-stack og styringsprogramvare oppdatert mot kjente sårbarheter."
         - "Overvåk serverromtemperaturen uavhengig av BMS, med egen sensor og alarm til døgnbemannet drift."
@@ -415,7 +415,7 @@ scenarier:
         lovkrav: "Digitalsikkerhetsforskriften: Sikkerhetstiltak (hvis omfattet)"
     tiltak:
       forebygging:
-        - "Ta adgangskontroll og dørstyring av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
+        - "Ta adgangskontroll og dørstyring av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
         - "Bytt fabrikkpassord og krev sterk pålogging. Slå av grensesnitt og tjenester som ikke er i bruk."
         - "Loggfør adgang uavhengig av kontrolleren, så en opplåsing ikke kan skjules ved å endre loggen lokalt."
         - "Sett opp alarm på opplåsing utenfor åpningstid, og koble den til vakt som faktisk følger med."
@@ -478,7 +478,7 @@ scenarier:
         lovkrav: "Forskrift om miljørettet helsevern kap. 3a: Legionella"
     tiltak:
       forebygging:
-        - "Ta VVS- og varmestyring av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
+        - "Ta VVS- og varmestyring av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
         - "Lås settpunktet for varmtvann innenfor trygge grenser, og krev pålogging for å endre det."
         - "Overvåk varmtvannstemperaturen uavhengig av styringen, med egen sensor og alarm ved for lav temperatur."
         - "Følg rutinene for legionellakontroll i forskrift om miljørettet helsevern, og øv på termisk desinfeksjon."
@@ -540,7 +540,7 @@ scenarier:
         melding: "I trykk-kontrollerte rom, som laboratorier eller renrom, faller overtrykket. Forurensning kan trekke inn, og prøver eller produksjon må kasseres og valideres på nytt."
     tiltak:
       forebygging:
-        - "Ta ventilasjonsstyring av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
+        - "Ta ventilasjonsstyring av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
         - "Krev pålogging og lås kritiske settpunkter for vifte, trykk og CO2-grenser."
         - "Overvåk CO2 og trykk uavhengig av styringen, med egen alarm."
         - "Sett opp alarm ved stans i luftbehandlingen, særlig for rom med trykk-krav."
@@ -673,7 +673,7 @@ scenarier:
         melding: "Matvarene er ødelagt og må kastes. Butikken tømmer diskene om morgenen. Tapet er økonomisk, og driften forstyrres. Overopphetet utstyr kan i verste fall gi brann- eller vannskade."
     tiltak:
       forebygging:
-        - "Ta kjøle- og fryskontrollere av internett. Fjernservice skal gå gjennom VPN eller en sikret mellomløsning, ikke en åpen port."
+        - "Ta kjøle- og fryskontrollere av internett. Fjernservice skal gå gjennom VPN med flerfaktorautentisering eller en sikret mellomløsning, ikke en åpen port."
         - "Krev pålogging på alt OT-utstyr. Bytt fabrikkpassord, og slå av tjenester anlegget ikke bruker."
         - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
         - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
@@ -736,7 +736,7 @@ scenarier:
     tiltak:
       forebygging:
         - "Overvåk temperaturen uavhengig av styringssystemet, med egen sensor og alarm som når vakt hele døgnet. Dette grepet skiller dette scenarioet fra butikkfryseren."
-        - "Ta kjølekontrolleren av internett. Fjernservice skal gå via VPN eller en sikret mellomløsning."
+        - "Ta kjølekontrolleren av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
         - "Krev pålogging på alt OT-utstyr, bytt fabrikkpassord og slå av tjenester som ikke er i bruk."
         - "Lag en responsrutine for temperaturavvik, så vakt vet hva de skal gjøre når alarmen går."
         - "Segmenter kjølestyring fra kontor- og internett."
