@@ -110,6 +110,8 @@ export interface SimulatorConfig {
     // Felles rammetekst, vist én gang under punktene (den universelle delen som
     // ellers ble gjentatt i hvert scenario).
     ramme?: string;
+    // Felles råd om egenkontroll (Shodan-planens grenser), vist over lenkene.
+    egenkontroll?: string;
     lenker: { tekst: string; href: string }[];
   };
 }
@@ -338,6 +340,9 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 ))}
                 {config.angrepsvektor!.ramme && (
                   <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}>{config.angrepsvektor!.ramme}</div>
+                )}
+                {config.angrepsvektor!.egenkontroll && (
+                  <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}><RikTekst tekst={config.angrepsvektor!.egenkontroll} /></div>
                 )}
                 <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>
                   {config.angrepsvektor!.lenker.map((l, i) => (

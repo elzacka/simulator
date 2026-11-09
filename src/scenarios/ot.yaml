@@ -239,7 +239,7 @@ scenarier:
         - "Slå av SNMPv1 og v2c, og bruk SNMPv3 med autentisering og kryptering (authPriv). Bytt community-strengene og gi bare lesetilgang hvis v1 eller v2c må stå på."
         - "Begrens SNMP-tilgang med IP-basert ACL. Tillat bare dedikerte administrasjonsstasjoner."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri være eksponert mot internett."
-        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:161**, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SNMP-utstyr som svarer fra internett og skal tas ned. Overvåk området videre med Shodan Monitor."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:161**, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SNMP-utstyr som svarer fra internett og skal tas ned. **snmp.location:\"<adresse>\"** finner også UPS-er utenfor eget IP-område, for eksempel hos en driftsleverandør, hvis plasseringen i SNMP-svaret er byggets adresse."
       respons:
         - "Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 hvis virksomheten er omfattet."
         - "Gjennomgå alt nettverkstilkoblet OT-utstyr for fabrikkpassord. Anta at ingen er endret."
@@ -365,7 +365,7 @@ scenarier:
         - "Bruk BACnet/SC (TLS) der det støttes, og hold bacnet-stack og styringsprogramvare oppdatert mot kjente sårbarheter."
         - "Overvåk serverromtemperaturen uavhengig av BMS, med egen sensor og alarm til døgnbemannet drift."
         - "Segmenter SD-anlegget fra IT-nettet, så et kompromittert kontornett ikke kan nå kjølestyringen."
-        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808** finner BACnet-anlegg som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SD-anlegg som skal av nett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808** finner BACnet-anlegg som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SD-anlegg som skal av nett. Slå også på varselet industrial_control_system i Shodan Monitor. Shodan har ikke filter for innholdet i BACnet-svaret, så du kan ikke søke etter byggets navn. Spør leverandøren av SD-anlegget om anlegg de drifter fra egne adresser."
       respons:
         - "Sett kjølesettpunktet tilbake og verifiser hele priority array mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble SD-anlegget fra internett til arkitekturen er sikret."
@@ -431,7 +431,7 @@ scenarier:
         - "Loggfør adgang uavhengig av kontrolleren, så en opplåsing ikke kan skjules ved å endre loggen lokalt."
         - "Sett opp alarm på opplåsing utenfor åpningstid, og koble den til vakt som faktisk følger med."
         - "Segmenter adgangskontroll fra kontor- og internett, og skjerm serverrom som egen sone."
-        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:80,443 has_screenshot:true** viser internettvendte styringer med innloggingsbilde, der <ditt nett> er virksomhetens IP-område. Hvert treff med en adgangskontroll er en styring som skal av nett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:80,443 has_screenshot:true** viser internettvendte styringer med innloggingsbilde, der <ditt nett> er virksomhetens IP-område. Hvert treff med en adgangskontroll er en styring som skal av nett. Skjermbildet i treffet viser hvilken styring det er, så du trenger ikke logge inn for å finne ut av det."
       respons:
         - "Lås dørene manuelt, tilbakestill dørplanen og verifiser alle skrivbare verdier mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett til arkitekturen er sikret."
@@ -497,7 +497,7 @@ scenarier:
         - "Overvåk varmtvannstemperaturen uavhengig av styringen, med egen sensor og alarm ved for lav temperatur."
         - "Følg rutinene for legionellakontroll i forskrift om miljørettet helsevern, og øv på termisk desinfeksjon."
         - "Segmenter VVS fra kontor- og internett."
-        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner VVS-styring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner VVS-styring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned. Slå også på varselet industrial_control_system i Shodan Monitor."
       respons:
         - "Sett varmtvannstemperaturen tilbake til trygg verdi og verifiser mot baseline."
         - "Gjennomfør termisk eller kjemisk desinfeksjon, og steng berørte tappepunkter til prøvene er klare."
@@ -562,7 +562,7 @@ scenarier:
         - "Overvåk CO2 og trykk uavhengig av styringen, med egen alarm."
         - "Sett opp alarm ved stans i luftbehandlingen, særlig for rom med trykk-krav."
         - "Segmenter ventilasjon fra kontor- og internett."
-        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner ventilasjonsstyring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner ventilasjonsstyring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned. Slå også på varselet industrial_control_system i Shodan Monitor."
       respons:
         - "Start ventilasjonen manuelt og verifiser settpunktene mot baseline."
         - "Luft ut eller tøm rom med høy CO2, og vurder helsen til dem som var til stede."
@@ -702,7 +702,7 @@ scenarier:
         - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
         - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
         - "Oppdater fastvaren. Bytt ut utgåtte modeller (får ikke sikkerhetsoppdateringer)."
-        - "Søk jevnlig etter eget utstyr i Shodan, og ta ned det som er eksponert. For Danfoss-styringer: **net:<ditt nett> http.title:StoreView**. Mer generelt viser **net:<ditt nett> port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Ta stedsnavn ut av enhetsnavnene."
+        - "Søk jevnlig etter eget utstyr i Shodan, og ta ned det som er eksponert. For Danfoss-styringer: **net:<ditt nett> http.title:StoreView**. Mer generelt viser **net:<ditt nett> port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Ta stedsnavn ut av enhetsnavnene. Membership har ikke filteret vuln, så du kan ikke søke etter kontrollere med CVE-2025-41450. Sjekk fastvaren på hver AK-SM 800A og oppdater til 4.3.1 eller nyere."
         - "Still sikkerhetskrav ved innkjøp. For trådløst utstyr krever radioutstyrforskriften § 6 fra 01.08.25 at utstyret ikke skader nettet, beskytter personopplysninger og personvern og hindrer svindel (RED art. 3.3 bokstav d, e og f). For nettilkoblet utstyr gjelder det bare når utstyret behandler person-, trafikk- eller lokasjonsdata. Nkom fører tilsyn."
         - "EUs Cyber Resilience Act (CRA) stiller tilsvarende krav til alle produkter med digitale elementer, også kablet utstyr som kjølekontrollere, og krever blant annet at utstyret leveres uten fabrikkpassord og med støtte for sikkerhetsoppdateringer. Den får full virkning i EU 11.12.27, men er ennå ikke tatt inn i EØS-avtalen. (Status per 09.11.26.)"
       respons:
