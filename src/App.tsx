@@ -1,12 +1,11 @@
 import { useState } from "react";
 import OTSimulator from "./OTSimulator";
-import RisikoSimulator from "./RisikoSimulator";
 import OwaspSimulator from "./OwaspSimulator";
 import Icon from "./Icon";
 import ThemeToggle from "./ThemeToggle";
 import { useTheme } from "./theme";
 
-type Page = "start" | "ot" | "risiko" | "owasp";
+type Page = "start" | "ot" | "owasp";
 
 interface Kort {
   id: Exclude<Page, "start">;
@@ -14,8 +13,6 @@ interface Kort {
   tekst: string;
   antall: string;
   aktuell?: boolean;
-  // Gated-kategorier er inaktive i produksjon (GitHub Pages), klikkbare i dev.
-  gated?: boolean;
 }
 
 const KORT: Kort[] = [
@@ -27,13 +24,6 @@ const KORT: Kort[] = [
     aktuell: true,
   },
   {
-    id: "risiko",
-    tittel: "Risiko 2026",
-    tekst: "Uønskede hendelser i anskaffelser og leverandørkjeder. Basert på NSMs risikovurdering for 2026.",
-    antall: "5 scenarier",
-    gated: true,
-  },
-  {
     id: "owasp",
     tittel: "OWASP Top Ten 2025",
     tekst: "Angrepskjeder mot webapplikasjoner: Feil i tilgangskontroll, «injection», feilkonfigurasjon og mer.",
@@ -41,15 +31,11 @@ const KORT: Kort[] = [
   },
 ];
 
-// I produksjon (GitHub Pages) er OT og OWASP aktive; Risiko er skjult.
-const erAktiv = (k: Kort) => !k.gated || !import.meta.env.PROD;
-
 export default function App() {
   const [page, setPage] = useState<Page>("start");
   const theme = useTheme();
 
   if (page === "ot") return <OTSimulator onBack={() => setPage("start")} theme={theme} />;
-  if (page === "risiko") return <RisikoSimulator onBack={() => setPage("start")} theme={theme} />;
   if (page === "owasp") return <OwaspSimulator onBack={() => setPage("start")} theme={theme} />;
 
   return (
@@ -101,57 +87,42 @@ export default function App() {
         </details>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-          {KORT.map(k => {
-            const aktiv = erAktiv(k);
-            return (
-              <button
-                key={k.id}
-                className={aktiv ? "navcard panel" : "panel"}
-                onClick={aktiv ? () => setPage(k.id) : undefined}
-                disabled={!aktiv}
-                aria-disabled={!aktiv}
-                style={{
-                  display: "block", width: "100%", textAlign: "left", fontFamily: "inherit",
-                  padding: "var(--space-4)",
-                  opacity: aktiv ? 1 : 0.55,
-                  cursor: aktiv ? "pointer" : "not-allowed",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: "var(--space-2)", rowGap: "var(--space-1)" }}>
-                      <h2 style={{ fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
-                        {k.tittel}
-                      </h2>
-                      {k.aktuell && aktiv && (
-                        <span style={{
-                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)", whiteSpace: "nowrap",
-                          padding: "1px 8px", borderRadius: "999px", background: "var(--accent-surface)",
-                        }}>
-                          Aktuelt nå
-                        </span>
-                      )}
-                      {!aktiv && (
-                        <span style={{
-                          fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--ink-3)", whiteSpace: "nowrap",
-                          padding: "1px 8px", borderRadius: "999px", border: "1px solid var(--line)",
-                        }}>
-                          Kommer senere
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-4)", marginTop: "2px", marginBottom: "var(--space-2)" }}>
-                      {k.antall}
-                    </div>
-                    <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.55 }}>
-                      {k.tekst}
-                    </p>
+          {KORT.map(k => (
+            <button
+              key={k.id}
+              className="navcard panel"
+              onClick={() => setPage(k.id)}
+              style={{
+                display: "block", width: "100%", textAlign: "left", fontFamily: "inherit",
+                padding: "var(--space-4)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: "var(--space-2)", rowGap: "var(--space-1)" }}>
+                    <h2 style={{ fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
+                      {k.tittel}
+                    </h2>
+                    {k.aktuell && (
+                      <span style={{
+                        fontSize: "var(--text-xs)", fontWeight: 600, color: "var(--accent)", whiteSpace: "nowrap",
+                        padding: "1px 8px", borderRadius: "999px", background: "var(--accent-surface)",
+                      }}>
+                        Aktuelt nå
+                      </span>
+                    )}
                   </div>
-                  {aktiv && <Icon name="lucide/chevron-right" size={20} style={{ color: "var(--ink-3)", flexShrink: 0 }} />}
+                  <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-4)", marginTop: "2px", marginBottom: "var(--space-2)" }}>
+                    {k.antall}
+                  </div>
+                  <p style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", lineHeight: 1.55 }}>
+                    {k.tekst}
+                  </p>
                 </div>
-              </button>
-            );
-          })}
+                <Icon name="lucide/chevron-right" size={20} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
+              </div>
+            </button>
+          ))}
         </div>
 
         <footer style={{ marginTop: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)", fontSize: "var(--text-xs)", color: "var(--ink-3)", lineHeight: 1.6 }}>
