@@ -9,57 +9,57 @@ systemer:
     navn: Leverandørtilgang
     gruppe: 3
     col: 0
-    ikon: link
+    ikon: lucide/handshake
   nettverk:
     navn: "Internt nettverk"
     gruppe: 3
     col: 1
-    ikon: lan
+    ikon: lucide/network
   skytjeneste:
     navn: Skytjenester
     gruppe: 3
     col: 2
-    ikon: cloud
+    ikon: lucide/cloud
   backup:
     navn: Backup
     gruppe: 3
     col: 3
-    ikon: backup
+    ikon: lucide/database-backup
   tilgang:
     navn: Tilgangskontroll
     gruppe: 1
     col: 0
-    ikon: vpn_key
+    ikon: lucide/key-round
   epost:
     navn: E-post
     gruppe: 1
     col: 1
-    ikon: mail
+    ikon: lucide/mail
   fagsystem:
     navn: Fagsystemer
     gruppe: 0
     col: 0
-    ikon: computer
+    ikon: lucide/monitor
   okonomi:
     navn: "Økonomi / lønn"
     gruppe: 0
     col: 1
-    ikon: finance
+    ikon: lucide/banknote
   personopplysninger:
     navn: Personopplysninger
     gruppe: 0
     col: 2
-    ikon: person
+    ikon: lucide/file-user
   fysisk:
     navn: "Fysisk sikring"
     gruppe: 2
     col: 0
-    ikon: domain
+    ikon: lucide/shield-house
 
 scenarier:
   - id: leverandor_angrep
     navn: "Kompromittert IT-leverandør"
-    ikon: link
+    ikon: lucide/handshake
     kort: "Leverandør hackes. Angriperen bruker deres tilgang til å stjele data og penger"
     beskrivelse: "Virksomheten har satt ut IT-drift til en ekstern leverandør uten tilstrekkelige sikkerhetskrav i kontrakten. Leverandøren blir hacket, og angriperen bruker leverandørens legitime tilgang til å kompromittere virksomhetens systemer. Dette scenariet viser hvorfor sikkerhetskrav i anskaffelser er avgjørende."
     steg:
@@ -115,7 +115,7 @@ scenarier:
 
   - id: innsiderisiko
     navn: "Innsiderisiko: «Ola Nordmann»"
-    ikon: person_alert
+    ikon: tabler/user-exclamation
     kort: "Ansatt med sikkerhetsklarering rekrutteres gradvis av fremmed etterretning"
     beskrivelse: "Basert på et scenario fra NSM Risiko 2026. En ansatt med sikkerhetsklarering for HEMMELIG og bred systemtilgang rekrutteres gradvis av en fremmed etterretningstjeneste, via en nær relasjon. Virksomheten mangler rutiner for å oppdage og håndtere situasjonen."
     steg:
@@ -163,7 +163,7 @@ scenarier:
 
   - id: skytjeneste_avbrudd
     navn: "Skytjenesteavbrudd og konsentrasjonsrisiko"
-    ikon: cloud
+    ikon: lucide/cloud-off
     kort: "Én utenlandsk skyleverandør svikter. Hele virksomheten stopper opp"
     beskrivelse: "Virksomheten har samlet e-post, fagsystemer, backup og tilgangsstyring hos én stor utenlandsk skyleverandør. En geopolitisk hendelse fører til at tjenestene begrenses for europeiske kunder. Ingen reserveløsning finnes fordi alt ble anskaffet fra samme leverandør."
     steg:
@@ -216,7 +216,7 @@ scenarier:
 
   - id: fysisk_brist
     navn: "Fysisk inntrengning via adgangskort"
-    ikon: badge
+    ikon: lucide/id-card-lanyard
     kort: "Synlig adgangskort kopieres. Inntrenger stjeler data fra bygget"
     beskrivelse: "En ansatt bærer synlig adgangskort utenfor arbeidsplassen. Kortet fotograferes og kopieres. En inntrenger bruker det falske kortet og «tailgating» (følger tett bak en ansatt) for å komme inn i bygget. Sensitive data stjeles via USB-enhet."
     steg:
@@ -266,7 +266,7 @@ scenarier:
 
   - id: ki_angrep
     navn: "KI-drevet angrep mot innkjøper"
-    ikon: smart_toy
+    ikon: lucide/bot
     kort: "Kunstig intelligens brukes til å lure innkjøpsansvarlig. Deepfake og perfekt norsk"
     beskrivelse: "Trusselaktør bruker kunstig intelligens til å lage perfekt tilpassede phishing-e-poster og deepfake-videosamtaler rettet mot innkjøpsansvarlige. Angrepet utnytter tillit og rutiner i anskaffelsesprosessen for å omdirigere betalinger og stjele forretningshemmeligheter."
     steg:

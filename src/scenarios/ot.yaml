@@ -11,182 +11,182 @@ systemer:
     navn: UPS
     gruppe: 3
     col: 0
-    ikon: battery_charging_full
+    ikon: lucide/battery-charging
   hvac:
     navn: "HVAC / Kjøling"
     gruppe: 3
     col: 1
-    ikon: ac_unit
+    ikon: tabler/air-conditioning
   bms:
     navn: "BMS / SD-anlegg"
     gruppe: 3
     col: 2
-    ikon: rule_settings
+    ikon: tabler/building-cog
   nettstrom:
     navn: "Nettstrøm / inntak"
     gruppe: 3
     col: 8
-    ikon: electric_meter
+    ikon: lucide/utility-pole
   aggregat:
     navn: Nødaggregat
     gruppe: 3
     col: 9
-    ikon: bolt
+    ikon: lucide/engine
   aak:
     navn: Adgangskontroll
     gruppe: 2
     col: 0
-    ikon: badge
+    ikon: lucide/id-card-lanyard
   TVO:
     navn: "Kamera / NVR"
     gruppe: 2
     col: 1
-    ikon: videocam
+    ikon: lucide/cctv
   vaktrom:
     navn: Vaktrom
     gruppe: 2
     col: 2
-    ikon: person_shield
+    ikon: lucide/user-round-shield
   brannmur:
     navn: Brannmur
     gruppe: 1
     col: 0
-    ikon: shield_locked
+    ikon: lucide/brick-wall-fire
   server:
     navn: Servere
     gruppe: 1
     col: 1
-    ikon: dns
+    ikon: lucide/server
   servertemp:
     navn: "Temp-sensor server"
     gruppe: 1
     col: 2
-    ikon: device_thermostat
+    ikon: lucide/thermometer
   serverkjoler:
     navn: Serverromkjøling
     gruppe: 1
     col: 3
-    ikon: ac_unit
+    ikon: tabler/air-conditioning
   fagsystem:
     navn: Fagsystemer
     gruppe: 0
     col: 1
-    ikon: computer
+    ikon: lucide/monitor
   kjolekontroller:
     navn: "Kjøle-/fryskontroller"
     gruppe: 4
     col: 0
-    ikon: developer_board
+    ikon: lucide/cpu
   kjoledisk:
     navn: "Kjøle-/frysedisk"
     gruppe: 4
     col: 1
-    ikon: kitchen
+    ikon: lucide/refrigerator
   fryserom:
     navn: "Fryse-/kjølerom"
     gruppe: 4
     col: 2
-    ikon: ac_unit
+    ikon: lucide/snowflake
   kjoletemp:
     navn: "Temp-sensor kjøl"
     gruppe: 4
     col: 3
-    ikon: device_thermostat
+    ikon: lucide/thermometer
   kjolealarm:
     navn: Temperaturalarm
     gruppe: 4
     col: 4
-    ikon: notification_important
+    ikon: lucide/bell-ring
   matvarer:
     navn: "Matvarer / varelager"
     gruppe: 4
     col: 5
-    ikon: inventory_2
+    ikon: lucide/shopping-basket
   dorlas:
     navn: "Dørlås / sluse"
     gruppe: 2
     col: 3
-    ikon: door_front
+    ikon: lucide/door-closed-locked
   vvskontroller:
     navn: "VVS-/varmestyring"
     gruppe: 3
     col: 3
-    ikon: developer_board
+    ikon: lucide/cpu
   varmtvann:
     navn: Varmtvannsbereder
     gruppe: 3
     col: 4
-    ikon: water_heater
+    ikon: material/water_heater
   vvstemp:
     navn: "Temp-sensor varmtvann"
     gruppe: 3
     col: 5
-    ikon: device_thermostat
+    ikon: lucide/thermometer
   tappepunkt:
     navn: "Tappepunkter / dusj"
     gruppe: 2
     col: 4
-    ikon: shower
+    ikon: lucide/shower-head
   ventkontroller:
     navn: Ventilasjonsstyring
     gruppe: 3
     col: 6
-    ikon: developer_board
+    ikon: lucide/cpu
   vifte:
     navn: "Vifte / aggregat"
     gruppe: 3
     col: 7
-    ikon: mode_fan
+    ikon: lucide/fan
   co2sensor:
     navn: CO2-sensor
     gruppe: 0
     col: 0
-    ikon: co2
+    ikon: material/co2
   inneklima:
     navn: "Inneklima / ansatte"
     gruppe: 0
     col: 2
-    ikon: groups
+    ikon: lucide/users
   blodkontroller:
     navn: "Kjølekontroller blod"
     gruppe: 5
     col: 0
-    ikon: developer_board
+    ikon: lucide/cpu
   blodkjol:
     navn: Blodkjøleskap
     gruppe: 5
     col: 1
-    ikon: kitchen
+    ikon: lucide/refrigerator
   blodlager:
     navn: Blodlager
     gruppe: 5
     col: 2
-    ikon: bloodtype
+    ikon: material/bloodtype
   blodtemp:
     navn: "Temp-sensor blod"
     gruppe: 5
     col: 3
-    ikon: device_thermostat
+    ikon: lucide/thermometer
   blodalarm:
     navn: "Uavhengig alarm"
     gruppe: 5
     col: 4
-    ikon: notification_important
+    ikon: lucide/bell-ring
   angriper:
     navn: "Angriper (internett)"
     gruppe: -1
     col: 3
-    ikon: person_alert
+    ikon: tabler/spy
 
 scenarier:
   - id: snmp_ups
     navn: "UPS slått av via SNMP"
-    ikon: battery_charging_full
+    ikon: lucide/battery-charging
     kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
-    virksomhetIkon: dns
+    virksomhetIkon: lucide/server
     funksjon: "Strømforsyning (UPS)"
-    funksjonIkon: battery_charging_full
+    funksjonIkon: lucide/battery-charging
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -245,12 +245,12 @@ scenarier:
 
   - id: strombrudd_svikt
     navn: "Strømbrudd og svikt i nødstrøm"
-    ikon: power_off
+    ikon: lucide/zap-off
     kategori: "Strømforsyning og reservekraft"
     virksomhet: "Datasenter og kontorbygg"
-    virksomhetIkon: dns
+    virksomhetIkon: lucide/server
     funksjon: "Nødstrøm og UPS"
-    funksjonIkon: bolt
+    funksjonIkon: lucide/zap
     trussel:
       art: Utilsiktet
       kilde: "Naturhendelse og teknisk svikt"
@@ -300,12 +300,12 @@ scenarier:
 
   - id: serverkjoling
     navn: "Serverromkjøling slått av via BACnet"
-    ikon: ac_unit
+    ikon: tabler/air-conditioning
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Datasenter og serverrom"
-    virksomhetIkon: dns
+    virksomhetIkon: lucide/server
     funksjon: "Presisjonskjøling (CRAC)"
-    funksjonIkon: ac_unit
+    funksjonIkon: tabler/air-conditioning
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -366,12 +366,12 @@ scenarier:
 
   - id: adgangskontroll
     navn: "Dører låst opp via adgangskontrollen"
-    ikon: lock_open
+    ikon: lucide/door-open
     kategori: "Fysisk sikring og nettverk"
     virksomhet: "Lager og offentlig tjenestebygg"
-    virksomhetIkon: warehouse
+    virksomhetIkon: lucide/warehouse
     funksjon: "Fysisk adgangskontroll"
-    funksjonIkon: badge
+    funksjonIkon: lucide/id-card-lanyard
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -428,12 +428,12 @@ scenarier:
 
   - id: varme_legionella
     navn: "Senket varmtvannstemperatur gir legionellarisiko"
-    ikon: water_heater
+    ikon: material/water_heater
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Sykehjem og svømmehall"
-    virksomhetIkon: elderly
+    virksomhetIkon: tabler/old
     funksjon: "Varmt tappevann"
-    funksjonIkon: water_heater
+    funksjonIkon: material/water_heater
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -491,12 +491,12 @@ scenarier:
 
   - id: ventilasjon
     navn: "Ventilasjonsaggregat stoppet utenfra"
-    ikon: air
+    ikon: lucide/fan
     kategori: "Byggautomasjon og SD-anlegg"
     virksomhet: "Kontorbygg og laboratorium"
-    virksomhetIkon: domain
+    virksomhetIkon: lucide/building-2
     funksjon: "Ventilasjon og inneklima"
-    funksjonIkon: air
+    funksjonIkon: lucide/fan
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -553,12 +553,12 @@ scenarier:
 
   - id: patching
     navn: "Automatisk brannmuroppdatering slår ut kameraene"
-    ikon: videocam_off
+    ikon: lucide/cctv-off
     kategori: "Fysisk sikring og nettverk"
     virksomhet: "Virksomhet med videoovervåkning"
-    virksomhetIkon: domain
+    virksomhetIkon: lucide/building-2
     funksjon: "Nettverk og kamera"
-    funksjonIkon: videocam
+    funksjonIkon: lucide/cctv
     trussel:
       art: Utilsiktet
       kilde: Feilkonfigurasjon
@@ -616,12 +616,12 @@ scenarier:
 
   - id: kjoleanlegg
     navn: "Kjøleanlegg i dagligvarebutikk manipulert utenfra"
-    ikon: kitchen
+    ikon: lucide/refrigerator
     kategori: "Kjøl og frys"
     virksomhet: Dagligvarebutikk
-    virksomhetIkon: local_grocery_store
+    virksomhetIkon: lucide/store
     funksjon: "Kjøl og frys (matforsyning)"
-    funksjonIkon: ac_unit
+    funksjonIkon: lucide/snowflake
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"
@@ -687,12 +687,12 @@ scenarier:
 
   - id: blodbank
     navn: "Blodbank med uavhengig temperaturovervåkning"
-    ikon: bloodtype
+    ikon: material/bloodtype
     kategori: "Kjøl og frys"
     virksomhet: "Sykehus og blodbank"
-    virksomhetIkon: local_hospital
+    virksomhetIkon: lucide/hospital
     funksjon: "Kjøl (blod og medisin)"
-    funksjonIkon: ac_unit
+    funksjonIkon: lucide/snowflake
     trussel:
       art: Tilsiktet
       kilde: "Ekstern aktør"

@@ -81,7 +81,7 @@ export default function App() {
         <details className="situasjon" style={{ marginBottom: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)" }}>
           <summary className="eyebrow" style={{ color: "var(--accent)", display: "flex", alignItems: "center", gap: "6px" }}>
             <span className="situasjon-chevron" style={{ display: "inline-flex", transition: "transform 0.2s ease" }}>
-              <Icon name="expand_more" size={16} ariaLabel="" />
+              <Icon name="lucide/chevron-down" size={16} />
             </span>
             Situasjonsbilde: Operasjonell teknologi
           </summary>
@@ -148,7 +148,7 @@ export default function App() {
                       {k.tekst}
                     </p>
                   </div>
-                  {aktiv && <Icon name="chevron_right" size={20} ariaLabel="" style={{ color: "var(--ink-3)", flexShrink: 0 }} />}
+                  {aktiv && <Icon name="lucide/chevron-right" size={20} style={{ color: "var(--ink-3)", flexShrink: 0 }} />}
                 </div>
               </button>
             );

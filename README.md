@@ -15,7 +15,8 @@ Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og dig
 - React 19, TypeScript 5.9, Vite 7
 - Scenariodata i YAML (`src/scenarios/`). Tekstfeltene støtter `**fet**` og `*kursiv*`.
 - Lyst standardtema og mørk modus via CSS-variabler
-- Material Symbols Rounded, Public Sans, Source Serif 4
+- Public Sans, Source Serif 4
+- Ikoner som SVG i `src/ikoner/<bibliotek>/` (Lucide, Tabler, Heroicons, Material Symbols), valgt etter hva som passer best. Lisensene ligger ved hvert bibliotek. Bruk i YAML: `ikon: lucide/cctv`
 - GitHub Pages via GitHub Actions
 
 ## Kom i gang

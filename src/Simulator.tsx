@@ -8,9 +8,6 @@ import {
   useScenarioEngine, fg, statusLabel, statusForklaring,
 } from "./scenarioEngine";
 
-// Heroicons 24 solid play-circle (MIT, Tailwind Labs); same symbol as public/favicon.svg
-const PLAY_CIRCLE = "M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm14.024-.983a1.125 1.125 0 0 1 0 1.966l-5.603 3.113A1.125 1.125 0 0 1 9 15.113V8.887c0-.857.921-1.4 1.671-.983l5.603 3.113Z";
-
 /* ── Språkavhengige faste etiketter ── */
 
 interface Tekster {
@@ -206,7 +203,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             padding: "6px 14px", borderRadius: "var(--radius-sm)", fontSize: "var(--text-sm)", fontFamily: "inherit",
             display: "flex", alignItems: "center", gap: "6px",
           }}>
-            <Icon name="arrow_back" size={16} ariaLabel="" /> {t.tilbake}
+            <Icon name="lucide/arrow-left" size={16} /> {t.tilbake}
           </button>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-xl)", fontWeight: 600, color: "var(--ink)", lineHeight: 1.1 }}>{config.tittel}</span>
@@ -225,18 +222,18 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               <span className="eyebrow">{t.scenarioEtikett}</span>
               <span style={{ fontSize: "var(--text-base)", fontWeight: 600, color: "var(--ink)" }}>{scenario ? scenario.navn : t.velgScenario}</span>
             </span>
-            <Icon name={scOpen ? "expand_less" : "expand_more"} size={20} ariaLabel="" style={{ color: "var(--ink-3)", flexShrink: 0 }} />
+            <Icon name={scOpen ? "lucide/chevron-up" : "lucide/chevron-down"} size={20} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
           </button>
 
           <div className="sim-handlinger">
             {running && (
               <span role="status" style={{ color: "var(--accent)", fontSize: "var(--text-sm)", display: "flex", alignItems: "center", gap: "6px" }}>
-                <Icon name="sync" size={14} ariaLabel="" style={{ animation: "spin 1s linear infinite" }} /> {t.pagar}
+                <Icon name="lucide/loader-circle" size={14} style={{ animation: "spin 1s linear infinite" }} /> {t.pagar}
               </span>
             )}
             {done && (
               <span role="status" style={{ color: "var(--danger-ink)", fontSize: "var(--text-sm)", display: "flex", alignItems: "center", gap: "6px" }}>
-                <Icon name="check_circle" size={14} ariaLabel="" /> {t.fullfort(antallBrutt)}
+                <Icon name="lucide/circle-check" size={14} /> {t.fullfort(antallBrutt)}
               </span>
             )}
             {(done || running) && (
@@ -245,7 +242,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 borderRadius: "var(--radius-sm)", border: "1px solid var(--line)", background: "transparent",
                 color: "var(--ink-2)", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
               }}>
-                <Icon name="close" size={14} ariaLabel="" /> {t.nullstill}
+                <Icon name="lucide/x" size={14} /> {t.nullstill}
               </button>
             )}
             <button className="btn-primary" onClick={simuler} disabled={!kanSimulere} style={{
@@ -257,14 +254,12 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               display: "flex", alignItems: "center", justifyContent: "center", gap: "8px",
             }}>
               {running ? (
-                <><Icon name="sync" size={16} ariaLabel="" style={{ animation: "spin 1s linear infinite" }} /> {t.simulerer}</>
+                <><Icon name="lucide/loader-circle" size={16} style={{ animation: "spin 1s linear infinite" }} /> {t.simulerer}</>
               ) : done ? (
-                <><Icon name="replay" size={16} ariaLabel="" /> {t.kjorIgjen}</>
+                <><Icon name="lucide/rotate-ccw" size={16} /> {t.kjorIgjen}</>
               ) : (
                 <>
-                  <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                    <path fillRule="evenodd" clipRule="evenodd" d={PLAY_CIRCLE} />
-                  </svg> {t.simuler}
+                  <Icon name="heroicons/solid/play-circle" size={16} /> {t.simuler}
                 </>
               )}
             </button>
@@ -282,7 +277,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                         onClick={() => { velgScenario(sc.id); setScOpen(false); }}
                         style={{ padding: "var(--space-3)", borderRadius: "var(--radius-sm)", border: "1px solid var(--line)", background: "var(--surface-2)", font: "inherit", textAlign: "left" }}>
                         <div style={{ display: "flex", gap: "var(--space-2)", alignItems: "flex-start" }}>
-                          <Icon name={sc.ikon} size={20} fill={valgt === sc.id} ariaLabel="" style={{ color: valgt === sc.id ? "var(--accent)" : "var(--ink-2)", flexShrink: 0 }} />
+                          <Icon name={sc.ikon} size={20} style={{ color: valgt === sc.id ? "var(--accent)" : "var(--ink-2)", flexShrink: 0 }} />
                           <div>
                             <div style={{ fontSize: "var(--text-sm)", fontWeight: 600, color: valgt === sc.id ? "var(--accent)" : "var(--ink)", marginBottom: "2px", lineHeight: 1.35 }}>{sc.navn}</div>
                             <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", lineHeight: 1.45 }}><RikTekst tekst={sc.kort} /></div>
@@ -306,12 +301,12 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "var(--space-3)" }}>
                   {scenario.virksomhet && (
                     <span style={{ fontSize: "var(--text-2xs)", color: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      {scenario.virksomhetIkon && <Icon name={scenario.virksomhetIkon} size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} />} {scenario.virksomhet}
+                      {scenario.virksomhetIkon && <Icon name={scenario.virksomhetIkon} size={12} style={{ color: "var(--ink-3)" }} />} {scenario.virksomhet}
                     </span>
                   )}
                   {scenario.funksjon && (
                     <span style={{ fontSize: "var(--text-2xs)", color: "var(--ink-2)", border: "1px solid var(--line)", borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      {scenario.funksjonIkon && <Icon name={scenario.funksjonIkon} size={12} ariaLabel="" style={{ color: "var(--ink-3)" }} />} {scenario.funksjon}
+                      {scenario.funksjonIkon && <Icon name={scenario.funksjonIkon} size={12} style={{ color: "var(--ink-3)" }} />} {scenario.funksjon}
                     </span>
                   )}
                   {scenario.trussel && (() => {
@@ -319,7 +314,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     const col = tilsiktet ? "var(--danger-ink)" : "var(--st-advarsel)";
                     return (
                       <span style={{ fontSize: "var(--text-2xs)", color: col, border: `1px solid ${col}`, borderRadius: "var(--radius-sm)", padding: "2px 8px", display: "flex", alignItems: "center", gap: "4px" }}>
-                        <Icon name={tilsiktet ? "person_alert" : "report_problem"} size={12} ariaLabel="" /> {scenario.trussel.art}: {scenario.trussel.kilde}
+                        <Icon name={tilsiktet ? "tabler/spy" : "lucide/triangle-alert"} size={12} /> {scenario.trussel.art}: {scenario.trussel.kilde}
                       </span>
                     );
                   })()}
@@ -334,18 +329,18 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             {harVektor && (
               <div className="sim-vektor" style={{ padding: "var(--space-4)" }}>
                 <div className="eyebrow" style={{ marginBottom: "var(--space-2)", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Icon name="travel_explore" size={13} ariaLabel="" style={{ color: "var(--ink-2)" }} /> {config.angrepsvektor!.tittel}
+                  <Icon name="tabler/world-search" size={13} style={{ color: "var(--ink-2)" }} /> {config.angrepsvektor!.tittel}
                 </div>
                 {scenario.angrepsvektor!.map((p, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="chevron_right" size={14} ariaLabel="" style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> {p}
+                    <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> {p}
                   </div>
                 ))}
                 <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>
                   {config.angrepsvektor!.lenker.map((l, i) => (
                     <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"
                       style={{ fontSize: "var(--text-sm)", color: "var(--accent)", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
-                      <Icon name="open_in_new" size={13} ariaLabel="" /> {l.tekst}
+                      <Icon name="lucide/external-link" size={13} /> {l.tekst}
                     </a>
                   ))}
                 </div>
@@ -387,7 +382,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: "3px", textAlign: "center",
                           color: hit ? c : "var(--ink-3)",
                         }}>
-                          <Icon name={info.ikon} size={24} fill={hit} ariaLabel="" />
+                          <Icon name={info.ikon} size={24} />
                           <div style={{ fontSize: "var(--text-xs)", fontWeight: 600, lineHeight: 1.25, color: hit ? c : "var(--ink-2)" }}>{info.navn}</div>
                           <div style={{ fontSize: "var(--text-2xs)", color: hit ? c : "var(--ink-3)" }}>{sl(st)}</div>
                         </div>
@@ -443,7 +438,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                         borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)",
                         color: det!.overvaket ? "var(--accent)" : "var(--ink-2)",
                       }}>
-                        <Icon name="visibility" size={14} ariaLabel="" style={{ flexShrink: 0, marginTop: "2px" }} />
+                        <Icon name="lucide/eye" size={14} style={{ flexShrink: 0, marginTop: "2px" }} />
                         <div style={{ fontSize: "var(--text-2xs)", lineHeight: 1.5 }}>
                           <span style={{ fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em" }}>{t.oppdagetHer}</span>
                           <span style={{ color: "var(--ink-2)" }}> · {det!.kilde}</span>
@@ -463,7 +458,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                           <span style={{ fontSize: "var(--text-2xs)", color: c, fontWeight: 600 }}>{sl(e.status)}</span>
                           {e.lovkrav && (
                             <span style={{ fontSize: "var(--text-2xs)", color: "var(--st-advarsel)", border: "1px solid var(--st-advarsel)", padding: "0 6px", borderRadius: "999px", marginLeft: "auto", display: "flex", alignItems: "center", gap: "3px" }}>
-                              <Icon name="gavel" size={11} ariaLabel="" /> {e.lovkrav}
+                              <Icon name="lucide/gavel" size={11} /> {e.lovkrav}
                             </span>
                           )}
                         </div>
@@ -496,7 +491,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 return (
                   <div>
                     <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginBottom: "2px", display: "flex", alignItems: "center", gap: "4px" }}>
-                      <Icon name="visibility" size={12} ariaLabel="" style={{ color: col }} /> {t.tidUoppdaget}
+                      <Icon name="lucide/eye" size={12} style={{ color: col }} /> {t.tidUoppdaget}
                     </div>
                     <div style={{ fontFamily: "var(--font-display)", color: col, fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{scenario.deteksjon.forsinkelse}</div>
                   </div>
@@ -507,7 +502,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               <div style={{ paddingTop: "var(--space-3)", borderTop: "1px solid var(--danger-line)" }}>
                 {lovkravListe.map((l, i) => (
                   <div key={i} style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", padding: "2px 0", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                    <Icon name="gavel" size={12} ariaLabel="" style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={l} />
+                    <Icon name="lucide/gavel" size={12} style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={l} />
                   </div>
                 ))}
               </div>
@@ -521,11 +516,11 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             {scenario.tiltak.respons && (
               <div className="panel" style={{ padding: "var(--space-4)", animation: "reveal 0.4s ease both" }}>
                 <div className="eyebrow" style={{ marginBottom: "var(--space-3)", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Icon name="crisis_alert" size={13} ariaLabel="" style={{ color: "var(--danger-ink)" }} /> {t.respons}
+                  <Icon name="lucide/siren" size={13} style={{ color: "var(--danger-ink)" }} /> {t.respons}
                 </div>
                 {scenario.tiltak.respons.map((tx, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--danger-ink)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
+                    <Icon name="lucide/arrow-right" size={13} style={{ color: "var(--danger-ink)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
                   </div>
                 ))}
               </div>
@@ -533,11 +528,11 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             {scenario.tiltak.forebygging && (
               <div className="panel" style={{ background: "var(--accent-surface)", padding: "var(--space-4)", animation: "reveal 0.4s ease both" }}>
                 <div className="eyebrow" style={{ color: "var(--accent)", marginBottom: "var(--space-3)", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Icon name="verified_user" size={13} ariaLabel="" style={{ color: "var(--accent)" }} /> {t.forebygging}{config.forebyggingSuffiks ? config.forebyggingSuffiks(scenario) : ""}
+                  <Icon name="lucide/shield-check" size={13} style={{ color: "var(--accent)" }} /> {t.forebygging}{config.forebyggingSuffiks ? config.forebyggingSuffiks(scenario) : ""}
                 </div>
                 {scenario.tiltak.forebygging.map((tx, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="arrow_forward" size={13} ariaLabel="" style={{ color: "var(--accent)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
+                    <Icon name="lucide/arrow-right" size={13} style={{ color: "var(--accent)", flexShrink: 0, marginTop: "3px" }} /> <RikTekst tekst={tx} />
                   </div>
                 ))}
                 {config.lenker && lenkeHref && (
@@ -545,7 +540,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     <div className="eyebrow" style={{ marginBottom: "6px" }}>{config.lenker.tittel}</div>
                     <a href={lenkeHref} target="_blank" rel="noopener noreferrer"
                       style={{ fontSize: "var(--text-sm)", color: "var(--accent)", textDecoration: "none", display: "flex", alignItems: "center", gap: "5px" }}>
-                      <Icon name="open_in_new" size={13} ariaLabel="" /> {config.lenker.etikett(scenario)}
+                      <Icon name="lucide/external-link" size={13} /> {config.lenker.etikett(scenario)}
                     </a>
                   </div>
                 )}
