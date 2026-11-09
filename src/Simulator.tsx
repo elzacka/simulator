@@ -454,7 +454,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                           <span style={{ fontSize: "var(--text-2xs)", color: c, fontWeight: 600 }}>{sl(e.status)}</span>
                           {e.lovkrav && (
                             <span style={{ fontSize: "var(--text-2xs)", color: "var(--st-advarsel)", border: "1px solid var(--st-advarsel)", padding: "0 6px", borderRadius: "999px", marginLeft: "auto", display: "flex", alignItems: "center", gap: "3px" }}>
-                              <Icon name="lucide/gavel" size={11} /> {e.lovkrav}
+                              <Icon name="lucide/gavel" size={11} /> <RikTekst tekst={e.lovkrav} />
                             </span>
                           )}
                         </div>

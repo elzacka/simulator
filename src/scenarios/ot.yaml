@@ -470,12 +470,12 @@ scenarier:
         sys: tappepunkt
         status: kritisk
         melding: "Over flere dager formerer legionella seg i rør, dusjer og sjeldent brukte tappepunkter. Risikoen er usynlig til noen puster inn aerosoler fra en dusj."
-        lovkrav: "Forskrift om miljørettet helsevern kap. 3a: Legionella"
+        lovkrav: "Forskrift om miljørettet helsevern kap. 3a. Krav om å hindre spredning av Legionella via aerosol"
       - tid: 8500
         sys: tappepunkt
         status: nede
         melding: "Smitte kan ikke utelukkes. Bygget må stenge berørte dusjer, varsle kommunelegen og desinfisere anlegget termisk. En kritisk tjeneste for sårbare brukere settes ut av spill."
-        lovkrav: "Forskrift om miljørettet helsevern kap. 3a: Legionella"
+        lovkrav: "Forskrift om miljørettet helsevern kap. 3a. Krav om å hindre spredning av Legionella via aerosol"
     tiltak:
       forebygging:
         - "Ta VVS- og varmestyring av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
@@ -533,7 +533,7 @@ scenarier:
         sys: inneklima
         status: kritisk
         melding: "Lufta blir tung. Ansatte får hodepine og konsentrasjonssvikt, og mange forlater bygget. Driften stopper opp, og leveranser som avhenger av bygget, forsinkes."
-        lovkrav: "Arbeidsplassforskriften § 2-14: Klima, ventilasjon og luftkvalitet"
+        lovkrav: "Arbeidsplassforskriften § 2-14. Klima, ventilasjon, luftkvalitet mv."
       - tid: 8500
         sys: inneklima
         status: kritisk
@@ -666,7 +666,7 @@ scenarier:
         sys: matvarer
         status: kritisk
         melding: "Matvarene har vært over trygg temperatur for lenge og er ikke lenger trygge å selge."
-        lovkrav: "Næringsmiddelhygieneforskriften § 12: Lett bedervelige næringsmidler"
+        lovkrav: "Næringsmiddelhygieneforskriften § 12. Særskilte bestemmelser om lett bedervelige næringsmidler"
       - tid: 12500
         sys: matvarer
         status: odelagt

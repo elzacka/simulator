@@ -340,6 +340,17 @@ details.situasjon[open] .situasjon-chevron {
   border-color: var(--line);
 }
 
+.lovlenke {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lovlenke:hover {
+  text-decoration-thickness: 2px;
+}
+
+.lovlenke:focus-visible,
 .sim-velger:focus-visible,
 .sccard:focus-visible,
 .btn-primary:focus-visible,
