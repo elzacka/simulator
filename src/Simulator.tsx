@@ -20,7 +20,6 @@ interface Tekster {
   visningTom: string;
   loggTittel: string;
   loggTom: string;
-  scenarioEtikett: string;
   velgScenario: string;
   kontekst: string;
   simuler: string;
@@ -47,7 +46,6 @@ const NO: Tekster = {
   visningTom: "Velg et scenario for å se anleggsvisningen",
   loggTittel: "Hendelseslogg",
   loggTom: "Velg et scenario og trykk Simuler",
-  scenarioEtikett: "Scenario",
   velgScenario: "Velg scenario",
   kontekst: "Kontekst",
   simuler: "Simuler",
@@ -74,7 +72,6 @@ const EN: Tekster = {
   visningTom: "Select a scenario to see the system view",
   loggTittel: "Event log",
   loggTom: "Select a scenario and click Simulate",
-  scenarioEtikett: "Scenario",
   velgScenario: "Select scenario",
   kontekst: "Context",
   simuler: "Simulate",
@@ -219,7 +216,6 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
           <button type="button" className="sim-velger" onClick={() => setScOpen(!scOpen)}
             aria-expanded={scOpen} aria-controls="scenarioliste">
             <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", minWidth: 0 }}>
-              <span className="eyebrow">{t.scenarioEtikett}</span>
               <span style={{ fontSize: "var(--text-base)", fontWeight: 600, color: "var(--ink)" }}>{scenario ? scenario.navn : t.velgScenario}</span>
             </span>
             <Icon name={scOpen ? "lucide/chevron-up" : "lucide/chevron-down"} size={20} style={{ color: "var(--ink-3)", flexShrink: 0 }} />
