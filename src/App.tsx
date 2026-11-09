@@ -121,7 +121,7 @@ export default function App() {
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", columnGap: "var(--space-2)", rowGap: "var(--space-1)" }}>
-                      <h2 style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
+                      <h2 style={{ fontSize: "var(--text-lg)", fontWeight: 600, color: "var(--ink)" }}>
                         {k.tittel}
                       </h2>
                       {k.aktuell && aktiv && (

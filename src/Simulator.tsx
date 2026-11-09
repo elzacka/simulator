@@ -206,7 +206,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             <Icon name="lucide/arrow-left" size={16} /> {t.tilbake}
           </button>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontFamily: "var(--font-display)", fontSize: "var(--text-xl)", fontWeight: 600, color: "var(--ink)", lineHeight: 1.1 }}>{config.tittel}</span>
+            <span style={{ fontSize: "var(--text-xl)", fontWeight: 600, color: "var(--ink)", lineHeight: 1.1 }}>{config.tittel}</span>
             <span style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)" }}>{config.undertittel}</span>
           </div>
           <div style={{ marginLeft: "auto" }}>
@@ -480,11 +480,11 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             <div style={{ display: "flex", flexWrap: "wrap", gap: "var(--space-3) var(--space-6)", marginBottom: lovkravListe.length ? "var(--space-3)" : 0 }}>
               <div>
                 <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginBottom: "2px" }}>{t.systemerRammet}</div>
-                <div style={{ fontFamily: "var(--font-display)", color: "var(--danger-ink)", fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{antallBrutt}</div>
+                <div style={{ color: "var(--danger-ink)", fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{antallBrutt}</div>
               </div>
               <div>
                 <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginBottom: "2px" }}>{t.lovkravBerort}</div>
-                <div style={{ fontFamily: "var(--font-display)", color: "var(--st-advarsel)", fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{lovkravListe.length}</div>
+                <div style={{ color: "var(--st-advarsel)", fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{lovkravListe.length}</div>
               </div>
               {scenario?.deteksjon && (() => {
                 const col = scenario.deteksjon.overvaket ? "var(--accent)" : "var(--danger-ink)";
@@ -493,7 +493,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginBottom: "2px", display: "flex", alignItems: "center", gap: "4px" }}>
                       <Icon name="lucide/eye" size={12} style={{ color: col }} /> {t.tidUoppdaget}
                     </div>
-                    <div style={{ fontFamily: "var(--font-display)", color: col, fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{scenario.deteksjon.forsinkelse}</div>
+                    <div style={{ color: col, fontSize: "var(--text-2xl)", fontWeight: 600, lineHeight: 1 }}>{scenario.deteksjon.forsinkelse}</div>
                   </div>
                 );
               })()}
