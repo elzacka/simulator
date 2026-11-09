@@ -112,6 +112,8 @@ export interface SimulatorConfig {
     ramme?: string;
     // Felles råd om egenkontroll (Shodan-planens grenser), vist over lenkene.
     egenkontroll?: string;
+    // Overskrift på den sammenfoldede boksen med ramme og egenkontroll
+    detaljerTittel?: string;
     lenker: { tekst: string; href: string }[];
   };
 }
@@ -338,11 +340,21 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={p} />
                   </div>
                 ))}
-                {config.angrepsvektor!.ramme && (
-                  <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}>{config.angrepsvektor!.ramme}</div>
-                )}
-                {config.angrepsvektor!.egenkontroll && (
-                  <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}><RikTekst tekst={config.angrepsvektor!.egenkontroll} /></div>
+                {(config.angrepsvektor!.ramme || config.angrepsvektor!.egenkontroll) && (
+                  <details className="situasjon" style={{ marginTop: "var(--space-2)" }}>
+                    <summary style={{ fontSize: "var(--text-xs)", color: "var(--accent)", display: "flex", alignItems: "center", gap: "4px" }}>
+                      <span className="situasjon-chevron" style={{ display: "inline-flex", transition: "transform 0.2s ease" }}>
+                        <Icon name="lucide/chevron-down" size={14} />
+                      </span>
+                      {config.angrepsvektor!.detaljerTittel}
+                    </summary>
+                    {config.angrepsvektor!.ramme && (
+                      <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}>{config.angrepsvektor!.ramme}</div>
+                    )}
+                    {config.angrepsvektor!.egenkontroll && (
+                      <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}><RikTekst tekst={config.angrepsvektor!.egenkontroll} /></div>
+                    )}
+                  </details>
                 )}
                 <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>
                   {config.angrepsvektor!.lenker.map((l, i) => (
