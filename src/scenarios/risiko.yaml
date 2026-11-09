@@ -210,7 +210,7 @@ scenarier:
         - "Etabler en offline beredskapsplan for e-post, tilgangsstyring og kritiske fagsystemer som ikke er avhengig av én skyleverandør."
         - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. digitalsikkerhetsforskriften § 8. Risikohåndtering om kontinuitet)."
       respons:
-        - "Aktiver beredskapsplan umiddelbart: alternativ kommunikasjonskanal, manuell innlogging, papirbaserte nødprosedyrer."
+        - "Aktiver beredskapsplan umiddelbart: Alternativ kommunikasjonskanal, manuell innlogging, papirbaserte nødprosedyrer."
         - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
         - "Initier prosess for å anskaffet alternativ eller supplerende tjenesteleverandør for kritiske funksjoner."
 

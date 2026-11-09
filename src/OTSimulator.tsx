@@ -15,7 +15,7 @@ const config: SimulatorConfig = {
     tittel: "Angrepsvektor: Slik nås enheten",
     lenker: [
       { tekst: "Sjekk egne adresser på Shodan", href: "https://www.shodan.io/" },
-      { tekst: "NSM: råd om IKT-sikkerhet", href: "https://nsm.no/" },
+      { tekst: "NSM: Råd om IKT-sikkerhet", href: "https://nsm.no/" },
     ],
   },
 };
