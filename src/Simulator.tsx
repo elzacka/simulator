@@ -333,7 +333,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 </div>
                 {scenario.angrepsvektor!.map((p, i) => (
                   <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> {p}
+                    <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={p} />
                   </div>
                 ))}
                 <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>

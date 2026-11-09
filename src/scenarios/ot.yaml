@@ -192,7 +192,7 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Shodan finner UPS-ens nettverkskort på SNMP (UDP 161). Kortet er eldre og har SNMP slått på fra fabrikken, med community-strengen «private» for skrivetilgang. Ingen har endret den. Nyere kort leveres med SNMP slått av."
+      - "Shodan finner UPS-ens nettverkskort på SNMP (UDP 161) med et søk som **port:161**. Kortet er eldre og har SNMP slått på fra fabrikken, med community-strengen «private» for skrivetilgang. Ingen har endret den. Nyere kort leveres med SNMP slått av."
       - "Et fritt kommandolinjeverktøy som snmpset (Net-SNMP) sender avslåingskommandoen. Ingen pålogging utover community-strengen, ingen kryptering i SNMPv2c."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Standard community-streng «private» → angriperen slår av UPS-en → alt utstyr bak den mister strømmen"
@@ -237,6 +237,7 @@ scenarier:
         - "Slå av SNMPv1 og v2c, og bruk SNMPv3 med autentisering og kryptering (authPriv). Bytt community-strengene og gi bare lesetilgang hvis v1 eller v2c må stå på."
         - "Begrens SNMP-tilgang med IP-basert ACL. Tillat bare dedikerte administrasjonsstasjoner."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri være eksponert mot internett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:161**, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SNMP-utstyr som svarer fra internett og skal tas ned. Overvåk området videre med Shodan Monitor."
       respons:
         - "Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 hvis virksomheten er omfattet."
         - "Gjennomgå alt nettverkstilkoblet OT-utstyr for fabrikkpassord. Anta at ingen er endret."
@@ -310,7 +311,7 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "BMS/SD-anlegget svarer på BACnet-forespørsler (UDP 47808) og er synlig i Shodan, med navn, leverandør, modell og plassering. BACnet/IP har ingen pålogging, så enheten svarer alle som spør."
+      - "BMS/SD-anlegget svarer på BACnet-forespørsler (UDP 47808) og er synlig i Shodan med et søk som **port:47808**, med navn, leverandør, modell og plassering. BACnet/IP har ingen pålogging, så enheten svarer alle som spør."
       - "Et fritt verktøy som YABE (Yet Another BACnet Explorer) kobler til, leser objekttreet og skriver til «commandable» objekter med WriteProperty. Ingen pålogging, ingen kryptering."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Den sikrede varianten BACnet/SC bruker TLS med sertifikater, men krever utstyr som støtter den. Eksponeringen er selve sårbarheten."
     kort: "SD-anlegg eksponert mot internett → settpunktet for kjøling heves til 45 °C → serverrommet overopphetes"
@@ -357,6 +358,7 @@ scenarier:
         - "Bruk BACnet/SC (TLS) der det støttes, og hold bacnet-stack og styringsprogramvare oppdatert mot kjente sårbarheter."
         - "Overvåk serverromtemperaturen uavhengig av BMS, med egen sensor og alarm til døgnbemannet drift."
         - "Segmenter SD-anlegget fra IT-nettet, så et kompromittert kontornett ikke kan nå kjølestyringen."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808** finner BACnet-anlegg som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff er et SD-anlegg som skal av nett."
       respons:
         - "Sett kjølesettpunktet tilbake og verifiser hele priority array mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble SD-anlegget fra internett til arkitekturen er sikret."
@@ -376,7 +378,7 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Shodan finner adgangskontrollerens web-/administrasjonsgrensesnitt (HTTP/HTTPS) åpent mot internett, ofte med fabrikkpassord."
+      - "Shodan finner adgangskontrollerens web-/administrasjonsgrensesnitt (HTTP/HTTPS) åpent mot internett med et søk som **port:80,443 has_screenshot:true**, ofte med fabrikkpassord."
       - "Døren låses opp fra nettleseren eller via enhetens eget API. Ingen BACnet her, bare et styringsgrensesnitt som aldri skulle vært eksponert."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Adgangskontrollen nås fra internett med fabrikkpassord → dørene låses opp om natten → ingen alarm"
@@ -419,6 +421,7 @@ scenarier:
         - "Loggfør adgang uavhengig av kontrolleren, så en opplåsing ikke kan skjules ved å endre loggen lokalt."
         - "Sett opp alarm på opplåsing utenfor åpningstid, og koble den til vakt som faktisk følger med."
         - "Segmenter adgangskontroll fra kontor- og internett, og skjerm serverrom som egen sone."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:80,443 has_screenshot:true** viser internettvendte styringer med innloggingsbilde, der <ditt nett> er virksomhetens IP-område. Hvert treff med en adgangskontroll er en styring som skal av nett."
       respons:
         - "Lås dørene manuelt, tilbakestill dørplanen og verifiser alle skrivbare verdier mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett til arkitekturen er sikret."
@@ -438,7 +441,7 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Varmestyringen er som regel koblet til byggets SD-anlegg. Shodan finner den på BACnet (UDP 47808) eller Modbus TCP (502)."
+      - "Varmestyringen er som regel koblet til byggets SD-anlegg. Shodan finner den på BACnet (UDP 47808) eller Modbus TCP (502) med et søk som **port:47808,502**."
       - "Et fritt verktøy kan skrive settpunktet hvis enheten mangler pålogging. For BACnet er YABE (Yet Another BACnet Explorer) et vanlig eksempel."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "SD-anlegg eksponert mot internett → settpunktet for varmtvann senkes fra 70 til 38 °C → legionella kan vokse i rørnettet"
@@ -482,6 +485,7 @@ scenarier:
         - "Overvåk varmtvannstemperaturen uavhengig av styringen, med egen sensor og alarm ved for lav temperatur."
         - "Følg rutinene for legionellakontroll i forskrift om miljørettet helsevern, og øv på termisk desinfeksjon."
         - "Segmenter VVS fra kontor- og internett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner VVS-styring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned."
       respons:
         - "Sett varmtvannstemperaturen tilbake til trygg verdi og verifiser mot baseline."
         - "Gjennomfør termisk eller kjemisk desinfeksjon, og steng berørte tappepunkter til prøvene er klare."
@@ -501,7 +505,7 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Ventilasjonsaggregatet styres fra byggets SD-anlegg. Shodan finner det på BACnet (UDP 47808) eller Modbus TCP (502)."
+      - "Ventilasjonsaggregatet styres fra byggets SD-anlegg. Shodan finner det på BACnet (UDP 47808) eller Modbus TCP (502) med et søk som **port:47808,502**."
       - "Et fritt verktøy som YABE (BACnet) skriver rett til drift og settpunkt hvis enheten mangler pålogging."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "SD-anlegg eksponert mot internett → aggregatet stoppes → CO2 passerer 1000 ppm, og de ansatte forlater bygget"
@@ -544,6 +548,7 @@ scenarier:
         - "Overvåk CO2 og trykk uavhengig av styringen, med egen alarm."
         - "Sett opp alarm ved stans i luftbehandlingen, særlig for rom med trykk-krav."
         - "Segmenter ventilasjon fra kontor- og internett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:47808,502** finner ventilasjonsstyring på BACnet eller Modbus som svarer fra internett, der <ditt nett> er virksomhetens IP-område. Hvert treff skal tas ned."
       respons:
         - "Start ventilasjonen manuelt og verifiser settpunktene mot baseline."
         - "Luft ut eller tøm rom med høy CO2, og vurder helsen til dem som var til stede."
@@ -626,11 +631,11 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Shodan finner kjøle- og fryskontrolleren på webgrensesnittet (HTTP/HTTPS). Enhetsnavnet røper ofte butikken."
+      - "Shodan finner kjøle- og fryskontrolleren på webgrensesnittet (HTTP/HTTPS), for Danfoss med et søk som **http.title:StoreView**. Enhetsnavnet røper ofte butikken."
       - "Utgåtte modeller som Danfoss AK-SM 800 og AK-SC 355 får ikke sikkerhetsoppdateringer. På AK-SM 800A med eldre fastvare kan angriperen omgå påloggingen (CVE-2025-41450). Myndighetene har ikke offentliggjort hvordan angriperne kom inn i Frankrike i oktober 2026."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
-    kort: "Kjølestyringen eksponert mot internett → settpunktet heves fra +4 til +15 °C → varene må kastes"
-    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer settpunktet og står ofte åpen på internett for fjernservice. En angriper som hever settpunktet, stanser kjølingen. Temperaturen stiger, og matvarene blir ødelagt. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
+    kort: "Kjølestyringen eksponert mot internett → angriperen tvinger på avriming → temperaturen stiger mot 50 °C, og varene må kastes"
+    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer temperatur og avriming og står ofte åpen på internett for fjernservice. En angriper endrer innstillingene, slik at anlegget varmer i stedet for å kjøle. I de franske butikkene steg temperaturen mot 50 °C i løpet av natten, nok til at varer måtte kastes og overopphetet utstyr kunne ta fyr. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
     deteksjon:
       vedSteg: 7
       kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
@@ -644,15 +649,15 @@ scenarier:
       - tid: 1500
         sys: kjolekontroller
         status: manipulert
-        melding: "Angrep: Angriperen omgår påloggingen i webgrensesnittet og hever kjølesettpunktet fra +4 °C til +15 °C. Kontrolleren godtar endringen."
+        melding: "Angrep: Angriperen omgår påloggingen i webgrensesnittet og endrer temperatur- og avrimingsstyringen. Anlegget settes i kontinuerlig avriming med varene inne, slik som i de franske angrepene. Kontrolleren godtar endringen som en vanlig driftskommando."
       - tid: 3000
         sys: fryserom
         status: nede
-        melding: "Kompressor og vifter trappes ned i kjøle- og fryserommet. Anlegget slutter å kjøle, fordi kontrolleren tror måltemperaturen allerede er nådd."
+        melding: "Avrimingsvarmen står på i kjøle- og fryserommet. I stedet for å kjøle varmer anlegget aktivt, og temperaturen stiger raskt."
       - tid: 4500
         sys: kjoletemp
         status: advarsel
-        melding: "Temperaturen i kjøl og frys stiger jevnt. Driftsbildet viser fortsatt «normal drift», fordi settpunktet er endret og ikke brutt."
+        melding: "Temperaturen i kjøl og frys stiger raskt. Driftsbildet viser fortsatt «normal drift», fordi endringen er en gyldig driftskommando og ikke en feil."
       - tid: 6500
         sys: kjolealarm
         status: svekket
@@ -660,7 +665,7 @@ scenarier:
       - tid: 8500
         sys: kjoledisk
         status: kritisk
-        melding: "Kjøle- og frysediskene passerer trygg temperatur. Kjølekjeden er brutt."
+        melding: "Kjøle- og frysediskene passerer trygg temperatur og er på vei mot 50 °C, som i de franske butikkene. Kjølekjeden er brutt."
         lovkrav: "Næringsmiddelhygieneforskriften § 12. Særskilte bestemmelser om lett bedervelige næringsmidler"
       - tid: 10500
         sys: matvarer
@@ -678,8 +683,9 @@ scenarier:
         - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
         - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
         - "Oppdater fastvaren. Danfoss AK-SM 800A trenger versjon 4.3.1 eller nyere. Bytt ut utgåtte modeller som AK-SM 800 og AK-SC 355, fordi de ikke får sikkerhetsoppdateringer."
-        - "Søk jevnlig etter eget utstyr i offentlige søketjenester som Shodan og Censys, og fjern det som er eksponert. Ta stedsnavn ut av enhetsnavnene."
-        - "Still sikkerhetskrav ved innkjøp. RED-kravene gjelder radioutstyr solgt i EØS fra 01.08.25, og EUs Cyber Resilience Act (CRA) får full virkning i EU 11.12.27, men er ennå ikke tatt inn i EØS-avtalen. Nkom fører tilsyn med radioutstyr. (Status per 09.11.26.)"
+        - "Søk jevnlig etter eget utstyr i Shodan og Censys, og ta ned det som er eksponert. For Danfoss-styringer: **net:<ditt nett> http.title:StoreView**. Mer generelt viser **net:<ditt nett> port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Ta stedsnavn ut av enhetsnavnene."
+        - "Still sikkerhetskrav ved innkjøp. For trådløst utstyr krever radioutstyrforskriften § 6 fra 01.08.25 at utstyret ikke skader nettet, beskytter personopplysninger og personvern og hindrer svindel (RED art. 3.3 bokstav d, e og f). For nettilkoblet utstyr gjelder det bare når utstyret behandler person-, trafikk- eller lokasjonsdata. Nkom fører tilsyn."
+        - "EUs Cyber Resilience Act (CRA) stiller tilsvarende krav til alle produkter med digitale elementer, også kablet utstyr som kjølekontrollere, og krever blant annet at utstyret leveres uten fabrikkpassord og med støtte for sikkerhetsoppdateringer. Den får full virkning i EU 11.12.27, men er ennå ikke tatt inn i EØS-avtalen. (Status per 09.11.26.)"
       respons:
         - "Sett kjøle- og frysesettpunktene tilbake til riktig verdi manuelt, og kontroller alle skrivbare verdier, også avrimingsplanen, mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett inntil arkitekturen er sikret."
@@ -699,11 +705,11 @@ scenarier:
       kilde: "Ekstern aktør"
     eksponert: true
     angrepsvektor:
-      - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på webgrensesnittet (HTTP/HTTPS)."
+      - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på webgrensesnittet (HTTP/HTTPS) med et søk som **http.title:StoreView** eller **has_screenshot:true** på portene 80 og 443."
       - "Angriperen endrer settpunktet utenfra, akkurat som mot butikkfryseren. Forskjellen ligger ikke i angrepet, men i hva som fanger det opp."
       - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Samme angrep som mot butikken, men en uavhengig alarm varsler vakten i løpet av minutter"
-    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på tre franske blodbanker som i november 2026 fanget temperaturendringen, der butikkene ikke gjorde det."
+    beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på tre franske blodbanker som i november 2026 fanget temperaturendringen, der butikkene ikke gjorde det. I angrepet 02.11.26 forsøkte angriperne å varme blodkjøleskap mot 110 °C, men personalet grep inn."
     deteksjon:
       vedSteg: 3
       kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket oppsto"
@@ -717,7 +723,7 @@ scenarier:
       - tid: 1500
         sys: blodkontroller
         status: manipulert
-        melding: "Angrep: Angriperen hever settpunktet utenfra til en verdi over trygg grense. Kontrolleren utfører kommandoen uten pålogging, nøyaktig som i butikkangrepet."
+        melding: "Angrep: Angriperen endrer temperatur- og avrimingsstyringen utenfra, slik at lageret varmes over trygg grense. Kontrolleren utfører kommandoen uten pålogging, nøyaktig som i butikkangrepet."
       - tid: 3000
         sys: blodtemp
         status: advarsel
@@ -741,6 +747,7 @@ scenarier:
         - "Krev pålogging på alt OT-utstyr, bytt fabrikkpassord og slå av tjenester som ikke er i bruk."
         - "Lag en responsrutine for temperaturavvik, så vakt vet hva de skal gjøre når alarmen går."
         - "Segmenter kjølestyring fra kontor- og internett."
+        - "Sjekk egen eksponering i Shodan: **net:<ditt nett> port:80,443 has_screenshot:true**, og for Danfoss-styringer **http.title:StoreView**. <ditt nett> er virksomhetens IP-område, og hvert treff er en kjølestyring som svarer fra internett."
       respons:
         - "Koble kontrolleren fra internett, sett settpunktet tilbake og verifiser mot en kjent baseline."
         - "Kontroller blodenhetene mot temperaturloggen og kravene til oppbevaring i blodforskriften § 3-12, og kassér bare det som faktisk var utenfor grensen."

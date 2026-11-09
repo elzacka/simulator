@@ -4,6 +4,7 @@ const DSL = D + "NL/lov/2023-12-20-108";
 const DSF = D + "SF/forskrift/2025-06-20-1131";
 const MHV = D + "SF/forskrift/2003-04-25-486";
 const SIKL = D + "NL/lov/2018-06-01-24";
+const RADIO = D + "SF/forskrift/2016-04-15-377";
 
 /** Citation as written in the app → Lovdata link to that provision. Anchors checked against Lovdata 2026-11-09. */
 const HJEMLER: Record<string, string> = {
@@ -25,6 +26,8 @@ const HJEMLER: Record<string, string> = {
   "digitalsikkerhetsforskriften": DSF,
   "arbeidsplassforskriften § 2-14": `${D}SF/forskrift/2011-12-06-1356/KAPITTEL_2#PARAGRAF_2-14`,
   "næringsmiddelhygieneforskriften § 12": `${D}SF/forskrift/2008-12-22-1623/KAPITTEL_5#PARAGRAF_12`,
+  "radioutstyrforskriften § 6": `${RADIO}/KAPITTEL_2#PARAGRAF_6`,
+  "radioutstyrforskriften": RADIO,
   "forskrift om miljørettet helsevern kap. 3a": `${MHV}/KAPITTEL_4#KAPITTEL_4`,
   "forskrift om miljørettet helsevern": MHV,
   "matloven § 16": `${D}NL/lov/2003-12-19-124/KAPITTEL_3#PARAGRAF_16`,
