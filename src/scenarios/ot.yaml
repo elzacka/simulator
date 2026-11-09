@@ -319,7 +319,7 @@ scenarier:
       - "Et fritt verktøy som YABE (Yet Another BACnet Explorer) kobler til, leser objekttreet og skriver til «commandable» objekter med WriteProperty. Ingen pålogging, ingen kryptering."
       - "Den sikrede varianten BACnet/SC bruker TLS med sertifikater, men krever utstyr som støtter den."
     kort: "SD-anlegg eksponert mot internett → settpunktet for kjøling heves til 45 °C → serverrommet overopphetes"
-    beskrivelse: "Serverrom holdes kjølige av presisjonskjøling (CRAC), styrt gjennom byggets BACnet-baserte SD-anlegg. En angriper kan heve kjølesettpunktet utenfra med et gratis BACnet-verktøy hvis anlegget er eksponert mot internett. Kjølingen stanser, serverrommet overopphetes, og serverne går i termisk nødavstenging. Da faller et kritisk ledd i den digitale infrastrukturen, med tjenester mange andre er avhengige av."
+    beskrivelse: "Serverrom holdes kjølige av presisjonskjøling (CRAC), styrt gjennom byggets BACnet-baserte SD-anlegg. En angriper kan heve kjølesettpunktet utenfra med et gratis BACnet-verktøy hvis anlegget er eksponert mot internett. Serverrommet bærer tjenester som mange andre er avhengige av, så et avbrudd her rammer bredt."
     deteksjon:
       vedSteg: 5
       kilde: "Oppdaget da serverne gikk i termisk nødavstenging og tjenester falt ut"
@@ -581,7 +581,7 @@ scenarier:
       art: Utilsiktet
       kilde: Feilkonfigurasjon
     kort: "Ny fastvare på brannmuren → feil tilgangsregel (ACL) blokkerer kameranettet → ingen opptak og ingen alarm"
-    beskrivelse: "Ikke alle OT-hendelser er angrep. En automatisk firmware-oppdatering på brannmuren legger inn en feil ACL-regel som blokkerer kamerasegmentet. Ingen angriper er involvert, men konsekvensen er reell: Kameraene blir svarte, adgangsloggen stanser, og feilen ligner ikke et kjent angrep, så den må spores fra bunnen. Scenarioet viser den utilsiktede, menneskeskapte trusselen: Endringer uten testing og kontroll."
+    beskrivelse: "Ikke alle OT-hendelser er angrep. En automatisk firmware-oppdatering på brannmuren legger inn en feil ACL-regel som blokkerer kamerasegmentet. Ingen angriper er involvert, men konsekvensen er reell: Kameraene blir svarte, og adgangsloggen stanser. Scenarioet viser den utilsiktede, menneskeskapte trusselen: Endringer uten testing og kontroll."
     deteksjon:
       vedSteg: 4
       kilde: "Vakt oppdaget svarte skjermer under runde og varslet IT-vakt"
@@ -651,7 +651,7 @@ scenarier:
       - "Shodan finner kjøle- og fryskontrolleren på webgrensesnittet (HTTP/HTTPS), for Danfoss med et søk som **http.title:StoreView**. Enhetsnavnet røper ofte butikken."
       - "Utgåtte modeller som Danfoss AK-SM 800 og AK-SC 355 får ikke sikkerhetsoppdateringer. På AK-SM 800A med eldre fastvare kan angriperen omgå påloggingen (CVE-2025-41450)."
     kort: "Kjølestyringen eksponert mot internett → angriperen tvinger på avriming → temperaturen stiger mot 50 °C, og varene må kastes"
-    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer temperatur og avriming og står ofte åpen på internett for fjernservice. En angriper endrer innstillingene, slik at anlegget varmer i stedet for å kjøle. I de franske butikkene steg temperaturen mot 50 °C i løpet av natten, nok til at varer måtte kastes og overopphetet utstyr kunne ta fyr. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
+    beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer temperatur og avriming og er ofte tilgjengelig fra internett for fjernservice. En angriper endrer innstillingene, så anlegget varmer opp lageret. I de franske butikkene steg temperaturen mot 50 °C i løpet av natten, nok til at varer måtte kastes og overopphetet utstyr kunne ta fyr. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
     deteksjon:
       vedSteg: 7
       kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
@@ -748,7 +748,7 @@ scenarier:
       - tid: 3000
         sys: blodtemp
         status: advarsel
-        melding: "Temperaturen i blodlageret begynner å stige. Her sitter en sensor som er uavhengig av styringen, og som måler direkte i lageret."
+        melding: "Temperaturen i blodlageret begynner å stige. Her sitter en egen sensor som måler direkte i lageret, utenom den manipulerte kontrolleren."
       - tid: 4500
         sys: blodalarm
         status: advarsel

@@ -33,6 +33,7 @@ const HJEMLER: Record<string, string> = {
   "forskrift om miljørettet helsevern": MHV,
   "matloven § 16": `${D}NL/lov/2003-12-19-124/KAPITTEL_3#PARAGRAF_16`,
   "blodforskriften § 3-12": `${D}SF/forskrift/2005-02-04-80/KAPITTEL_3#PARAGRAF_3-12`,
+  "sikkerhetsloven": SIKL,
   "sikkerhetsloven § 4-5": `${SIKL}/KAPITTEL_4#PARAGRAF_4-5`,
   "sikkerhetsloven § 5-4": `${SIKL}/KAPITTEL_5#PARAGRAF_5-4`,
   "sikkerhetsloven § 6-4": `${SIKL}/KAPITTEL_6#PARAGRAF_6-4`,

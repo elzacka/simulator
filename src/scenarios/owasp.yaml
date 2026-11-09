@@ -68,6 +68,9 @@ scenarier:
     owasp: "A01:2025"
     kort: "IDOR vulnerability in citizen portal. Unauthorized access to personal data"
     beskrivelse: "A citizen-facing portal lacks server-side authorization checks on its API. By manipulating the user ID parameter in the URL, an attacker can read and modify other citizens' applications, decisions, and personal data. The flaw exists because authorization is enforced only in the frontend, not in the backend API."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: api
@@ -122,6 +125,9 @@ scenarier:
     owasp: "A02:2025"
     kort: "Debug mode in production. Error messages expose infrastructure"
     beskrivelse: "A web application is deployed to production with debug mode enabled. Stack traces, database connection strings, and internal IP addresses are exposed in error messages. The default admin account has not been disabled. Unnecessary services and ports are open."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: webserver
@@ -171,6 +177,9 @@ scenarier:
     owasp: "A03:2025"
     kort: "Compromised npm package. Backdoor deployed via CI/CD pipeline"
     beskrivelse: "A popular npm package used in the organization's web application is compromised via a dependency confusion attack. Malicious code is injected in a patch update and automatically deployed through the CI/CD pipeline without manual review."
+    lovkrav:
+      - "Digitalsikkerhetsloven §§ 7 og 8"
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
     steg:
       - tid: 0
         sys: cicd
@@ -220,6 +229,9 @@ scenarier:
     owasp: "A04:2025"
     kort: "TLS downgrade and unencrypted backup. Personal data exposed in cleartext"
     beskrivelse: "The portal supports outdated TLS versions and weak cipher suites. A MITM attacker on the network downgrades the encryption and intercepts sensitive traffic. Backups are sent unencrypted to external cloud storage, and passwords are hashed with MD5 without salt."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 5 nr. 1 bokstav f, 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: webserver
@@ -270,6 +282,9 @@ scenarier:
     owasp: "A05:2025"
     kort: "SQL injection in search field. Entire database dumped"
     beskrivelse: "The search field in a public-facing service does not validate user input. An attacker uses SQL injection to extract the entire database, including internal case worker data, before escalating to OS command execution via xp_cmdshell."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: portal
@@ -323,6 +338,10 @@ scenarier:
     owasp: "A06:2025"
     kort: "Password reset with sequential tokens. No identity verification by design"
     beskrivelse: "The password reset function was designed without security requirements. Tokens are sequential integers, not cryptographically random strings. The function can be used to enumerate users and reset others' passwords. Rate limiting and notification to the account holder were never considered in the design phase."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
+      - "eForvaltningsforskriften § 15"
     steg:
       - tid: 0
         sys: portal
@@ -373,6 +392,9 @@ scenarier:
     owasp: "A07:2025"
     kort: "Credential stuffing against employee portal. No MFA, no rate limiting"
     beskrivelse: "An employee portal with VPN access lacks multi-factor authentication and rate limiting. An attacker uses leaked username/password pairs from a previous breach to systematically log in as employees. Session IDs are predictable and not invalidated on password change."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: portal
@@ -421,6 +443,9 @@ scenarier:
     owasp: "A08:2025"
     kort: "Insecure deserialization in API. Arbitrary code execution via crafted object"
     beskrivelse: "The REST API accepts Java-serialized objects without validating content or source. An attacker sends a crafted object with a gadget chain targeting an outdated deserialization library. The code executes with the application server's privileges. The CI/CD pipeline lacks signing of deployment artifacts."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven §§ 7 og 8"
     steg:
       - tid: 0
         sys: api
@@ -470,6 +495,11 @@ scenarier:
     owasp: "A09:2025"
     kort: "Undetected breach for 11 weeks. SIEM without rules, logs without an owner"
     beskrivelse: "SIEM is installed, but no correlation rules are configured and no one owns the log monitoring function. The attacker moves laterally for 11 weeks without anyone reacting. The breach is discovered only when ransomware is deployed and services go down. Not by the security monitoring."
+    lovkrav:
+      - "eForvaltningsforskriften § 15"
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven §§ 7 og 8"
+      - "Digitalsikkerhetsforskriften § 13"
     steg:
       - tid: 0
         sys: logg
@@ -526,6 +556,9 @@ scenarier:
     owasp: "A10:2025"
     kort: "Race condition in application processing. Approvals granted without review"
     beskrivelse: "The application API lacks locking mechanisms on critical operations. An attacker sends concurrent requests and exploits a race condition to get applications approved without passing through the review queue. The exception handling is not designed for concurrent failures. Stack traces are exposed and thread pool exhaustion blocks legitimate users."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 7"
     steg:
       - tid: 0
         sys: api

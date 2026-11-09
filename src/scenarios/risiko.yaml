@@ -62,6 +62,11 @@ scenarier:
     ikon: lucide/handshake
     kort: "Leverandør hackes. Angriperen bruker deres tilgang til å stjele data og penger"
     beskrivelse: "Virksomheten har satt ut IT-drift til en ekstern leverandør uten tilstrekkelige sikkerhetskrav i kontrakten. Leverandøren blir hacket, og angriperen bruker leverandørens legitime tilgang til å kompromittere virksomhetens systemer. Dette scenariet viser hvorfor sikkerhetskrav i anskaffelser er avgjørende."
+    lovkrav:
+      - "Digitalsikkerhetsforskriften §§ 8, 14 og 17"
+      - "Personvernforordningen (GDPR) art. 28, 32, 33 og 34"
+      - "Digitalsikkerhetsloven § 8"
+      - "Sikkerhetsloven § 9-2"
     steg:
       - tid: 0
         sys: leverandor
@@ -119,6 +124,9 @@ scenarier:
     ikon: tabler/user-exclamation
     kort: "Ansatt med sikkerhetsklarering rekrutteres gradvis av fremmed etterretning"
     beskrivelse: "Basert på et scenario fra NSM Risiko 2026. En ansatt med sikkerhetsklarering for HEMMELIG og bred systemtilgang rekrutteres gradvis av en fremmed etterretningstjeneste, via en nær relasjon. Virksomheten mangler rutiner for å oppdage og håndtere situasjonen."
+    lovkrav:
+      - "Sikkerhetsloven §§ 4-5, 5-4, 6-4, 8-9 og 8-11"
+      - "Innsynsforskriften § 2"
     steg:
       - tid: 0
         sys: tilgang
@@ -168,6 +176,9 @@ scenarier:
     ikon: lucide/cloud-off
     kort: "Én utenlandsk skyleverandør svikter. Hele virksomheten stopper opp"
     beskrivelse: "Virksomheten har samlet e-post, fagsystemer, backup og tilgangsstyring hos én stor utenlandsk skyleverandør. En geopolitisk hendelse fører til at tjenestene begrenses for europeiske kunder. Ingen reserveløsning finnes fordi alt ble anskaffet fra samme leverandør."
+    lovkrav:
+      - "Digitalsikkerhetsloven §§ 7 og 8"
+      - "Digitalsikkerhetsforskriften §§ 8, 13 og 17"
     steg:
       - tid: 0
         sys: skytjeneste
@@ -221,6 +232,9 @@ scenarier:
     ikon: lucide/id-card-lanyard
     kort: "Synlig adgangskort kopieres. Inntrenger stjeler data fra bygget"
     beskrivelse: "En ansatt bærer synlig adgangskort utenfor arbeidsplassen. Kortet fotograferes og kopieres. En inntrenger bruker det falske kortet og «tailgating» (følger tett bak en ansatt) for å komme inn i bygget. Sensitive data stjeles via USB-enhet."
+    lovkrav:
+      - "Digitalsikkerhetsforskriften § 11"
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
     steg:
       - tid: 0
         sys: fysisk
@@ -271,6 +285,10 @@ scenarier:
     ikon: lucide/bot
     kort: "Kunstig intelligens brukes til å lure innkjøpsansvarlig. Deepfake og perfekt norsk"
     beskrivelse: "Trusselaktør bruker kunstig intelligens til å lage perfekt tilpassede phishing-e-poster og deepfake-videosamtaler rettet mot innkjøpsansvarlige. Angrepet utnytter tillit og rutiner i anskaffelsesprosessen for å omdirigere betalinger og stjele forretningshemmeligheter."
+    lovkrav:
+      - "Personvernforordningen (GDPR) art. 32, 33 og 34"
+      - "Digitalsikkerhetsloven §§ 7 og 8"
+      - "Digitalsikkerhetsforskriften § 17"
     steg:
       - tid: 0
         sys: epost
