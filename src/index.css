@@ -394,7 +394,6 @@ details.situasjon[open] .situasjon-chevron {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-4);
-  align-items: start;
 }
 
 @media (max-width: 860px) {

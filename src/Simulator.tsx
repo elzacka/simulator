@@ -354,7 +354,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             </div>
             <div style={{ padding: "var(--space-2) var(--space-4) var(--space-4)", display: "flex", flexDirection: "column", flex: 1 }}>
               {!scenario ? (
-                <div style={{ padding: "var(--space-5)", textAlign: "center", color: "var(--ink-3)", fontSize: "var(--text-sm)" }}>{t.visningTom}</div>
+                <div style={{ margin: "auto 0", padding: "var(--space-5)", textAlign: "center", color: "var(--ink-3)", fontSize: "var(--text-sm)" }}>{t.visningTom}</div>
               ) : rekkefolge.grupper.map((g, gi) => (
                 <div key={g} style={{
                   paddingTop: "var(--space-3)", marginTop: gi === 0 ? 0 : "var(--space-3)",
@@ -405,7 +405,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
             )}
           </div>
 
-          <div className="panel">
+          <div className="panel" style={{ display: "flex", flexDirection: "column" }}>
             <div className="panel-head" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span>{t.loggTittel}</span>
               {(running || done) && totalSteg > 0 && (
@@ -417,9 +417,9 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                 <div className="progress-track"><div className="progress-fill" style={{ width: `${andel}%` }} /></div>
               </div>
             )}
-            <div ref={logRef} style={{ maxHeight: "520px", overflowY: "auto", padding: "var(--space-2)" }}>
+            <div ref={logRef} style={{ flex: 1, display: "flex", flexDirection: "column", maxHeight: "520px", overflowY: "auto", padding: "var(--space-2)" }}>
               {log.length === 0
-                ? <div style={{ color: "var(--ink-3)", fontSize: "var(--text-sm)", padding: "var(--space-5)", textAlign: "center" }}>{t.loggTom}</div>
+                ? <div style={{ margin: "auto 0", color: "var(--ink-3)", fontSize: "var(--text-sm)", padding: "var(--space-5)", textAlign: "center" }}>{t.loggTom}</div>
                 : log.map((e, i) => {
                   const c = fg(e.status);
                   const aktiv = i === aktivIdx;
