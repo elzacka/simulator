@@ -17,7 +17,6 @@ interface Tekster {
   fullfort: (n: number) => string;
   steg: (n: number, total: number) => string;
   systemstatus: string;
-  visningRamme: string;
   visningTom: string;
   loggTittel: string;
   loggTom: string;
@@ -44,7 +43,6 @@ const NO: Tekster = {
   fullfort: n => `Fullført · ${n} systemer rammet`,
   steg: (n, total) => `Steg ${n} av ${total}`,
   systemstatus: "Systemstatus",
-  visningRamme: "Du ser enhetene i bygget. Det du ikke ser er f.eks den utdaterte programvaren og de åpne portene som gjør dem sårbare.",
   visningTom: "Velg et scenario for å se anleggsvisningen",
   loggTittel: "Hendelseslogg",
   loggTom: "Velg et scenario og trykk Simuler",
@@ -71,7 +69,6 @@ const EN: Tekster = {
   fullfort: n => `Complete · ${n} systems affected`,
   steg: (n, total) => `Step ${n} of ${total}`,
   systemstatus: "System status",
-  visningRamme: "You see the devices in the building. What you do not see is the outdated software and open ports that make them easy to reach.",
   visningTom: "Select a scenario to see the system view",
   loggTittel: "Event log",
   loggTom: "Select a scenario and click Simulate",
@@ -359,10 +356,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
         <div className="sim-to">
           <div className="panel" style={{ display: "flex", flexDirection: "column" }}>
             <div className="panel-head">{config.visningTittel || t.systemstatus}</div>
-            <div style={{ padding: "var(--space-3) var(--space-4) 0", fontSize: "var(--text-xs)", color: "var(--ink-3)", lineHeight: 1.55 }}>
-              {t.visningRamme}
-            </div>
-            <div style={{ padding: "var(--space-2) var(--space-4) var(--space-4)", display: "flex", flexDirection: "column", flex: 1 }}>
+            <div style={{ padding: "var(--space-3) var(--space-4) var(--space-4)", display: "flex", flexDirection: "column", flex: 1 }}>
               {!scenario ? (
                 <div style={{ margin: "auto 0", padding: "var(--space-5)", textAlign: "center", color: "var(--ink-3)", fontSize: "var(--text-sm)" }}>{t.visningTom}</div>
               ) : rekkefolge.grupper.map((g, gi) => (
