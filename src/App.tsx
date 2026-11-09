@@ -156,7 +156,7 @@ export default function App() {
         </div>
 
         <footer style={{ marginTop: "var(--space-6)", paddingTop: "var(--space-4)", borderTop: "1px solid var(--line)", fontSize: "var(--text-xs)", color: "var(--ink-3)", lineHeight: 1.6 }}>
-          Kilder: Faktiske hendelser omtalt i åpne kilder · NSM Risiko 2026 · OWASP Top Ten 2025 · OT/ICS-rammeverk (ISA, NIST, SANS) · Lovdata.no
+          Kilder: Faktiske hendelser omtalt i åpne kilder · NSM Risiko 2026 · OWASP Top Ten 2025 · NIST SP 800-82 (OT-sikkerhet) · Lovdata.no
         </footer>
       </div>
     </div>
