@@ -22,7 +22,7 @@ const KORT: Kort[] = [
   {
     id: "ot",
     tittel: "Operasjonell teknologi",
-    tekst: "Feilkjeder i OT i bygg og anlegg: Bygningsautomatisering (BMS/HVAC), energiforsyning, elektroniske sikringsanlegg og butikkjøling. Tilsiktede og utilsiktede hendelser.",
+    tekst: "Feil- og angrepskjeder i OT i bygg og anlegg: Bygningsautomatisering (BMS/HVAC), energiforsyning, elektroniske sikringsanlegg og butikkjøling. Tilsiktede og utilsiktede hendelser.",
     antall: "9 scenarier",
     aktuell: true,
   },
