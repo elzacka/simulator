@@ -239,7 +239,7 @@ scenarier:
         - "Konfigurer grace period på minst 60 sekunder på UPS-avslåing, så én kommando ikke kobler ut lasten umiddelbart."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri være eksponert mot internett."
       respons:
-        - "Varsle NSM/NCSC etter digitalsikkerhetsloven hvis virksomheten er omfattet. Sjekk varslingspliktene i loven og forskriften."
+        - "Varsle NSM etter digitalsikkerhetsloven hvis virksomheten er omfattet. Sjekk varslingspliktene i loven og forskriften."
         - "Gjennomgå alt nettverkstilkoblet OT-utstyr for fabrikkpassord. Anta at ingen er endret."
         - "Vurder dataintegriteten på servere som ble avsluttet ukontrollert. Sjekk filsystemet ved oppstart."
 
@@ -362,7 +362,7 @@ scenarier:
         - "Sett kjølesettpunktet tilbake og verifiser hele priority array mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble SD-anlegget fra internett til arkitekturen er sikret."
         - "Kontroller serverne for termisk skade og dataintegritet etter nødavstengingen."
-        - "Varsle NSM/NCSC etter digitalsikkerhetsloven hvis virksomheten er omfattet."
+        - "Varsle NSM etter digitalsikkerhetsloven hvis virksomheten er omfattet."
 
   - id: adgangskontroll
     navn: "Dører låst opp via adgangskontrollen"
@@ -424,7 +424,7 @@ scenarier:
         - "Lås dørene manuelt, tilbakestill dørplanen og verifiser alle skrivbare verdier mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett til arkitekturen er sikret."
         - "Gjennomgå kamera og fysiske spor for perioden, og undersøk om noen var inne."
-        - "Meld hendelsen til politiet. Varsle NSM/NCSC hvis virksomheten er omfattet av digitalsikkerhetsloven."
+        - "Meld hendelsen til politiet. Varsle NSM hvis virksomheten er omfattet av digitalsikkerhetsloven."
 
   - id: varme_legionella
     navn: "Senket varmtvannstemperatur gir legionellarisiko"
@@ -487,7 +487,7 @@ scenarier:
         - "Sett varmtvannstemperaturen tilbake til trygg verdi og verifiser mot baseline."
         - "Gjennomfør termisk eller kjemisk desinfeksjon, og steng berørte tappepunkter til prøvene er klare."
         - "Varsle kommunelegen og ta legionellaprøver."
-        - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM/NCSC hvis virksomheten er omfattet."
+        - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM hvis virksomheten er omfattet."
 
   - id: ventilasjon
     navn: "Ventilasjonsaggregat stoppet utenfra"
@@ -549,7 +549,7 @@ scenarier:
         - "Start ventilasjonen manuelt og verifiser settpunktene mot baseline."
         - "Luft ut eller tøm rom med høy CO2, og vurder helsen til dem som var til stede."
         - "For trykk-kontrollerte rom: Vurder forurensning og behov for ny validering."
-        - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM/NCSC hvis virksomheten er omfattet."
+        - "Steng fjerntilgangen, meld hendelsen til politiet og til NSM hvis virksomheten er omfattet."
 
   - id: patching
     navn: "Automatisk brannmuroppdatering slår ut kameraene"
@@ -683,7 +683,7 @@ scenarier:
         - "Sett kjøle- og frysesettpunktene tilbake til riktig verdi manuelt, og kontroller alle skrivbare verdier mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett inntil arkitekturen er sikret."
         - "Kartlegg matvarer som har vært over trygg temperatur, og kassér dem. Dokumentér for mattrygghet og forsikring."
-        - "Meld hendelsen til politiet og til NSM/NCSC. Varehandelen faller stort sett utenfor digitalsikkerhetsloven, men en melding styrker det nasjonale situasjonsbildet."
+        - "Meld hendelsen til politiet og til NSM. Varehandelen faller stort sett utenfor digitalsikkerhetsloven, men en melding styrker det nasjonale situasjonsbildet."
 
   - id: blodbank
     navn: "Blodbank med uavhengig temperaturovervåkning"
@@ -744,4 +744,4 @@ scenarier:
         - "Koble kontrolleren fra internett, sett settpunktet tilbake og verifiser mot en kjent baseline."
         - "Kontroller blodenhetene mot temperaturloggen, og kassér bare det som faktisk var utenfor grensen."
         - "Gjennomgå hvordan kontrolleren ble eksponert, og sikre arkitekturen før den kobles til igjen."
-        - "Meld hendelsen til politiet og til NSM/NCSC. Helsesektoren kan være omfattet av digitalsikkerhetsloven."
+        - "Meld hendelsen til politiet og til NSM. Helsesektoren kan være omfattet av digitalsikkerhetsloven."

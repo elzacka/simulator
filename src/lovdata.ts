@@ -29,20 +29,27 @@ const HJEMLER: Record<string, string> = {
 };
 
 const POLITIET = "https://anmeldelse.politiet.no/";
+const DATATILSYNET = "https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/avvik/";
 
-/** Reporting bodies as written in the app → their reporting page. */
+/** Reporting bodies as written in the app → their reporting page. Checked 2026-11-09. */
 const VARSLING: Record<string, string> = {
   "politiet": POLITIET,
   "politianmeldelse": POLITIET,
-  "nsm/ncsc": "https://nsm.no/varsle-nsm/",
+  "nsm": "https://nsm.no/varsle-nsm/",
+  "pst": "https://www.pst.no/tips-oss/",
+  "datatilsynet": DATATILSYNET,
+  "supervisory authority": DATATILSYNET,
 };
+
+// Mentions of a reporting body that are no call to report to it
+const UNNTAK = ["nsm risiko", "nsm veileder", "pst vurderer"];
 
 const LENKER = { ...HJEMLER, ...VARSLING };
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-// Longest first, so "§ 12" wins over the bare act name
+// Longest first, so "§ 12" wins over the bare act name; whole words only, so "NSMs" stays plain
 const MONSTER = new RegExp(
-  `(${Object.keys(LENKER).sort((a, b) => b.length - a.length).map(escape).join("|")})(?![\\d-])`,
-  "gi",
+  `(?<![\\p{L}\\d])(?!${UNNTAK.map(escape).join("|")})(${Object.keys(LENKER).sort((a, b) => b.length - a.length).map(escape).join("|")})(?![\\p{L}\\d-])`,
+  "giu",
 );
 
 export type Del = string | { tekst: string; href: string };

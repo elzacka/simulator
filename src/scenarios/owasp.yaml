@@ -210,7 +210,7 @@ scenarier:
         - "Implement egress filtering: applications communicate only with known, explicitly allowed destinations."
       respons:
         - "Roll back to last known good version immediately. Isolate the compromised environment."
-        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NCSC according to digitalsikkerhetsloven § 8."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM according to digitalsikkerhetsloven § 8."
         - "Notify affected individuals without undue delay according to GDPR art. 34. Personal data exfiltrated in real time."
         - "Review all dependencies in the SBOM for similar backdoors. Assume all code deployed during the period is compromised."
 
@@ -460,7 +460,7 @@ scenarier:
       respons:
         - "Shut down the exposed API endpoint immediately. Rebuild the application server from a known clean baseline. Not from backup."
         - "Conduct full forensic analysis. Attacker has persistent remote access via reverse shell."
-        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NCSC according to digitalsikkerhetsloven § 8."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM according to digitalsikkerhetsloven § 8."
         - "Notify affected individuals without undue delay according to GDPR art. 34. 9,200 user records including decision data compromised."
 
   - id: logging_failures
@@ -514,7 +514,7 @@ scenarier:
         - "Conduct quarterly tabletop exercises to verify that alerts, escalation, and response plans actually work."
       respons:
         - "Activate incident response immediately. Ransomware requires full isolation of affected systems."
-        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM/NCSC according to digitalsikkerhetsloven § 8."
+        - "Notify the supervisory authority within 72 hours according to GDPR art. 33 and NSM according to digitalsikkerhetsloven § 8."
         - "Notify affected individuals without undue delay according to GDPR art. 34. 45 GB of personal data exfiltrated over 6 weeks."
         - "Assess whether recovery from offline backup or external backup outside the primary provider is possible."
 

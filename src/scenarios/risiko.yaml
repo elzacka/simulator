@@ -111,7 +111,7 @@ scenarier:
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger er berørt."
         - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34. Personopplysninger om ansatte og borgere er kopiert ut."
         - "Kontakt politiet ang. svindelforsøket mot kontonummer. Kontakt banken umiddelbart for å forsøke å stoppe overføringen."
-        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle NSM iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
 
   - id: innsiderisiko
     navn: "Innsiderisiko: «Ola Nordmann»"
@@ -211,7 +211,7 @@ scenarier:
         - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. digitalsikkerhetsforskriften § 8. Risikohåndtering om kontinuitet)."
       respons:
         - "Aktiver beredskapsplan umiddelbart: Alternativ kommunikasjonskanal, manuell innlogging, papirbaserte nødprosedyrer."
-        - "Varsle NSM/NCSC iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle NSM iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
         - "Initier prosess for å anskaffet alternativ eller supplerende tjenesteleverandør for kritiske funksjoner."
 
   - id: fysisk_brist
@@ -309,7 +309,7 @@ scenarier:
         - "Innfør anti-phishing-filtrering og sandboxing av vedlegg. Sett opp DMARC, DKIM og SPF."
       respons:
         - "Kontakt banken umiddelbart for å forsøke å stoppe eller reversere overføringen."
-        - "Varsle politiet og dokumenter deepfake-bevisene. NSM/NCSC varsles iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Varsle politiet og dokumenter deepfake-bevisene. NSM varsles iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
         - "Gjennomfør fullstendig forensisk analyse av nettverket. Bakdøren er aktiv og angriper har fortsatt tilgang."
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger ble eksponert."
         - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34 dersom personopplysninger er kompromittert."
