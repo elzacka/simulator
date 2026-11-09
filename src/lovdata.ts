@@ -28,7 +28,7 @@ const HJEMLER: Record<string, string> = {
   "forskrift om miljørettet helsevern": MHV,
 };
 
-const POLITIET = "https://anmeldelse.politiet.no/";
+const POLITIET = "https://www.politiet.no/rad/datakriminalitet";
 const DATATILSYNET = "https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/avvik/";
 
 /** Reporting bodies as written in the app → their reporting page. Checked 2026-11-09. */
