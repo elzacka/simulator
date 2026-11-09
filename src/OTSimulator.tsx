@@ -9,7 +9,7 @@ const config: SimulatorConfig = {
   lang: "no",
   tittel: "Operasjonell teknologi",
   undertittel: "Bygg og anlegg",
-  visningTittel: "Anleggsvisning",
+  visningTittel: "Visualisering",
   kontekstFot: () => "Basert på hendelsesmønstre for OT i norske bygg og anlegg",
   angrepsvektor: {
     tittel: "Angrepsvektor: Slik nås enheten",
