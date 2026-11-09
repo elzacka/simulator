@@ -322,9 +322,9 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                   <Icon name="tabler/world-search" size={13} style={{ color: "var(--ink-2)" }} /> {config.angrepsvektor!.tittel}
                 </div>
                 {scenario.angrepsvektor!.map((p, i) => (
-                  <div key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", display: "flex", alignItems: "flex-start", gap: "8px", lineHeight: 1.5 }}>
-                    <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={p} />
-                  </div>
+                  <p key={i} style={{ fontSize: "var(--text-sm)", color: "var(--ink-2)", padding: "3px 0", lineHeight: 1.5 }}>
+                    <RikTekst tekst={p} />
+                  </p>
                 ))}
                 {(config.angrepsvektor!.ramme || config.angrepsvektor!.egenkontroll) && (
                   <details className="situasjon" style={{ marginTop: "var(--space-2)" }}>
