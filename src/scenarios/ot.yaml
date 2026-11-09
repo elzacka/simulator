@@ -194,9 +194,11 @@ scenarier:
     angrepsvektor:
       - "Shodan finner UPS-ens nettverkskort på SNMP (UDP 161) med et søk som **port:161**. Kortet er eldre og har SNMP slått på fra fabrikken, med community-strengen «private» for skrivetilgang. Ingen har endret den. Nyere kort leveres med SNMP slått av."
       - "Et fritt kommandolinjeverktøy som snmpset (Net-SNMP) sender avslåingskommandoen. Ingen pålogging utover community-strengen, ingen kryptering i SNMPv2c."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Standard community-streng «private» → angriperen slår av UPS-en → alt utstyr bak den mister strømmen"
     beskrivelse: "En UPS er byggets siste strømlinje for kritisk utstyr. En angriper kan slå den av med én SNMP-kommando hvis nettverkskortet er eksponert mot internett og fortsatt har standard community-streng. Alt som henger på UPS-en, mister strømmen umiddelbart, uten kontrollert nedstenging. Hvis bygget er et kritisk ledd i en verdikjede, stanser også leveransene som avhenger av det."
+    lovkrav:
+      - "Digitalsikkerhetsloven § 8"
+      - "Digitalsikkerhetsforskriften §§ 10, 11 og 17"
     steg:
       - tid: 0
         sys: ups
@@ -256,6 +258,8 @@ scenarier:
       kilde: "Naturhendelse og teknisk svikt"
     kort: "Lynnedslag tar nettstrømmen → nødstrømsaggregatet starter ikke → gamle UPS-batterier er tomme etter få minutter"
     beskrivelse: "Samme strømavhengighet som ved et angrep kan ryke uten noen angriper. Et lynnedslag tar nettstrømmen, nødaggregatet starter ikke, og eldre UPS-batterier holder bare noen minutter. Hendelsen er ikke tilsiktet, men følger av naturhendelse, teknisk svikt og manglende vedlikehold. Konsekvensen er den samme som i UPS-angrepet, og viser at OT-beredskap må tåle mer enn menneskelige trusler."
+    lovkrav:
+      - "Digitalsikkerhetsforskriften § 11"
     steg:
       - tid: 0
         sys: nettstrom
@@ -313,7 +317,7 @@ scenarier:
     angrepsvektor:
       - "BMS/SD-anlegget svarer på BACnet-forespørsler (UDP 47808) og er synlig i Shodan med et søk som **port:47808**, med navn, leverandør, modell og plassering. BACnet/IP har ingen pålogging, så enheten svarer alle som spør."
       - "Et fritt verktøy som YABE (Yet Another BACnet Explorer) kobler til, leser objekttreet og skriver til «commandable» objekter med WriteProperty. Ingen pålogging, ingen kryptering."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Den sikrede varianten BACnet/SC bruker TLS med sertifikater, men krever utstyr som støtter den. Eksponeringen er selve sårbarheten."
+      - "Den sikrede varianten BACnet/SC bruker TLS med sertifikater, men krever utstyr som støtter den."
     kort: "SD-anlegg eksponert mot internett → settpunktet for kjøling heves til 45 °C → serverrommet overopphetes"
     beskrivelse: "Serverrom holdes kjølige av presisjonskjøling (CRAC), styrt gjennom byggets BACnet-baserte SD-anlegg. En angriper kan heve kjølesettpunktet utenfra med et gratis BACnet-verktøy hvis anlegget er eksponert mot internett. Kjølingen stanser, serverrommet overopphetes, og serverne går i termisk nødavstenging. Da faller et kritisk ledd i den digitale infrastrukturen, med tjenester mange andre er avhengige av."
     deteksjon:
@@ -321,6 +325,9 @@ scenarier:
       kilde: "Oppdaget da serverne gikk i termisk nødavstenging og tjenester falt ut"
       forsinkelse: "Under 30 minutter"
       overvaket: false
+    lovkrav:
+      - "Digitalsikkerhetsloven § 8"
+      - "Digitalsikkerhetsforskriften §§ 10 og 17"
     steg:
       - tid: 0
         sys: bms
@@ -380,7 +387,6 @@ scenarier:
     angrepsvektor:
       - "Shodan finner adgangskontrollerens web-/administrasjonsgrensesnitt (HTTP/HTTPS) åpent mot internett med et søk som **port:80,443 has_screenshot:true**, ofte med fabrikkpassord."
       - "Døren låses opp fra nettleseren eller via enhetens eget API. Ingen BACnet her, bare et styringsgrensesnitt som aldri skulle vært eksponert."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Adgangskontrollen nås fra internett med fabrikkpassord → dørene låses opp om natten → ingen alarm"
     beskrivelse: "Adgangskontrollen er bygningens usynlige funksjon for å holde uvedkommende ute. I et bygg som er et kritisk ledd i en leveransekjede, for eksempel et lager eller et offentlig tjenestebygg, blir dørene en fjernstyrt bryter hvis kontrolleren står på internett. En angriper låser opp om natten, og adgangsloggen endres så alt ser normalt ut. Konsekvensen er fysisk innbrudd, tukling med utstyr og tap av sporbarhet."
     deteksjon:
@@ -388,6 +394,10 @@ scenarier:
       kilde: "Oppdaget morgenen etter, ved avvik i varelageret og fysisk kontroll"
       forsinkelse: "Hele natten"
       overvaket: false
+    lovkrav:
+      - "Digitalsikkerhetsloven § 8"
+      - "Digitalsikkerhetsforskriften §§ 11 og 17"
+      - "Personvernforordningen (GDPR) art. 32"
     steg:
       - tid: 0
         sys: aak
@@ -443,7 +453,6 @@ scenarier:
     angrepsvektor:
       - "Varmestyringen er som regel koblet til byggets SD-anlegg. Shodan finner den på BACnet (UDP 47808) eller Modbus TCP (502) med et søk som **port:47808,502**."
       - "Et fritt verktøy kan skrive settpunktet hvis enheten mangler pålogging. For BACnet er YABE (Yet Another BACnet Explorer) et vanlig eksempel."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "SD-anlegg eksponert mot internett → settpunktet for varmtvann senkes fra 70 til 38 °C → legionella kan vokse i rørnettet"
     beskrivelse: "Varmtvannet må holde høy temperatur for å hindre legionella. Helsedirektoratet anbefaler at berederen jevnlig varmes opp til minst 70 °C, og at vannet når minst 60 °C ved tappestedet. I bygg med sårbare brukere, for eksempel sykehjem og svømmehaller, har varmestyringen ofte fjerntilgang for service. En angriper som senker settpunktet, gjør vannet lunkent. Legionella formerer seg i rør og dusjer, og faren er usynlig til noen blir syke. Dette er «når hackerne skrur opp varmen» speilvendt: Her skrus den ned."
     deteksjon:
@@ -451,6 +460,9 @@ scenarier:
       kilde: "Oppdaget da brukere ble syke og prøvene påviste legionella"
       forsinkelse: "Flere dager"
       overvaket: false
+    lovkrav:
+      - "Forskrift om miljørettet helsevern kap. 3a"
+      - "Digitalsikkerhetsloven § 8"
     steg:
       - tid: 0
         sys: vvskontroller
@@ -507,7 +519,6 @@ scenarier:
     angrepsvektor:
       - "Ventilasjonsaggregatet styres fra byggets SD-anlegg. Shodan finner det på BACnet (UDP 47808) eller Modbus TCP (502) med et søk som **port:47808,502**."
       - "Et fritt verktøy som YABE (BACnet) skriver rett til drift og settpunkt hvis enheten mangler pålogging."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "SD-anlegg eksponert mot internett → aggregatet stoppes → CO2 passerer 1000 ppm, og de ansatte forlater bygget"
     beskrivelse: "Ventilasjon går i bakgrunnen og holder lufta pustbar. I noen bygg holder den også trykk, for eksempel i laboratorier eller renrom. Aggregatet har ofte fjerntilgang for service. En angriper som stopper det, får CO2 og fukt til å stige. Folk får hodepine og går hjem, og virksomheten som er avhengig av bygget, stopper opp. I trykk-kontrollerte rom er konsekvensen verre, fordi forurensning kan trekke inn."
     deteksjon:
@@ -515,6 +526,9 @@ scenarier:
       kilde: "Oppdaget da ansatte reagerte på tung luft og hodepine"
       forsinkelse: "Noen timer"
       overvaket: false
+    lovkrav:
+      - "Arbeidsplassforskriften § 2-14"
+      - "Digitalsikkerhetsloven § 8"
     steg:
       - tid: 0
         sys: ventkontroller
@@ -573,6 +587,9 @@ scenarier:
       kilde: "Vakt oppdaget svarte skjermer under runde og varslet IT-vakt"
       forsinkelse: "8 minutter"
       overvaket: false
+    lovkrav:
+      - "Digitalsikkerhetsforskriften § 10"
+      - "Personvernforordningen (GDPR) art. 32"
     steg:
       - tid: 0
         sys: brannmur
@@ -632,8 +649,7 @@ scenarier:
     eksponert: true
     angrepsvektor:
       - "Shodan finner kjøle- og fryskontrolleren på webgrensesnittet (HTTP/HTTPS), for Danfoss med et søk som **http.title:StoreView**. Enhetsnavnet røper ofte butikken."
-      - "Utgåtte modeller som Danfoss AK-SM 800 og AK-SC 355 får ikke sikkerhetsoppdateringer. På AK-SM 800A med eldre fastvare kan angriperen omgå påloggingen (CVE-2025-41450). Myndighetene har ikke offentliggjort hvordan angriperne kom inn i Frankrike i oktober 2026."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
+      - "Utgåtte modeller som Danfoss AK-SM 800 og AK-SC 355 får ikke sikkerhetsoppdateringer. På AK-SM 800A med eldre fastvare kan angriperen omgå påloggingen (CVE-2025-41450)."
     kort: "Kjølestyringen eksponert mot internett → angriperen tvinger på avriming → temperaturen stiger mot 50 °C, og varene må kastes"
     beskrivelse: "I oktober 2026 ble kjøle- og fryseanlegg i flere hundre franske dagligvarebutikker manipulert utenfra, og i november spredte angrepene seg til flere land. Kontrolleren styrer temperatur og avriming og står ofte åpen på internett for fjernservice. En angriper endrer innstillingene, slik at anlegget varmer i stedet for å kjøle. I de franske butikkene steg temperaturen mot 50 °C i løpet av natten, nok til at varer måtte kastes og overopphetet utstyr kunne ta fyr. OT som dette faller mellom IT-sikkerhet og teknisk drift, og bevisstheten om risikoen er lav."
     deteksjon:
@@ -641,6 +657,9 @@ scenarier:
       kilde: "Ansatt oppdaget tint vann på gulvet og ødelagte varer da butikken åpnet om morgenen"
       forsinkelse: "Hele natten"
       overvaket: false
+    lovkrav:
+      - "Næringsmiddelhygieneforskriften § 12"
+      - "Matloven § 16"
     steg:
       - tid: 0
         sys: kjolekontroller
@@ -682,8 +701,8 @@ scenarier:
         - "Krev pålogging på alt OT-utstyr. Bytt fabrikkpassord, og slå av tjenester anlegget ikke bruker."
         - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
         - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
-        - "Oppdater fastvaren. Danfoss AK-SM 800A trenger versjon 4.3.1 eller nyere. Bytt ut utgåtte modeller som AK-SM 800 og AK-SC 355, fordi de ikke får sikkerhetsoppdateringer."
-        - "Søk jevnlig etter eget utstyr i Shodan og Censys, og ta ned det som er eksponert. For Danfoss-styringer: **net:<ditt nett> http.title:StoreView**. Mer generelt viser **net:<ditt nett> port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Ta stedsnavn ut av enhetsnavnene."
+        - "Oppdater fastvaren. Bytt ut utgåtte modeller (får ikke sikkerhetsoppdateringer)."
+        - "Søk jevnlig etter eget utstyr i Shodan, og ta ned det som er eksponert. For Danfoss-styringer: **net:<ditt nett> http.title:StoreView**. Mer generelt viser **net:<ditt nett> port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Ta stedsnavn ut av enhetsnavnene."
         - "Still sikkerhetskrav ved innkjøp. For trådløst utstyr krever radioutstyrforskriften § 6 fra 01.08.25 at utstyret ikke skader nettet, beskytter personopplysninger og personvern og hindrer svindel (RED art. 3.3 bokstav d, e og f). For nettilkoblet utstyr gjelder det bare når utstyret behandler person-, trafikk- eller lokasjonsdata. Nkom fører tilsyn."
         - "EUs Cyber Resilience Act (CRA) stiller tilsvarende krav til alle produkter med digitale elementer, også kablet utstyr som kjølekontrollere, og krever blant annet at utstyret leveres uten fabrikkpassord og med støtte for sikkerhetsoppdateringer. Den får full virkning i EU 11.12.27, men er ennå ikke tatt inn i EØS-avtalen. (Status per 09.11.26.)"
       respons:
@@ -707,7 +726,6 @@ scenarier:
     angrepsvektor:
       - "Samme type kjølekontroller som i butikk kan stå eksponert. Shodan finner den på webgrensesnittet (HTTP/HTTPS) med et søk som **http.title:StoreView** eller **has_screenshot:true** på portene 80 og 443."
       - "Angriperen endrer settpunktet utenfra, akkurat som mot butikkfryseren. Forskjellen ligger ikke i angrepet, men i hva som fanger det opp."
-      - "Angrepet krever verken kode eller programmering, bare en åpen port. Eksponeringen på internett er selve sårbarheten."
     kort: "Samme angrep som mot butikken, men en uavhengig alarm varsler vakten i løpet av minutter"
     beskrivelse: "En blodbank kjøler blod og plasma innenfor strenge grenser. Kontrolleren kan være like eksponert som i en butikk, men blodlageret overvåkes døgnet rundt av en temperatursensor som er uavhengig av styringen. Da avgjør ikke angrepet utfallet, men deteksjonen: Avviket fanges på minutter, vakt rykker ut, og blodet reddes. Scenarioet speiler butikkfryseren og viser hva overvåkning utgjør. Det bygger på tre franske blodbanker som i november 2026 fanget temperaturendringen, der butikkene ikke gjorde det. I angrepet 02.11.26 forsøkte angriperne å varme blodkjøleskap mot 110 °C, men personalet grep inn."
     deteksjon:
@@ -715,6 +733,9 @@ scenarier:
       kilde: "Uavhengig temperaturovervåkning varslet døgnbemannet vakt straks avviket oppsto"
       forsinkelse: "4 minutter"
       overvaket: true
+    lovkrav:
+      - "Blodforskriften § 3-12"
+      - "Digitalsikkerhetsloven § 8"
     steg:
       - tid: 0
         sys: blodkontroller

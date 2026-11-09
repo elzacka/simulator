@@ -13,6 +13,7 @@ const config: SimulatorConfig = {
   kontekstFot: () => "Basert på hendelsesmønstre for OT i norske bygg og anlegg",
   angrepsvektor: {
     tittel: "Angrepsvektor: Slik nås enheten",
+    ramme: "Ingen av angrepene krever kode eller programmering. Den åpne porten mot internett er selve sårbarheten.",
     lenker: [
       { tekst: "Sjekk egne adresser på Shodan", href: "https://www.shodan.io/" },
       { tekst: "NIST: Guide to Operational Technology (OT) Security", href: "https://csrc.nist.gov/pubs/sp/800/82/r4/ipd" },

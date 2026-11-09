@@ -8,6 +8,7 @@ const RADIO = D + "SF/forskrift/2016-04-15-377";
 
 /** Citation as written in the app → Lovdata link to that provision. Anchors checked against Lovdata 2026-11-09. */
 const HJEMLER: Record<string, string> = {
+  "personvernforordningen": `${D}NL/lov/2018-06-15-38/gdpr`,
   "gdpr art. 5 nr. 1 bokstav f": `${GDPR}5#gdpr/ARTIKKEL_5`,
   "gdpr art. 28": `${GDPR}28#gdpr/ARTIKKEL_28`,
   "gdpr art. 32": `${GDPR}32#gdpr/ARTIKKEL_32`,
@@ -44,7 +45,7 @@ const HJEMLER: Record<string, string> = {
 
 // Apply only to some kinds of organisation, or only when the incident affects certain things
 const AVHENGIG = [
-  "digitalsikkerhetsloven", "digitalsikkerhetsforskriften", "sikkerhetsloven", "eforvaltningsforskriften", "gdpr",
+  "digitalsikkerhetsloven", "digitalsikkerhetsforskriften", "sikkerhetsloven", "eforvaltningsforskriften", "gdpr", "personvernforordningen",
   "blodforskriften", "matloven", "næringsmiddelhygieneforskriften", "forskrift om miljørettet helsevern",
 ];
 

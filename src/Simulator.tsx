@@ -110,6 +110,9 @@ export interface SimulatorConfig {
   // (scenario.angrepsvektor), siden protokoll, port og verktøy varierer.
   angrepsvektor?: {
     tittel: string;
+    // Felles rammetekst, vist én gang under punktene (den universelle delen som
+    // ellers ble gjentatt i hvert scenario).
+    ramme?: string;
     lenker: { tekst: string; href: string }[];
   };
 }
@@ -336,6 +339,9 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                     <Icon name="lucide/chevron-right" size={14} style={{ color: "var(--ink-3)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={p} />
                   </div>
                 ))}
+                {config.angrepsvektor!.ramme && (
+                  <div style={{ fontSize: "var(--text-2xs)", color: "var(--ink-3)", marginTop: "var(--space-2)", lineHeight: 1.5 }}>{config.angrepsvektor!.ramme}</div>
+                )}
                 <div style={{ marginTop: "var(--space-3)", display: "flex", flexDirection: "column", gap: "4px" }}>
                   {config.angrepsvektor!.lenker.map((l, i) => (
                     <a key={i} href={l.href} target="_blank" rel="noopener noreferrer"

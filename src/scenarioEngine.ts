@@ -34,6 +34,9 @@ export interface Scenario {
   deteksjon?: { vedSteg: number; kilde: string; forsinkelse: string; overvaket?: boolean };
   steg: Steg[];
   tiltak?: { forebygging?: string[]; respons?: string[] };
+  // Fullt register av berørte lover og hjemler for det røde feltet. Egen liste,
+  // ikke bare steg-pillene, så varsling og personvern kommer med.
+  lovkrav?: string[];
 }
 
 export interface LoggInnslag extends Steg {
@@ -219,7 +222,7 @@ export function useScenarioEngine(scenarier: Scenario[]) {
 
   const scenario = scenarier.find(s => s.id === valgt);
   const antallBrutt = Object.values(statuses).filter(s => BRUTT_STATUSER.includes(s)).length;
-  const lovkravListe = [...new Set(log.flatMap(l => (l.lovkrav ? [l.lovkrav] : [])))];
+  const lovkravListe = scenario?.lovkrav ?? [...new Set(log.flatMap(l => (l.lovkrav ? [l.lovkrav] : [])))];
 
   return {
     valgt, running, done, statuses, log, aktivIdx, logRef,
