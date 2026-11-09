@@ -38,11 +38,10 @@ const KORT: Kort[] = [
     tittel: "OWASP Top Ten 2025",
     tekst: "Angrepskjeder mot webapplikasjoner: Feil i tilgangskontroll, «injection», feilkonfigurasjon og mer.",
     antall: "10 scenarier",
-    gated: true,
   },
 ];
 
-// I produksjon (GitHub Pages) er bare OT aktiv.
+// I produksjon (GitHub Pages) er OT og OWASP aktive; Risiko er skjult.
 const erAktiv = (k: Kort) => !k.gated || !import.meta.env.PROD;
 
 export default function App() {
