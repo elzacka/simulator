@@ -15,6 +15,7 @@ const config: SimulatorConfig = {
     tittel: "Angrepsvektor: Slik nås enheten",
     lenker: [
       { tekst: "Sjekk egne adresser på Shodan", href: "https://www.shodan.io/" },
+      { tekst: "NIST: Guide to Operational Technology (OT) Security", href: "https://csrc.nist.gov/pubs/sp/800/82/r4/ipd" },
       { tekst: "NSM: Grunnprinsipper for IKT-sikkerhet", href: "https://nsm.no/regelverk-og-hjelp/rad-og-anbefalinger/ta-i-bruk-grunnprinsippene/" },
     ],
   },
