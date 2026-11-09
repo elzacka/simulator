@@ -3,6 +3,7 @@ const GDPR = D + "NL/lov/2018-06-15-38/gdpr/ARTIKKEL_";
 const DSL = D + "NL/lov/2023-12-20-108";
 const DSF = D + "SF/forskrift/2025-06-20-1131";
 const MHV = D + "SF/forskrift/2003-04-25-486";
+const SIKL = D + "NL/lov/2018-06-01-24";
 
 /** Citation as written in the app → Lovdata link to that provision. Anchors checked against Lovdata 2026-11-09. */
 const HJEMLER: Record<string, string> = {
@@ -26,6 +27,13 @@ const HJEMLER: Record<string, string> = {
   "næringsmiddelhygieneforskriften § 12": `${D}SF/forskrift/2008-12-22-1623/KAPITTEL_5#PARAGRAF_12`,
   "forskrift om miljørettet helsevern kap. 3a": `${MHV}/KAPITTEL_4#KAPITTEL_4`,
   "forskrift om miljørettet helsevern": MHV,
+  "matloven § 16": `${D}NL/lov/2003-12-19-124/KAPITTEL_3#PARAGRAF_16`,
+  "blodforskriften § 3-12": `${D}SF/forskrift/2005-02-04-80/KAPITTEL_3#PARAGRAF_3-12`,
+  "sikkerhetsloven § 4-5": `${SIKL}/KAPITTEL_4#PARAGRAF_4-5`,
+  "sikkerhetsloven § 5-4": `${SIKL}/KAPITTEL_5#PARAGRAF_5-4`,
+  "sikkerhetsloven § 6-4": `${SIKL}/KAPITTEL_6#PARAGRAF_6-4`,
+  "sikkerhetsloven § 8-9": `${SIKL}/KAPITTEL_8#PARAGRAF_8-9`,
+  "sikkerhetsloven § 8-11": `${SIKL}/KAPITTEL_8#PARAGRAF_8-11`,
 };
 
 const POLITIET = "https://www.politiet.no/rad/datakriminalitet";

@@ -111,7 +111,7 @@ scenarier:
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger er berørt."
         - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34. Personopplysninger om ansatte og borgere er kopiert ut."
         - "Kontakt politiet ang. svindelforsøket mot kontonummer. Kontakt banken umiddelbart for å forsøke å stoppe overføringen."
-        - "Varsle NSM iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 hvis virksomheten er omfattet."
 
   - id: innsiderisiko
     navn: "Innsiderisiko: «Ola Nordmann»"
@@ -127,6 +127,7 @@ scenarier:
         sys: personopplysninger
         status: advarsel
         melding: "«Ola» blir samboer med person fra et land PST vurderer som høy etterretningstrussel. Forholdet meldes ikke til autorisasjonsansvarlig."
+        lovkrav: "Sikkerhetsloven § 8-11. Varslingsplikt om forhold som kan påvirke sikkerhetsmessig skikkethet"
       - tid: 3000
         sys: epost
         status: svekket
@@ -139,26 +140,26 @@ scenarier:
         sys: personopplysninger
         status: kompromittert
         melding: "«Ola» deler gradert informasjon med personer tilknyttet fremmed etterretning, bevisst eller under press."
-        lovkrav: "Digitalsikkerhetsforskriften § 12. Sikkerhetstiltak for personell"
+        lovkrav: "Sikkerhetsloven § 5-4. Tilgang til og taushetsplikt med hensyn til sikkerhetsgradert informasjon"
       - tid: 7500
         sys: tilgang
         status: feil
         melding: "Autorisasjonsansvarlig er aldri blitt varslet om samboerforholdet. Ingen revurdering av «Ola»s klarering er gjennomført."
-        lovkrav: "Digitalsikkerhetsforskriften § 12. Sikkerhetstiltak for personell"
+        lovkrav: "Sikkerhetsloven § 8-9. Autorisasjon"
       - tid: 9000
         sys: backup
         status: svekket
         melding: "Omfanget av informasjonslekkasjen er ukjent. Det finnes ingen logging av «Ola»s tilgang til gradert informasjon."
-        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak"
+        lovkrav: "Sikkerhetsloven § 6-4. Overvåking av skjermingsverdige informasjonssystemer"
     tiltak:
       forebygging:
-        - "Implementer rutiner for å melde endringer i livssituasjon til autorisasjonsansvarlig (jf. digitalsikkerhetsforskriften § 12, personellmessige sikkerhetstiltak)."
+        - "Implementer rutiner for å melde endringer i livssituasjon til autorisasjonsansvarlig (jf. sikkerhetsloven § 8-11)."
         - "Aktiver logging og atferdsanalyse (UBA) for alle med tilgang til gradert informasjon. Avvik skal generere varsel."
         - "Gjennomfør regelmessige sikkerhetssamtaler med sikkerhetsklarert personell. Klarering er ikke en engangsvurdering."
         - "Bygg sikkerhetskultur der melding av bekymringsfulle forhold er normen, ikke en engangssak."
       respons:
         - "Inndra klareringen og alle systemtilganger umiddelbart. Gjennomfør forensisk gjennomgang av «Ola»s aktivitetslogger."
-        - "Varsle PST og NSM. Igangsett skadeomfangsvurdering for all informasjon «Ola» har hatt tilgang til."
+        - "Varsle NSM straks etter sikkerhetsloven § 4-5. Varsle også PST. Igangsett skadeomfangsvurdering for all informasjon «Ola» har hatt tilgang til."
         - "Gjennomgå og tilstram rutiner for autorisasjonsoppfølging. Etabler prosedyre for varsling ved livsforandringer."
 
   - id: skytjeneste_avbrudd
@@ -208,10 +209,10 @@ scenarier:
         - "Distribuer tjenester og data på tvers av minst to leverandører og to geografier. Unngå konsentrasjonsrisiko."
         - "Krev at backup lagres hos en annen leverandør enn primær skytjeneste, fortrinnsvis med norsk/europeisk databehandling."
         - "Etabler en offline beredskapsplan for e-post, tilgangsstyring og kritiske fagsystemer som ikke er avhengig av én skyleverandør."
-        - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. digitalsikkerhetsforskriften § 8. Risikohåndtering om kontinuitet)."
+        - "Gjennomfør scenariotesting for skytjenesteavbrudd som del av beredskapsøvinger (jf. digitalsikkerhetsforskriften § 13. Hendelseshåndtering og beredskap)."
       respons:
         - "Aktiver beredskapsplan umiddelbart: Alternativ kommunikasjonskanal, manuell innlogging, papirbaserte nødprosedyrer."
-        - "Varsle NSM iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 dersom virksomheten er innenfor lovens virkeområde."
+        - "Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 hvis virksomheten er omfattet."
         - "Initier prosess for å anskaffet alternativ eller supplerende tjenesteleverandør for kritiske funksjoner."
 
   - id: fysisk_brist
@@ -309,7 +310,7 @@ scenarier:
         - "Innfør anti-phishing-filtrering og sandboxing av vedlegg. Sett opp DMARC, DKIM og SPF."
       respons:
         - "Kontakt banken umiddelbart for å forsøke å stoppe eller reversere overføringen."
-        - "Varsle politiet og dokumenter deepfake-bevisene. NSM varsles iht. digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
+        - "Varsle politiet og dokumenter deepfake-bevisene. Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17."
         - "Gjennomfør fullstendig forensisk analyse av nettverket. Bakdøren er aktiv og angriper har fortsatt tilgang."
         - "Varsle Datatilsynet innen 72 timer iht. GDPR art. 33 dersom personopplysninger ble eksponert."
         - "Varsle berørte personer uten ugrunnet opphold iht. GDPR art. 34 dersom personopplysninger er kompromittert."
