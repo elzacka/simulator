@@ -217,7 +217,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
 
         {/* KONTROLLRAD: scenariovalg og simulering */}
         <div ref={velgerRef} className="panel sim-kontroll" style={{ position: "relative" }}>
-          <button type="button" className="sim-velger" onClick={() => setScOpen(!scOpen)}
+          <button type="button" className="sim-velger" onClick={() => { if (!scOpen) nullstill(); setScOpen(!scOpen); }}
             aria-expanded={scOpen} aria-controls="scenarioliste">
             <span style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", textAlign: "left", minWidth: 0 }}>
               <span style={{ fontSize: "var(--text-base)", fontWeight: 600, color: "var(--ink)" }}>{scenario ? scenario.navn : t.velgScenario}</span>
