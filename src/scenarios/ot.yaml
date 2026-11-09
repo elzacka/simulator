@@ -222,7 +222,7 @@ scenarier:
         sys: TVO
         status: nede
         melding: "Kamera og NVR mister strømmen. Alle kameraer er svarte, og opptaket stopper."
-        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
       - tid: 5000
         sys: aak
         status: svekket
@@ -231,7 +231,7 @@ scenarier:
         sys: fagsystem
         status: nede
         melding: "Alle fagsystemer er utilgjengelige. Virksomhetens tjenester stanser, og leveranser som avhenger av bygget, rammes."
-        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak"
     tiltak:
       forebygging:
         - "Bytt ut standard community-streng. Bruk SNMPv3 med autentisering og kryptering (authPriv)."
@@ -285,7 +285,7 @@ scenarier:
         sys: fagsystem
         status: nede
         melding: "Fagsystemene er utilgjengelige. Driften stanser, og leveranser som avhenger av bygget, forsinkes. Årsaken var ikke et angrep, men manglende vedlikehold og testing av nødstrøm."
-        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
     tiltak:
       forebygging:
         - "Testkjør nødaggregatet under last jevnlig, og bytt startbatteriet etter leverandørens intervall."
@@ -346,7 +346,7 @@ scenarier:
         sys: server
         status: nede
         melding: "Serverne går i termisk nødavstenging for å unngå maskinvareskade. Tjenester som avhenger av serverrommet, faller ut. Et kritisk ledd i den digitale infrastrukturen er nede."
-        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak"
       - tid: 9000
         sys: angriper
         status: advarsel
@@ -412,7 +412,7 @@ scenarier:
         sys: server
         status: kompromittert
         melding: "Uvedkommende får fysisk tilgang til serverrom og lager. Utstyr kan manipuleres, kopieres eller fjernes, og et kritisk ledd i leveransekjeden settes ut av spill."
-        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 11. Fysiske sikkerhetstiltak"
     tiltak:
       forebygging:
         - "Ta adgangskontroll og dørstyring av internett. Fjernservice skal gå via VPN med flerfaktorautentisering eller en sikret mellomløsning."
@@ -582,7 +582,7 @@ scenarier:
         sys: TVO
         status: nede
         melding: "NVR-en mister kontakt med alle kameraer via VLAN 30. Svarte skjermer i hele bygget."
-        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak (hvis omfattet)"
+        lovkrav: "Digitalsikkerhetsforskriften § 10. Teknologiske sikkerhetstiltak"
       - tid: 2000
         sys: aak
         status: svekket

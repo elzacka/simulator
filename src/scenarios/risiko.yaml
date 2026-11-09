@@ -103,6 +103,7 @@ scenarier:
     tiltak:
       forebygging:
         - "Inkluder minimumskrav til informasjonssikkerhet i alle leverandørkontrakter. Ref. NSM Veileder for sikkerhet i anskaffelser."
+        - "Inngå en sikkerhetsavtale etter sikkerhetsloven § 9-2 hvis leverandøren får tilgang til sikkerhetsgradert informasjon."
         - "Krev MFA på alle leverandørtilganger. Begrens tilgang til spesifikke systemer, tidsrom og funksjoner (minste privilegium)."
         - "Gjennomfør leverandørvurdering og periodisk revisjon av leverandørens sikkerhetsnivå."
         - "Segmenter leverandørtilgang i eget VLAN/nettverkssone. Leverandøren skal aldri ha generell nettverkstilgang."
@@ -158,7 +159,7 @@ scenarier:
         - "Gjennomfør regelmessige sikkerhetssamtaler med sikkerhetsklarert personell. Klarering er ikke en engangsvurdering."
         - "Bygg sikkerhetskultur der melding av bekymringsfulle forhold er normen, ikke en engangssak."
       respons:
-        - "Inndra klareringen og alle systemtilganger umiddelbart. Gjennomfør forensisk gjennomgang av «Ola»s aktivitetslogger."
+        - "Inndra klareringen og alle systemtilganger umiddelbart. Gjennomfør forensisk gjennomgang av «Ola»s aktivitetslogger. Innsyn i e-postkassen og filene hans må oppfylle vilkårene i innsynsforskriften § 2."
         - "Varsle NSM straks etter sikkerhetsloven § 4-5. Varsle også PST. Igangsett skadeomfangsvurdering for all informasjon «Ola» har hatt tilgang til."
         - "Gjennomgå og tilstram rutiner for autorisasjonsoppfølging. Etabler prosedyre for varsling ved livsforandringer."
 

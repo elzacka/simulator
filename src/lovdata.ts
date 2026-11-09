@@ -34,7 +34,19 @@ const HJEMLER: Record<string, string> = {
   "sikkerhetsloven § 6-4": `${SIKL}/KAPITTEL_6#PARAGRAF_6-4`,
   "sikkerhetsloven § 8-9": `${SIKL}/KAPITTEL_8#PARAGRAF_8-9`,
   "sikkerhetsloven § 8-11": `${SIKL}/KAPITTEL_8#PARAGRAF_8-11`,
+  "sikkerhetsloven § 9-2": `${SIKL}/KAPITTEL_9#PARAGRAF_9-2`,
+  "eforvaltningsforskriften § 15": `${D}SF/forskrift/2004-06-25-988/KAPITTEL_3#PARAGRAF_15`,
+  "innsynsforskriften § 2": `${D}SF/forskrift/2018-07-02-1108#PARAGRAF_2`,
 };
+
+// Apply only to some kinds of organisation, or only when the incident affects certain things
+const AVHENGIG = [
+  "digitalsikkerhetsloven", "digitalsikkerhetsforskriften", "sikkerhetsloven", "eforvaltningsforskriften", "gdpr",
+  "blodforskriften", "matloven", "næringsmiddelhygieneforskriften", "forskrift om miljørettet helsevern",
+];
+
+/** True when whether the requirement applies depends on the type of organisation and what the incident affects. */
+export const avhengerAvVirksomhet = (lovkrav: string) => AVHENGIG.some(l => lovkrav.toLowerCase().startsWith(l));
 
 const POLITIET = "https://www.politiet.no/rad/datakriminalitet";
 const DATATILSYNET = "https://www.datatilsynet.no/rettigheter-og-plikter/virksomhetenes-plikter/avvik/";

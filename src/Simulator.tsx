@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
 import ThemeToggle from "./ThemeToggle";
 import RikTekst from "./RikTekst";
+import { avhengerAvVirksomhet } from "./lovdata";
 import { type ThemeState } from "./theme";
 import {
   type SimulatorData, type Scenario, type Lang,
@@ -30,6 +31,7 @@ interface Tekster {
   oppsummering: string;
   systemerRammet: string;
   lovkravBerort: string;
+  lovkravAvhenger: string;
   tidUoppdaget: string;
   oppdagetHer: string;
   respons: string;
@@ -56,6 +58,7 @@ const NO: Tekster = {
   oppsummering: "Konsekvenser",
   systemerRammet: "Systemer rammet",
   lovkravBerort: "Lovkrav berørt",
+  lovkravAvhenger: "* Om kravet gjelder, avhenger av type virksomhet og hva hendelsen påvirker",
   tidUoppdaget: "Tid uoppdaget",
   oppdagetHer: "Oppdaget",
   respons: "Respons",
@@ -82,6 +85,7 @@ const EN: Tekster = {
   oppsummering: "Impact",
   systemerRammet: "Systems affected",
   lovkravBerort: "Regulations affected",
+  lovkravAvhenger: "* Whether the requirement applies depends on the type of organisation and what the incident affects",
   tidUoppdaget: "Time undetected",
   oppdagetHer: "Detected",
   respons: "Response",
@@ -454,7 +458,7 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
                           <span style={{ fontSize: "var(--text-2xs)", color: c, fontWeight: 600 }}>{sl(e.status)}</span>
                           {e.lovkrav && (
                             <span style={{ fontSize: "var(--text-2xs)", color: "var(--st-advarsel)", border: "1px solid var(--st-advarsel)", padding: "0 6px", borderRadius: "999px", marginLeft: "auto", display: "flex", alignItems: "center", gap: "3px" }}>
-                              <Icon name="lucide/gavel" size={11} /> <RikTekst tekst={e.lovkrav} />
+                              <Icon name="lucide/gavel" size={11} /> <RikTekst tekst={e.lovkrav} />{avhengerAvVirksomhet(e.lovkrav) && " *"}
                             </span>
                           )}
                         </div>
@@ -498,9 +502,12 @@ export default function Simulator({ onBack, data, config, theme }: Props) {
               <div style={{ paddingTop: "var(--space-3)", borderTop: "1px solid var(--danger-line)" }}>
                 {lovkravListe.map((l, i) => (
                   <div key={i} style={{ fontSize: "var(--text-xs)", color: "var(--ink-2)", padding: "2px 0", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-                    <Icon name="lucide/gavel" size={12} style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> <RikTekst tekst={l} />
+                    <Icon name="lucide/gavel" size={12} style={{ color: "var(--st-advarsel)", flexShrink: 0, marginTop: "2px" }} /> <span><RikTekst tekst={l} />{avhengerAvVirksomhet(l) && " *"}</span>
                   </div>
                 ))}
+                {lovkravListe.some(avhengerAvVirksomhet) && (
+                  <div style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginTop: "var(--space-2)" }}>{t.lovkravAvhenger}</div>
+                )}
               </div>
             )}
           </div>

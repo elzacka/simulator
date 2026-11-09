@@ -354,6 +354,7 @@ scenarier:
         sys: brannmur
         status: svekket
         melding: "Rate limiting was not planned in the design phase. Cannot be implemented without a full rewrite of the authentication module."
+        lovkrav: "eForvaltningsforskriften § 15. Internkontroll på informasjonssikkerhetsområdet"
     tiltak:
       forebygging:
         - "Integrate threat modeling (STRIDE) in the design phase. Security requirements must come from the threat model, not be added as an afterthought."
@@ -474,6 +475,7 @@ scenarier:
         sys: logg
         status: advarsel
         melding: "SIEM is installed, but no correlation rules configured. Logs are collected. No alerts defined. No owner assigned."
+        lovkrav: "eForvaltningsforskriften § 15. Internkontroll på informasjonssikkerhetsområdet"
       - tid: 1200
         sys: portal
         status: kompromittert
