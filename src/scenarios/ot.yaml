@@ -193,7 +193,7 @@ scenarier:
     eksponert: true
     angrepsvektor:
       - "Shodan finner UPS-ens nettverkskort på SNMP (UDP 161) med et søk som **port:161**. Kortet er eldre og har SNMP slått på fra fabrikken, med community-strengen «private» for skrivetilgang. Ingen har endret den. Nyere kort leveres med SNMP slått av."
-      - "Et fritt kommandolinjeverktøy som snmpset (Net-SNMP) sender avslåingskommandoen. Ingen pålogging utover community-strengen, ingen kryptering i SNMPv2c."
+      - "Et fritt kommandolinjeverktøy som snmpset (Net-SNMP) sender kommandoen som slår den av. Ingen pålogging utover community-strengen, ingen kryptering i SNMPv2c."
     kort: "Standard community-streng «private» → angriperen slår av UPS-en → alt utstyr bak den mister strømmen"
     beskrivelse: "En UPS er byggets siste strømlinje for kritisk utstyr. En angriper kan slå den av med én SNMP-kommando hvis nettverkskortet er eksponert mot internett og fortsatt har standard community-streng. Alt som henger på UPS-en, mister strømmen umiddelbart, uten kontrollert nedstenging. Hvis bygget er et kritisk ledd i en verdikjede, stanser også leveransene som avhenger av det."
     lovkrav:
@@ -239,7 +239,7 @@ scenarier:
         - "Slå av SNMPv1 og v2c, og bruk SNMPv3 med autentisering og kryptering (authPriv). Bytt community-strengene og gi bare lesetilgang hvis v1 eller v2c må stå på."
         - "Begrens SNMP-tilgang med IP-basert ACL. Tillat bare dedikerte administrasjonsstasjoner."
         - "Segmenter OT-nettet fra internett og kontornett. SNMP skal aldri være eksponert mot internett."
-        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:161**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Hvert treff er en SNMP-enhet som svarer fra internett og skal tas ned. Søket **snmp.location:\"Eksempelveien 12, Oslo\"** finner også UPS-er utenfor eget IP-område, for eksempel hos en driftsleverandør, hvis plasseringen i SNMP-svaret er byggets adresse."
+        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:161**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Hvert treff er en SNMP-enhet som svarer fra internett og skal tas ned."
       respons:
         - "Varsle tilsynsmyndigheten innen 24 timer, med kopi til NSM, etter digitalsikkerhetsloven § 8 og digitalsikkerhetsforskriften § 17 hvis virksomheten er omfattet."
         - "Gjennomgå alt nettverkstilkoblet OT-utstyr for fabrikkpassord. Anta at ingen er endret."
