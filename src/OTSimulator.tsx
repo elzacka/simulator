@@ -8,9 +8,9 @@ const data = parseSimulatorData(otYaml);
 const config: SimulatorConfig = {
   lang: "no",
   tittel: "Operasjonell teknologi",
-  undertittel: "Bygg og anlegg",
+  undertittel: "I bygg og butikk",
   visningTittel: "Visualisering",
-  kontekstFot: () => "Basert på hendelsesmønstre for OT i norske bygg og anlegg",
+  kontekstFot: () => "Basert på hendelsesmønstre for OT i norske bygg og butikker",
   angrepsvektor: {
     tittel: "Angrepsvektor: Slik nås enheten",
     detaljerTittel: "Om sårbarheten og egenkontroll",

@@ -6,7 +6,7 @@ Interaktiv scenariosimulator for sikkerhetshendelser. Simuler cyberangrep og dig
 
 ## Simulatorer
 
-- **Operasjonell teknologi**: Angrep mot OT-systemer i bygg og anlegg (UPS, BMS, HVAC, adgangskontroll, kjøl og frys)
+- **Operasjonell teknologi**: Angrep mot OT-systemer i bygg og butikker (UPS, BMS, HVAC, adgangskontroll, kjøl og frys)
 - **OWASP Top 10 2025**: Angrep mot webapplikasjoner basert på OWASP Top 10:2025
 
 ## Teknologi

@@ -43,7 +43,7 @@ const NO: Tekster = {
   fullfort: n => `Fullført · ${n} systemer rammet`,
   steg: (n, total) => `Steg ${n} av ${total}`,
   systemstatus: "Systemstatus",
-  visningTom: "Velg et scenario for å se visualiseringen",
+  visningTom: "Velg et scenario og trykk Simuler",
   loggTittel: "Hendelseslogg",
   loggTom: "Velg et scenario og trykk Simuler",
   velgScenario: "Velg scenario",
