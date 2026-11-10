@@ -431,7 +431,7 @@ scenarier:
         - "Loggfør adgang uavhengig av kontrolleren, så en opplåsing ikke kan skjules ved å endre loggen lokalt."
         - "Sett opp alarm på opplåsing utenfor åpningstid, og koble den til vakt som faktisk følger med."
         - "Segmenter adgangskontroll fra kontor- og internett, og skjerm serverrom som egen sone."
-        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:80,443 has_screenshot:true**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Søket viser internettvendte styringer med innloggingsbilde. Hvert treff med en adgangskontroll er en styring som skal av nett. Skjermbildet i treffet viser hvilken styring det er, så du trenger ikke logge inn for å finne ut av det."
+        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:80,443 has_screenshot:true**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Søket viser webtjenester Shodan har tatt skjermbilde av, for eksempel innloggingsbildet til en styring. Hvert treff med en adgangskontroll er en styring som skal av nett. Skjermbildet i treffet viser hvilken styring det er, så du trenger ikke logge inn for å finne ut av det."
       respons:
         - "Lås dørene manuelt, tilbakestill dørplanen og verifiser alle skrivbare verdier mot en kjent baseline."
         - "Steng fjerntilgangen straks, og koble kontrolleren fra internett til arkitekturen er sikret."
@@ -702,7 +702,7 @@ scenarier:
         - "Sett opp en temperaturalarm som er uavhengig av styringssystemet, med egen sensor og et varsel som når vakt eller personale hele døgnet."
         - "Skill kjøl og frys fra kontor- og kassenettet. Et kompromittert kontornett skal ikke kunne nå kjølestyringen."
         - "Oppdater fastvaren. Bytt ut utgåtte modeller (får ikke sikkerhetsoppdateringer)."
-        - "Søk jevnlig etter eget utstyr i Shodan, og ta ned det som er eksponert. For Danfoss-styringer: **net:203.0.113.0/24 http.title:StoreView**. Mer generelt viser **net:203.0.113.0/24 port:80,443 has_screenshot:true** internettvendte styringer med innloggingsbilde. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Ta stedsnavn ut av enhetsnavnene. Membership har ikke filteret vuln, så du kan ikke søke etter kontrollere med CVE-2025-41450. Sjekk fastvaren på hver AK-SM 800A og oppdater til 4.3.1 eller nyere."
+        - "Søk jevnlig etter eget utstyr i Shodan, og ta ned det som er eksponert. For Danfoss-styringer: **net:203.0.113.0/24 http.title:StoreView**. Mer generelt viser **net:203.0.113.0/24 port:80,443 has_screenshot:true** webtjenester Shodan har tatt skjermbilde av, for eksempel innloggingsbildet til en styring. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Ta stedsnavn ut av enhetsnavnene. Membership har ikke filteret vuln, så du kan ikke søke etter kontrollere med CVE-2025-41450. Sjekk fastvaren på hver AK-SM 800A og oppdater til 4.3.1 eller nyere."
         - "Still sikkerhetskrav ved innkjøp. For trådløst utstyr krever radioutstyrforskriften § 6 fra 01.08.25 at utstyret ikke skader nettet, beskytter personopplysninger og personvern og hindrer svindel (RED art. 3.3 bokstav d, e og f). For nettilkoblet utstyr gjelder det bare når utstyret behandler person-, trafikk- eller lokasjonsdata. Nkom fører tilsyn."
         - "EUs Cyber Resilience Act (CRA) stiller tilsvarende krav til alle produkter med digitale elementer, også kablet utstyr som kjølekontrollere, og krever blant annet at utstyret leveres uten fabrikkpassord og med støtte for sikkerhetsoppdateringer. Den får full virkning i EU 11.12.27, men er ennå ikke tatt inn i EØS-avtalen."
       respons:
@@ -768,7 +768,7 @@ scenarier:
         - "Krev pålogging på alt OT-utstyr, bytt fabrikkpassord og slå av tjenester som ikke er i bruk."
         - "Lag en responsrutine for temperaturavvik, så vakt vet hva de skal gjøre når alarmen går."
         - "Segmenter kjølestyring fra kontor- og internett."
-        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:80,443 has_screenshot:true**, og for Danfoss-styringer **net:203.0.113.0/24 http.title:StoreView**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Hvert treff er en kjølestyring som svarer fra internett."
+        - "Sjekk egen eksponering i Shodan med søket **net:203.0.113.0/24 port:80,443 has_screenshot:true**, og for Danfoss-styringer **net:203.0.113.0/24 http.title:StoreView**. Bytt ut 203.0.113.0/24 med virksomhetens IP-område. Hvert treff på StoreView-søket er en kjølestyring som svarer fra internett. Det første søket viser også andre webtjenester, og skjermbildet i treffet viser hva det er."
       respons:
         - "Koble kontrolleren fra internett, sett settpunktet tilbake og verifiser mot en kjent baseline."
         - "Kontroller blodenhetene mot temperaturloggen og kravene til oppbevaring i blodforskriften § 3-12, og kassér bare det som faktisk var utenfor grensen."
